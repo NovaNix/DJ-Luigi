@@ -1,5 +1,5 @@
 # DJ-Luigi
-![DJ Luigi](DJ Luigi.jpg)
+![DJ Luigi](/DJ Luigi.jpg)
 A Discord Music Bot built in Java using JDA and LavaPlayer
 Since Youtube is shutting down a lot of Discord Music bots (such as Rythm and Groovy), 
 I figured it would be a good idea to write my own bot that can't be shut down.
