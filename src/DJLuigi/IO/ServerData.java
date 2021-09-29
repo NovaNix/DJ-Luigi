@@ -18,7 +18,6 @@ public class ServerData
 	
 	public File directory;
 	public File settingsFile;
-	public File playlistsFile;
 	
 	public ServerData(String ID)
 	{
@@ -26,7 +25,6 @@ public class ServerData
 		
 		directory = new File(DirectoryManager.serversDirectory, ID); 
 		settingsFile = new File(directory, "config.yml");
-		playlistsFile = new File(directory, "playlists");
 		
 		try {
 			validate();
@@ -41,7 +39,6 @@ public class ServerData
 	public void validate() throws JsonGenerationException, JsonMappingException, IOException
 	{
 		directoryUtils.validateFolder(directory);
-		directoryUtils.validateFolder(playlistsFile);
 		
 		if (!settingsFile.exists())
 		{
