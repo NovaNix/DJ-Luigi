@@ -61,7 +61,7 @@ public class ServerSettings
 	{
 		DirectoryManager.mapper.writeValue(location, this);
 		
-		System.out.println("Saved!");
+		System.out.println("Saved Server Settings");
 	}
 	
 }
