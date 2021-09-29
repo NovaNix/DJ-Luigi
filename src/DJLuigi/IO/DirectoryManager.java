@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import DJLuigi.DJ;
@@ -15,7 +16,7 @@ import DJLuigi.utils.directoryUtils;
 public class DirectoryManager 
 {
 
-	public static ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
+	public static ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory()).enable(SerializationFeature.INDENT_OUTPUT);
 	public static ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 	
 	public static File home;
@@ -39,9 +40,21 @@ public class DirectoryManager
 		}
 	}
 	
+	// As the playlist directory is determined by the bot config, it must be loaded afterwards
 	public static void initPlaylistDirectory()
 	{
-		playlistsDirectory = new File(DJ.settings.playlistsDirectory);
+		//Check to see if the playlist directory has been defined
+		if (DJ.settings.playlistsDirectory.equals("")) 
+		{
+			System.err.println("WARNING: PLAYLIST DIRECTORY HAS NOT BEEN DEFINED. DEFAULTING TO \"/playlists\" IN THE HOME DIRECTORY");
+			System.err.println("THIS MEANS PLAYLISTS WILL NOT WORK BETWEEN MULTIPLE BOTS");
+			playlistsDirectory = new File(home, "playlists");
+		}
+		
+		else
+		{
+			playlistsDirectory = new File(DJ.settings.playlistsDirectory);
+		}
 		
 		directoryUtils.validateFolder(playlistsDirectory);
 	}
