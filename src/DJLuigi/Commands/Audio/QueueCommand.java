@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "queue", 
 	description = "Lists the songs in the queue",
-	aliases = {"list"}
+	aliases = {"list", "q"}
 )
 public class QueueCommand implements Command
 {
