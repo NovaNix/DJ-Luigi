@@ -18,6 +18,8 @@ public class TrackScheduler extends AudioEventAdapter
 	
 	public ArrayList<AudioTrack> Tracks = new ArrayList<AudioTrack>();
 	
+	public boolean Looped = false; // Whether the current song should be looped
+	
 	public TrackScheduler(Server HostServer) 
 	{
 		this.HostServer = HostServer;
@@ -87,7 +89,15 @@ public class TrackScheduler extends AudioEventAdapter
 		{
 			// Start next track
 			
-			Tracks.remove(0);
+			if (Looped)
+			{
+				// Dont remove the song because its going to be played again
+			}
+			
+			else
+			{
+				Tracks.remove(0);
+			}
 			
 			if (Tracks.size() > 0)
 			{
