@@ -17,9 +17,11 @@ public class DJSettings
 	
 	@JsonProperty("sendJoinMessage") public boolean sendJoinMessage = true;
 	
+	@JsonProperty("playlistsDirectory") public String playlistsDirectory = "";
+	
 	public void SaveSettings() throws JsonGenerationException, JsonMappingException, IOException
 	{	
-		DirectoryManager.mapper.writeValue(DirectoryManager.configFile, this);
+		DirectoryManager.yamlMapper.writeValue(DirectoryManager.configFile, this);
 	}
 	
 }

@@ -59,9 +59,9 @@ public class ServerSettings
 	
 	public void Save(File location) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		DirectoryManager.mapper.writeValue(location, this);
+		DirectoryManager.yamlMapper.writeValue(location, this);
 		
-		System.out.println("Saved!");
+		System.out.println("Saved Server Settings");
 	}
 	
 }

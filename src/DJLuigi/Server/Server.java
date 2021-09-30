@@ -22,6 +22,7 @@ public class Server
 	public TrackScheduler trackScheduler;
 	public LoadResultHandler resultHandler;
 	
+	// The voice channel that the bot is in
 	public String ActiveVoiceChannel = "";
 	// The text channel that the bot should send messages to
 	// This changes whenever a command is sent

@@ -1,4 +1,4 @@
-package DJLuigi.Commands.Meta;
+package DJLuigi.Commands.Audio;
 
 import java.util.ArrayList;
 
@@ -9,18 +9,21 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
 (
-	command = "disconnect", 
-	description = "Removed the bot from VC.",
-	aliases = {"dc", "leave"}
+	command = "loop", 
+	description = "Toggles if the current song should be looped",
+	aliases = {"l"},
+	djOnly = true
 )
-public class DisconnectCommand implements Command
+public class LoopCommand implements Command
 {
 
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		S.LeaveVC();
-		S.SendMessage("Disconnected!");
+		S.trackScheduler.Looped = !S.trackScheduler.Looped;
+		
+		S.SendMessage("Set looped status to : `" + S.trackScheduler.Looped + "`!");
+		
 	}
 
 }

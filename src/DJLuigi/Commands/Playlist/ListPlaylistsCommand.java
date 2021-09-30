@@ -1,44 +1,43 @@
-package DJLuigi.Commands.Audio;
+package DJLuigi.Commands.Playlist;
 
 import java.util.ArrayList;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Playlist.Playlist;
+import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
 (
-	command = "queue", 
-	description = "Lists the songs in the queue",
-	aliases = {"list", "q"}
+	command = "listplaylists", 
+	description = "Reloads all of the playlists",
+	aliases = {"playlists"}
 )
-public class QueueCommand implements Command
+public class ListPlaylistsCommand implements Command 
 {
 
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		ArrayList<AudioTrack> Tracks = S.trackScheduler.Tracks;
-		
-		S.SendMessage("Queue Size: " + Tracks.size());
+		ArrayList<Playlist> playlists = PlaylistManager.getPlaylists(S);
 		
 		StringBuilder list = new StringBuilder();
 		
-		list.append("```\n");
+		list.append(playlists.size() + " playlist(s):");
+		list.append("```");
 		
-		for (int i = 0; i < Tracks.size(); i++)
+		for (int i = 0; i < playlists.size(); i++)
 		{
-			list.append(Tracks.get(i).getInfo().title);
+			list.append(playlists.get(i).name);
 			list.append("\n");
-			
 		}
 		
 		list.append("```");
 		
 		S.SendMessage(list.toString());
+		
 	}
 
 }

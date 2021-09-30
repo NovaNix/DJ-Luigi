@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import DJLuigi.DJ;
 import DJLuigi.Commands.Audio.ClearQueueCommand;
 import DJLuigi.Commands.Audio.ForceSkipCommand;
+import DJLuigi.Commands.Audio.LoopCommand;
 import DJLuigi.Commands.Audio.PauseCommand;
 import DJLuigi.Commands.Audio.PlayCommand;
 import DJLuigi.Commands.Audio.QueueCommand;
@@ -18,6 +19,13 @@ import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
+import DJLuigi.Commands.Playlist.AddSongCommand;
+import DJLuigi.Commands.Playlist.CreatePlaylistCommand;
+import DJLuigi.Commands.Playlist.DeletePlaylistCommand;
+import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
+import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
+import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
+import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -51,6 +59,20 @@ public class CommandHandler
 		loadCommand(new HelpCommand());
 		
 		loadCommand(new SettingsCommand());
+		
+		loadCommand(new LoopCommand());
+		
+		loadCommand(new CreatePlaylistCommand());
+		loadCommand(new DeletePlaylistCommand());
+		
+		loadCommand(new AddSongCommand());
+		
+		loadCommand(new ListPlaylistsCommand());
+		loadCommand(new ListPlaylistSongsCommand());
+		
+		loadCommand(new PlayPlaylistCommand());
+		
+		loadCommand(new ReloadPlaylistsCommand());
 		
 		// Initiate all commands used for debugging
 		

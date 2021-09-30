@@ -2,27 +2,28 @@ package DJLuigi.IO;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import DJLuigi.DJ;
 import DJLuigi.DJSettings;
-import DJLuigi.Server.Server;
 import DJLuigi.Server.ServerSettings;
 import DJLuigi.utils.directoryUtils;
 
 public class DirectoryManager 
 {
 
-	public static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+	public static ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory()).enable(SerializationFeature.INDENT_OUTPUT);
+	public static ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 	
 	public static File home;
 	
 	public static File configFile;
 	public static File serversDirectory;
+	public static File playlistsDirectory;
 	
 	public static void Init(String directory)
 	{
@@ -37,6 +38,25 @@ public class DirectoryManager
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	// As the playlist directory is determined by the bot config, it must be loaded afterwards
+	public static void initPlaylistDirectory()
+	{
+		//Check to see if the playlist directory has been defined
+		if (DJ.settings.playlistsDirectory.equals("")) 
+		{
+			System.err.println("WARNING: PLAYLIST DIRECTORY HAS NOT BEEN DEFINED. DEFAULTING TO \"/playlists\" IN THE HOME DIRECTORY");
+			System.err.println("THIS MEANS PLAYLISTS WILL NOT WORK BETWEEN MULTIPLE BOTS");
+			playlistsDirectory = new File(home, "playlists");
+		}
+		
+		else
+		{
+			playlistsDirectory = new File(DJ.settings.playlistsDirectory);
+		}
+		
+		directoryUtils.validateFolder(playlistsDirectory);
 	}
 	
 	// Checks to see if all of the needed files exist, and if they don't it will create it
@@ -56,7 +76,7 @@ public class DirectoryManager
 	public static DJSettings loadDJConfig()
 	{
 		try {
-			return mapper.readValue(configFile, DJSettings.class);
+			return yamlMapper.readValue(configFile, DJSettings.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new DJSettings();
@@ -66,7 +86,7 @@ public class DirectoryManager
 	public static ServerSettings loadServerSettings(File settings)
 	{
 		try {
-			return mapper.readValue(settings, ServerSettings.class);
+			return yamlMapper.readValue(settings, ServerSettings.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new ServerSettings();
