@@ -19,8 +19,12 @@ import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
+import DJLuigi.Commands.Playlist.AddSongCommand;
 import DJLuigi.Commands.Playlist.CreatePlaylistCommand;
 import DJLuigi.Commands.Playlist.DeletePlaylistCommand;
+import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
+import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
+import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
@@ -60,6 +64,13 @@ public class CommandHandler
 		
 		loadCommand(new CreatePlaylistCommand());
 		loadCommand(new DeletePlaylistCommand());
+		
+		loadCommand(new AddSongCommand());
+		
+		loadCommand(new ListPlaylistsCommand());
+		loadCommand(new ListPlaylistSongsCommand());
+		
+		loadCommand(new PlayPlaylistCommand());
 		
 		loadCommand(new ReloadPlaylistsCommand());
 		

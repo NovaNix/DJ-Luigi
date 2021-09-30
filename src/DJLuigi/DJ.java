@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import DJLuigi.IO.DirectoryManager;
+import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -60,8 +61,11 @@ public class DJ
         // optionally block until JDA is ready
         jda.awaitReady();
 
+        PlaylistManager.init();
         LoadServers();
                 
+        System.out.println("Ready to accept user input!");
+        
     }
 	
 	public static void LoadServers()
@@ -73,7 +77,7 @@ public class DJ
 			Servers.put(Guilds.get(i).getId(), new Server(Guilds.get(i).getId()));
 		}
 		
-		System.out.println("Loaded " + Guilds.size() + " servers!");
+		System.out.println("Loaded " + Guilds.size() + " server(s)!");
 	}
 	
 }
