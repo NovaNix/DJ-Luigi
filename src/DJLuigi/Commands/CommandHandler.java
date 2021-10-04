@@ -143,6 +143,15 @@ public class CommandHandler
 	    		return;
 	    	}
 	    }
+	    
+	    if (c.isOwnerOnly())
+	    {
+	    	if (!event.getMember().isOwner())
+	    	{
+	    		server.SendMessage("You must be the owner to run this command!");
+	    		return;
+	    	}
+	    }
 	    	
 	    ArrayList<String> parameters = extractParameters(matcher.group(2));
 	    
