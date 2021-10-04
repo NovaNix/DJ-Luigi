@@ -3,6 +3,7 @@ package DJLuigi;
 import java.awt.Color;
 
 import DJLuigi.Commands.CommandHandler;
+import DJLuigi.Interaction.ReactionMenuManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -10,6 +11,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventHandler extends ListenerAdapter 
@@ -79,5 +81,11 @@ public class EventHandler extends ListenerAdapter
 		}
 		
     }
+	
+	@Override
+	public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event)
+	{
+		ReactionMenuManager.onReactionEvent(event);
+	}
 	
 }

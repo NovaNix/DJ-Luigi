@@ -15,6 +15,7 @@ import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Debugging.SendParametersCommand;
+import DJLuigi.Commands.Debugging.TestConfirmCommand;
 import DJLuigi.Commands.Meta.ClearSettingsCommand;
 import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
@@ -83,6 +84,7 @@ public class CommandHandler
 		if (DJ.settings.debugMode)
 		{
 			loadCommand(new SendParametersCommand());
+			loadCommand(new TestConfirmCommand());
 		}
 		
 	}
