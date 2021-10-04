@@ -1,4 +1,4 @@
-package DJLuigi.Playlist;
+package DJLuigi.Playlist.Loading;
 
 import java.io.IOException;
 
