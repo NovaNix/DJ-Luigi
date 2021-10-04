@@ -54,9 +54,7 @@ public class AddSongCommand implements Command
 			S.SendMessage("You don't have permission to edit this playlist!");
 			return;
 		}
-		
-		
-		
+
 		if (Parameters.size() == 1) // Add current song
 		{	
 			if (S.trackScheduler.Tracks.size() == 0)
@@ -81,10 +79,7 @@ public class AddSongCommand implements Command
 		}
 		
 		else // Add specified song
-		{
-//			S.SendMessage("This feature is not currently enabled... Remove the extra parameter to add the current song.");
-//			return;
-			
+		{	
 			if (!commandUtils.isValidURL(Parameters.get(1)))
 			{
 				S.SendMessage("Invalid song link: " + Parameters.get(1));
@@ -92,10 +87,7 @@ public class AddSongCommand implements Command
 			}
 			
 			DJ.playerManager.loadItem(Parameters.get(1), new PlaylistLoadTrackHandler(S, p));
-			
 		}
-		
-		
 		
 	}
 
