@@ -26,6 +26,7 @@ import DJLuigi.Commands.Playlist.DeletePlaylistCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
+import DJLuigi.Commands.Playlist.PlaylistInfoCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
@@ -75,6 +76,7 @@ public class CommandHandler
 		loadCommand(new PlayPlaylistCommand());
 		
 		loadCommand(new ReloadPlaylistsCommand());
+		loadCommand(new PlaylistInfoCommand());
 		
 		// Initiate all commands used for debugging
 		
