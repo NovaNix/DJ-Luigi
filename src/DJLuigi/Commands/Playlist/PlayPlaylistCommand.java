@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistEntry;
@@ -17,7 +18,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "playplaylist", 
 	description = "Adds a playlist to the queue",
-	aliases = {"pp", "pplaylist"}
+	aliases = {"pp", "pplaylist"},
+	category = CommandCategory.Playlist
 )
 public class PlayPlaylistCommand implements Command
 {

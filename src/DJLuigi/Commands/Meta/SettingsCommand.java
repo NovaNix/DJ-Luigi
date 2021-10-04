@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.IO.BotSetting;
 import DJLuigi.Server.Server;
@@ -14,7 +15,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "settings", 
 	description = "Used to see, read, and write settings",
-	djOnly = true
+	djOnly = true,
+	category = CommandCategory.Settings
 )
 public class SettingsCommand implements Command
 {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
@@ -14,7 +15,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "createplaylist", 
 	description = "Creates a new playlist. (Note: playlist names should not have spaces)",
-	djOnly = true
+	djOnly = true,
+	category = CommandCategory.Playlist
 )
 public class CreatePlaylistCommand implements Command
 {

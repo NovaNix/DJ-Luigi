@@ -3,6 +3,7 @@ package DJLuigi.Commands.Playlist;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
@@ -12,7 +13,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "reload", 
 	description = "Reloads all of the playlists",
-	djOnly = true
+	djOnly = true,
+	category = CommandCategory.Playlist
 )
 public class ReloadPlaylistsCommand implements Command
 {

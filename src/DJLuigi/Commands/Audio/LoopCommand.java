@@ -3,6 +3,7 @@ package DJLuigi.Commands.Audio;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,7 +13,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	command = "loop", 
 	description = "Toggles if the current song should be looped",
 	aliases = {"l"},
-	djOnly = true
+	djOnly = true,
+	category = CommandCategory.Audio
 )
 public class LoopCommand implements Command
 {

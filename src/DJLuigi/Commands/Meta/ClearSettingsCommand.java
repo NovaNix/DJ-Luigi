@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import DJLuigi.Server.ServerSettings;
@@ -14,7 +15,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	command = "clearsettings", 
 	description = "Clears all of the settings",
 	djOnly = true,
-	ownerOnly = true
+	ownerOnly = true,
+	category = CommandCategory.Settings
 )
 public class ClearSettingsCommand implements Command
 {

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.IO.BotSetting;
 import DJLuigi.Playlist.Playlist;
@@ -16,7 +17,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "deleteplaylist", 
 	description = "Deletes the playlist (WARNING: THERES NO GOING BACK!)",
-	djOnly = true
+	djOnly = true,
+	category = CommandCategory.Playlist
 )
 public class DeletePlaylistCommand implements Command
 {

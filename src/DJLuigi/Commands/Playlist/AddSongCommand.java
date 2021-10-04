@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistEntry;
@@ -20,7 +21,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "paddsong", 
 	description = "Adds a song to a playlist. If no song is specified, it adds the currently playing song.",
-	aliases = {"addsong", "padd"}
+	aliases = {"addsong", "padd"},
+	category = CommandCategory.Playlist
 )
 public class AddSongCommand implements Command
 {

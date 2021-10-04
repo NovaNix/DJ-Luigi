@@ -3,6 +3,7 @@ package DJLuigi.Commands.Audio;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -11,7 +12,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "pause", 
 	description = "Pauses playback",
-	aliases = {"stop"}
+	aliases = {"stop"},
+	category = CommandCategory.Audio
 )
 public class PauseCommand implements Command
 {

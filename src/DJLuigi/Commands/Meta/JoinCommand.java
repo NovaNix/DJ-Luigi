@@ -9,12 +9,14 @@ import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import DJLuigi.Commands.CommandCategory;
 
 @CommandData
 (
 	command = "join", 
 	description = "Makes the bot join VC",
-	aliases = {"connect", "summon"}
+	aliases = {"connect", "summon"},
+	category = CommandCategory.Control
 )
 public class JoinCommand implements Command
 {
