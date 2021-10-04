@@ -10,9 +10,10 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
+import DJLuigi.Interaction.List.ReactionListable;
 import DJLuigi.Server.Server;
 
-public class TrackScheduler extends AudioEventAdapter
+public class TrackScheduler extends AudioEventAdapter implements ReactionListable
 {
 	private Server HostServer;
 	
@@ -129,6 +130,32 @@ public class TrackScheduler extends AudioEventAdapter
 	{
 		// Audio track has been unable to provide us any audio, might want to just start
 		// a new track
+	}
+
+	@Override
+	public String getValue(int index) 
+	{	
+		AudioTrack song = Tracks.get(index);
+		
+		return (index + 1) + ". [**" + song.getInfo().title + "**](" + song.getInfo().uri + ")";
+	}
+
+	@Override
+	public int size() 
+	{
+		return Tracks.size();
+	}
+
+	@Override
+	public int itemsPerPage() 
+	{
+		return 10;
+	}
+
+	@Override
+	public String getName() 
+	{	
+		return "Queue";
 	}
 	
 }
