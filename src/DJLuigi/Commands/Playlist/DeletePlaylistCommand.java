@@ -8,6 +8,7 @@ import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.IO.BotSetting;
+import DJLuigi.Interaction.ReactionConfirmation;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
@@ -17,7 +18,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "deleteplaylist", 
 	description = "Deletes the playlist (WARNING: THERES NO GOING BACK!)",
-	djOnly = true,
 	category = CommandCategory.Playlist
 )
 public class DeletePlaylistCommand implements Command
@@ -35,15 +35,18 @@ public class DeletePlaylistCommand implements Command
 				
 			if (PlaylistManager.hasPlaylist(Parameters.get(0))) 
 			{
-				if (PlaylistManager.deletePlaylist(Parameters.get(0))) 
+				
+				Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
+				
+				if (!p.memberCanEdit(event.getMember()))
 				{
-					S.SendMessage("Successfully deleted the playlist!");
+					S.SendMessage("You don't have permission to edit this playlist!");
+					return;
 				}
-
-				else 
-				{
-					S.SendMessage("Something went wrong...");
-				}
+				
+				new ReactionConfirmation("Do you really want to delete playlist " + Parameters.get(0) + "? There's no going back...", event,
+						() -> deletePlaylist(S, Parameters.get(0)),
+						() -> S.SendMessage("Aborded Deletion."));
 			}
 
 			else 
@@ -57,6 +60,19 @@ public class DeletePlaylistCommand implements Command
 			break;
 		}
 		
+	}
+	
+	private void deletePlaylist(Server S, String playlist)
+	{
+		if (PlaylistManager.deletePlaylist(playlist)) 
+		{
+			S.SendMessage("Successfully deleted the playlist!");
+		}
+
+		else 
+		{
+			S.SendMessage("Something went wrong...");
+		}
 	}
 
 }
