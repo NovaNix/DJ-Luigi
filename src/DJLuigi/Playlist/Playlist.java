@@ -29,9 +29,12 @@ public class Playlist
 	@JsonProperty("serverDependent") public boolean serverDependent = true;
 	@JsonProperty("homeServerID") public String homeServerID;
 
+	@JsonProperty("editors") public ArrayList<String> editors = new ArrayList<String>();
+	
 	@JsonProperty("songs") public ArrayList<PlaylistEntry> songs = new ArrayList<PlaylistEntry>();
 	
 	@JsonProperty("deleted") public boolean deleted = false;
+	
 	
 	public Playlist(String name, String creatorID, String homeServerID) throws JsonGenerationException, JsonMappingException, IOException
 	{
@@ -74,14 +77,28 @@ public class Playlist
 			return true;
 		}
 		
+		if ((editPermissions & PlaylistEditPermissions.EDIT_EDITORS) > 0)
+		{
+			if (editors.contains(m.getUser().getId()))
+			{
+				return true;
+			}
+		}
+		
 		if ((editPermissions & PlaylistEditPermissions.EDIT_OWNER) > 0)
 		{
-			return m.getUser().getId() == creatorID;
+			if (m.getUser().getId() == creatorID)
+			{
+				return true;
+			}
 		}
 		
 		if ((editPermissions & PlaylistEditPermissions.EDIT_DJ) > 0)
 		{
-			return commandUtils.isMemberDJ(m);
+			if (commandUtils.isMemberDJ(m))
+			{
+				return true;
+			}
 		}
 		
 		return false;
