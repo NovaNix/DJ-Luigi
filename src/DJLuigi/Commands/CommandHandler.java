@@ -15,6 +15,7 @@ import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Debugging.SendParametersCommand;
+import DJLuigi.Commands.Meta.ClearSettingsCommand;
 import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
@@ -59,6 +60,7 @@ public class CommandHandler
 		loadCommand(new HelpCommand());
 		
 		loadCommand(new SettingsCommand());
+		loadCommand(new ClearSettingsCommand());
 		
 		loadCommand(new LoopCommand());
 		
