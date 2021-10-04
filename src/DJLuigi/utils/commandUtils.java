@@ -39,6 +39,11 @@ public class commandUtils
 		return combined.toString();
 	}
 	
+	public static boolean hasEnoughParameters(ArrayList<String> parameters, int min, int max)
+	{
+		return (parameters.size() >= min && parameters.size() <= max);
+	}
+	
 	public static boolean isMemberDJ(Member u)
 	{
 		List<Role> Roles = u.getRoles();
