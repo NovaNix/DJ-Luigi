@@ -45,6 +45,7 @@ public class AddSongCommand implements Command
 		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
 		{
 			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+			return;
 		}
 		
 		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));

@@ -35,7 +35,19 @@ public class PlayPlaylistCommand implements Command
 			S.JoinChannel(event.getMember().getVoiceState().getChannel());
 		}
 		
+		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
+		{
+			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+			return;
+		}
+		
 		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
+		
+		if (!p.memberCanEdit(event.getMember()))
+		{
+			S.SendMessage("You can't access this playlist!");
+			return;
+		}
 		
 		ArrayList<PlaylistEntry> songs = p.songs;
 		
