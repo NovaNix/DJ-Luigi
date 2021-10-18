@@ -94,7 +94,6 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 			{
 				// Dont remove the song because its going to be played again
 				Tracks.get(0).setPosition(0);
-				//Tracks.set(0, Tracks.get(0).makeClone());
 				player.playTrack(Tracks.get(0));
 			}
 			

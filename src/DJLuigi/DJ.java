@@ -80,4 +80,14 @@ public class DJ
 		System.out.println("Loaded " + Guilds.size() + " server(s)!");
 	}
 	
+	public static int getJoinedServersCount()
+	{
+		return jda.getGuilds().size();
+	}
+	
+	public static int getLoadedServersCount()
+	{
+		return Servers.size();
+	}
+	
 }

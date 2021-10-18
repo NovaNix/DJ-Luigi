@@ -127,4 +127,8 @@ public class PlaylistManager
 		return playlistMap.containsKey(name);
 	}
 	
+	public static int getTotalPlaylistCount()
+	{
+		return playlists.size();
+	}
 }
