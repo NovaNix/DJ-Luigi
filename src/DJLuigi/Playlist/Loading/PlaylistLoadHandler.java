@@ -43,16 +43,13 @@ public class PlaylistLoadHandler implements AudioLoadResultHandler
 	@Override
 	public void noMatches() 
 	{
-		//HostServer.SendMessage("Hmm, I couldnt find that...");
-		
+		HostServer.SendMessage("We had trouble finding a song!");
 	}
 
 	@Override
 	public void loadFailed(FriendlyException exception) 
 	{
-		// TODO Auto-generated method stub
-		HostServer.SendMessage("Something went wrong!");
-		
+		HostServer.SendMessage("Failed to load song: " + exception.getMessage());
 	}
 
 }
