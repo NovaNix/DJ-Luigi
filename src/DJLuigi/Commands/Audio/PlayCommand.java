@@ -33,7 +33,7 @@ public class PlayCommand implements Command
 		
 		String combinedParameters = commandUtils.parametersToString(Parameters);
 		
-		S.SendMessage("Loading " + combinedParameters);
+		S.SendMessage("Loading '" + combinedParameters + "'");
 		
 		if (commandUtils.isValidURL(Parameters.get(0)))
 		{
