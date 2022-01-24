@@ -15,16 +15,21 @@ import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Debugging.SendParametersCommand;
+import DJLuigi.Commands.Debugging.TestConfirmCommand;
+import DJLuigi.Commands.Debugging.TestReactionListCommand;
+import DJLuigi.Commands.Meta.ClearSettingsCommand;
 import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
+import DJLuigi.Commands.Meta.StatusCommand;
 import DJLuigi.Commands.Playlist.AddSongCommand;
 import DJLuigi.Commands.Playlist.CreatePlaylistCommand;
 import DJLuigi.Commands.Playlist.DeletePlaylistCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
+import DJLuigi.Commands.Playlist.PlaylistInfoCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
@@ -44,11 +49,15 @@ public class CommandHandler
 	{	
 		// Initiate all of the commands used
 		
+		// Basic Commands
+		
 		loadCommand(new JoinCommand());
 		loadCommand(new DisconnectCommand());
 		loadCommand(new PlayCommand());
 		loadCommand(new PauseCommand());
 		loadCommand(new ResumeCommand());
+		
+		// Queue Commands
 		
 		loadCommand(new ForceSkipCommand());
 		loadCommand(new QueueCommand());
@@ -56,11 +65,9 @@ public class CommandHandler
 		
 		loadCommand(new RemoveFromQueueCommand());
 		
-		loadCommand(new HelpCommand());
-		
-		loadCommand(new SettingsCommand());
-		
 		loadCommand(new LoopCommand());
+		
+		// Playlist Commands
 		
 		loadCommand(new CreatePlaylistCommand());
 		loadCommand(new DeletePlaylistCommand());
@@ -73,12 +80,23 @@ public class CommandHandler
 		loadCommand(new PlayPlaylistCommand());
 		
 		loadCommand(new ReloadPlaylistsCommand());
+		loadCommand(new PlaylistInfoCommand());
+		
+		// Misc Commands
+		
+		loadCommand(new HelpCommand());
+		
+		loadCommand(new SettingsCommand());
+		loadCommand(new ClearSettingsCommand());
+		loadCommand(new StatusCommand());
 		
 		// Initiate all commands used for debugging
 		
 		if (DJ.settings.debugMode)
 		{
 			loadCommand(new SendParametersCommand());
+			loadCommand(new TestConfirmCommand());
+			loadCommand(new TestReactionListCommand());
 		}
 		
 	}
@@ -140,6 +158,15 @@ public class CommandHandler
 	    	if (!commandUtils.isMemberDJ(event.getMember()))
 	    	{
 	    		server.SendMessage("You must be a DJ to use this command!");
+	    		return;
+	    	}
+	    }
+	    
+	    if (c.isOwnerOnly())
+	    {
+	    	if (!event.getMember().isOwner())
+	    	{
+	    		server.SendMessage("You must be the owner to run this command!");
 	    		return;
 	    	}
 	    }

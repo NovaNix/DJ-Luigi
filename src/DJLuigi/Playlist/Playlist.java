@@ -10,15 +10,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
 import DJLuigi.IO.DirectoryManager;
+import DJLuigi.Interaction.List.ReactionListable;
 import DJLuigi.Server.Server;
 import DJLuigi.Server.ServerSettings;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Member;
 
-public class Playlist 
+public class Playlist implements ReactionListable
 {
 	
 	@JsonProperty("name") public String name;
@@ -29,9 +31,12 @@ public class Playlist
 	@JsonProperty("serverDependent") public boolean serverDependent = true;
 	@JsonProperty("homeServerID") public String homeServerID;
 
+	@JsonProperty("editors") public ArrayList<String> editors = new ArrayList<String>();
+	
 	@JsonProperty("songs") public ArrayList<PlaylistEntry> songs = new ArrayList<PlaylistEntry>();
 	
 	@JsonProperty("deleted") public boolean deleted = false;
+	
 	
 	public Playlist(String name, String creatorID, String homeServerID) throws JsonGenerationException, JsonMappingException, IOException
 	{
@@ -74,14 +79,28 @@ public class Playlist
 			return true;
 		}
 		
+		if ((editPermissions & PlaylistEditPermissions.EDIT_EDITORS) > 0)
+		{
+			if (editors.contains(m.getUser().getId()))
+			{
+				return true;
+			}
+		}
+		
 		if ((editPermissions & PlaylistEditPermissions.EDIT_OWNER) > 0)
 		{
-			return m.getUser().getId() == creatorID;
+			if (m.getUser().getId() == creatorID)
+			{
+				return true;
+			}
 		}
 		
 		if ((editPermissions & PlaylistEditPermissions.EDIT_DJ) > 0)
 		{
-			return commandUtils.isMemberDJ(m);
+			if (commandUtils.isMemberDJ(m))
+			{
+				return true;
+			}
 		}
 		
 		return false;
@@ -111,6 +130,32 @@ public class Playlist
 		File playlistFile = new File(DirectoryManager.playlistsDirectory, name + ".json");
 		
 		return playlistFile.delete();
+	}
+
+	@Override
+	public String getName() 
+	{
+		return name;
+	}
+
+	@Override
+	public String getValue(int index) 
+	{
+		PlaylistEntry entry = songs.get(index);
+		
+		return (index + 1) + ". [**" + entry.name + "**](" + entry.uri + ")";
+	}
+
+	@Override
+	public int size() 
+	{
+		return songs.size();
+	}
+
+	@Override
+	public int itemsPerPage() 
+	{
+		return 10;
 	}
 	
 }

@@ -3,6 +3,7 @@ package DJLuigi.Commands.Audio;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -11,7 +12,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "remove", 
 	description = "Removes a song from the queue",
-	aliases = {"removesong"}
+	aliases = {"removesong"},
+	category = CommandCategory.Audio
 )
 public class RemoveFromQueueCommand implements Command
 {

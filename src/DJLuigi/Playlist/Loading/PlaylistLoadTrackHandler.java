@@ -1,4 +1,4 @@
-package DJLuigi.Playlist;
+package DJLuigi.Playlist.Loading;
 
 import java.io.IOException;
 
@@ -7,6 +7,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import DJLuigi.Playlist.Playlist;
+import DJLuigi.Playlist.PlaylistEntry;
 import DJLuigi.Server.Server;
 
 public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
@@ -62,9 +64,7 @@ public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 	@Override
 	public void loadFailed(FriendlyException exception) 
 	{
-		// TODO Auto-generated method stub
-		HostServer.SendMessage("Something went wrong!");
-		
+		HostServer.SendMessage("Failed to load song: " + exception.getMessage());
 	}
 
 	

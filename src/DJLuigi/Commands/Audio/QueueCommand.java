@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Interaction.List.ReactionList;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -13,7 +15,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "queue", 
 	description = "Lists the songs in the queue",
-	aliases = {"list", "q"}
+	aliases = {"list", "q"},
+	category = CommandCategory.Audio
 )
 public class QueueCommand implements Command
 {
@@ -23,22 +26,17 @@ public class QueueCommand implements Command
 	{
 		ArrayList<AudioTrack> Tracks = S.trackScheduler.Tracks;
 		
-		S.SendMessage("Queue Size: " + Tracks.size());
-		
-		StringBuilder list = new StringBuilder();
-		
-		list.append("```\n");
-		
-		for (int i = 0; i < Tracks.size(); i++)
+		if (Tracks.size() > 0)
 		{
-			list.append(Tracks.get(i).getInfo().title);
-			list.append("\n");
-			
+			S.SendMessage("Queue Size: " + Tracks.size());
+			new ReactionList(S.trackScheduler, 0, event);
 		}
 		
-		list.append("```");
+		else
+		{
+			S.SendMessage("There are no songs in the queue!");
+		}
 		
-		S.SendMessage(list.toString());
 	}
 
 }

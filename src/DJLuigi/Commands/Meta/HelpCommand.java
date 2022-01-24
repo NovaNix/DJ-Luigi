@@ -3,6 +3,7 @@ package DJLuigi.Commands.Meta;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Server.Server;
@@ -12,7 +13,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "help", 
 	description = "Lists the available commands",
-	aliases = {"?", "h"}
+	aliases = {"?", "h"},
+	category = CommandCategory.Other
 )
 public class HelpCommand implements Command
 {

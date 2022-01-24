@@ -57,6 +57,21 @@ public interface Command
 		}
 	}
 	
+	public default boolean isOwnerOnly()
+	{
+		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		
+		if (data != null)
+		{
+			return data.ownerOnly();
+		}
+		
+		else
+		{
+			return true; // RETURN TRUE BECAUSE OWNER ONLY COMMANDS ARE POWERFUL AND IF SOMETHING GOES WRONG NOT ALLOWING THE COMMAND IS BETTER THAN ALLOWING IT
+		}
+	}
+	
 	public default String[] getAliases()
 	{
 		CommandData data = this.getClass().getAnnotation(CommandData.class);

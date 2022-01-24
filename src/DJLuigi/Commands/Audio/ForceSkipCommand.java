@@ -3,6 +3,7 @@ package DJLuigi.Commands.Audio;
 import java.util.ArrayList;
 
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,7 +13,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	command = "fs", 
 	description = "Skips the song without a vote.",
 	aliases = {"forceskip"},
-	djOnly = true
+	djOnly = true,
+	category = CommandCategory.Audio
 )
 public class ForceSkipCommand implements Command
 {

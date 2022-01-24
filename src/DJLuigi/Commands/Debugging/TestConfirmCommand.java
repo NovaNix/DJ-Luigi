@@ -5,30 +5,28 @@ import java.util.ArrayList;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Interaction.ReactionConfirmation;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-// Used to test that the parameter gathering command is functional
 @CommandData
 (
-	command = "listparameters", 
-	description = "(Debug) Lists parameters used in the command",
+	command = "testconfirm", 
+	description = "(Debug) Creates a confirmation menu for testing",
 	debug = true,
 	category = CommandCategory.Other
 )
-public class SendParametersCommand implements Command
+public class TestConfirmCommand implements Command
 {
 
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		S.SendMessage("***Listing " + Parameters.size() + " parameters...***");
 		
-		for (int i = 0; i < Parameters.size(); i++)
-		{
-			S.SendMessage(Parameters.get(i));
-		}
+		new ReactionConfirmation("This is a test. Accept?", event, 
+				() -> S.SendMessage("Approved"),
+				() -> S.SendMessage("Denied"));
 		
 	}
-	
+
 }

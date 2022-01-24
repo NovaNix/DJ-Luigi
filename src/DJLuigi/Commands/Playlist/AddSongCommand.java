@@ -7,11 +7,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistEntry;
-import DJLuigi.Playlist.PlaylistLoadTrackHandler;
 import DJLuigi.Playlist.PlaylistManager;
+import DJLuigi.Playlist.Loading.PlaylistLoadTrackHandler;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,7 +21,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "paddsong", 
 	description = "Adds a song to a playlist. If no song is specified, it adds the currently playing song.",
-	aliases = {"addsong", "padd"}
+	aliases = {"addsong", "padd"},
+	category = CommandCategory.Playlist
 )
 public class AddSongCommand implements Command
 {
@@ -43,6 +45,7 @@ public class AddSongCommand implements Command
 		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
 		{
 			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+			return;
 		}
 		
 		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
@@ -52,9 +55,7 @@ public class AddSongCommand implements Command
 			S.SendMessage("You don't have permission to edit this playlist!");
 			return;
 		}
-		
-		
-		
+
 		if (Parameters.size() == 1) // Add current song
 		{	
 			if (S.trackScheduler.Tracks.size() == 0)
@@ -79,10 +80,7 @@ public class AddSongCommand implements Command
 		}
 		
 		else // Add specified song
-		{
-//			S.SendMessage("This feature is not currently enabled... Remove the extra parameter to add the current song.");
-//			return;
-			
+		{	
 			if (!commandUtils.isValidURL(Parameters.get(1)))
 			{
 				S.SendMessage("Invalid song link: " + Parameters.get(1));
@@ -90,10 +88,7 @@ public class AddSongCommand implements Command
 			}
 			
 			DJ.playerManager.loadItem(Parameters.get(1), new PlaylistLoadTrackHandler(S, p));
-			
 		}
-		
-		
 		
 	}
 

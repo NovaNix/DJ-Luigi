@@ -49,7 +49,7 @@ public class DJ
 			System.exit(1);
 		}
 		
-        jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES)
+        jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
 //        	.setAudioSendFactory(new NativeAudioSendFactory())
             .addEventListeners(new EventHandler())
             .setActivity(Activity.playing("Epic Tunes!"))
@@ -78,6 +78,16 @@ public class DJ
 		}
 		
 		System.out.println("Loaded " + Guilds.size() + " server(s)!");
+	}
+	
+	public static int getJoinedServersCount()
+	{
+		return jda.getGuilds().size();
+	}
+	
+	public static int getLoadedServersCount()
+	{
+		return Servers.size();
 	}
 	
 }

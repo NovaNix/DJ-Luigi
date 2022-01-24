@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
+import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
@@ -14,7 +15,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "play", 
 	description = "Plays a song",
-	aliases = {"p"}
+	aliases = {"p"},
+	category = CommandCategory.Audio
 )
 public class PlayCommand implements Command
 {
@@ -31,7 +33,7 @@ public class PlayCommand implements Command
 		
 		String combinedParameters = commandUtils.parametersToString(Parameters);
 		
-		S.SendMessage("Loading " + combinedParameters);
+		S.SendMessage("Loading '" + combinedParameters + "'");
 		
 		if (commandUtils.isValidURL(Parameters.get(0)))
 		{

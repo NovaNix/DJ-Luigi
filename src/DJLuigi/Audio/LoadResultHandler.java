@@ -55,8 +55,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 	@Override
 	public void loadFailed(FriendlyException exception) 
 	{
-		// TODO Auto-generated method stub
-		
+		HostServer.SendMessage("Failed to load song: " + exception.getMessage());
 	}
 
 	
