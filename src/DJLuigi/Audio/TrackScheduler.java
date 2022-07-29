@@ -1,6 +1,8 @@
 package DJLuigi.Audio;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.sound.midi.Track;
 
@@ -60,6 +62,23 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	{
 		Tracks.clear();
 		HostServer.player.stopTrack();
+	}
+	
+	// Shuffles the queue. Note: the first item in the queue will not be suffled because it is currently playing
+	public void shuffle()
+	{
+		@SuppressWarnings("unchecked")
+		ArrayList<AudioTrack> queue = (ArrayList<AudioTrack>) Tracks.clone();
+		ArrayList<AudioTrack> shuffled = new ArrayList<AudioTrack>();
+		
+		shuffled.add(queue.remove(0));
+		
+		while (queue.size() > 0)
+		{
+			shuffled.add(queue.remove(ThreadLocalRandom.current().nextInt(queue.size())));
+		}
+		
+		Tracks = queue;
 	}
 	
 	@Override
