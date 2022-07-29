@@ -120,7 +120,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		// An already playing track threw an exception (track end event will still be
 		// received separately)
 		
-		HostServer.SendMessage("Something went wrong while playing the song: `" + exception.getMessage() + "`");
+		HostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	{
 		// Audio track has been unable to provide us any audio, might want to just start
 		// a new track
-		HostServer.SendMessage("I think I'm stuck... Imma skip this song...");
+		HostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
 		skip();
 	}
 
