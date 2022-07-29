@@ -68,8 +68,8 @@ public class ReactionList extends ReactionMenu
 		MessageEmbed embed = new EmbedBuilder()
 				.setDescription(description.toString())
 				.setColor(new Color(13012625))
-				.setFooter("Page " + (page + 1) + " of " + listed.calculatePageCount(), "https://i.redd.it/b2pilioyu7u21.jpg")
-				.setAuthor(listed.getName(), null, "https://i.redd.it/b2pilioyu7u21.jpg")
+				.setFooter("Page " + (page + 1) + " of " + listed.calculatePageCount(), null)
+				.setAuthor(listed.getName(), null, null)
 				.build();
 		
 		return embed;
