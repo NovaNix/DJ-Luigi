@@ -78,7 +78,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 			shuffled.add(queue.remove(ThreadLocalRandom.current().nextInt(queue.size())));
 		}
 		
-		Tracks = queue;
+		Tracks = shuffled;
 	}
 	
 	@Override
