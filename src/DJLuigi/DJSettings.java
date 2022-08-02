@@ -19,6 +19,8 @@ public class DJSettings
 	
 	@JsonProperty("playlistsDirectory") public String playlistsDirectory = "";
 	
+	@JsonProperty("nonVAUsersWebInterfaceEdit") public boolean nonVAUsersWebInterfaceEdit = false;
+	
 	public void SaveSettings() throws JsonGenerationException, JsonMappingException, IOException
 	{	
 		DirectoryManager.yamlMapper.writeValue(DirectoryManager.configFile, this);
