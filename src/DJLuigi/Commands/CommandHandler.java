@@ -14,6 +14,7 @@ import DJLuigi.Commands.Audio.PlayCommand;
 import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
+import DJLuigi.Commands.Audio.ShuffleCommand;
 import DJLuigi.Commands.Debugging.SendParametersCommand;
 import DJLuigi.Commands.Debugging.TestConfirmCommand;
 import DJLuigi.Commands.Debugging.TestReactionListCommand;
@@ -67,6 +68,8 @@ public class CommandHandler
 		
 		loadCommand(new LoopCommand());
 		
+		loadCommand(new ShuffleCommand());
+		
 		// Playlist Commands
 		
 		loadCommand(new CreatePlaylistCommand());
@@ -89,6 +92,7 @@ public class CommandHandler
 		loadCommand(new SettingsCommand());
 		loadCommand(new ClearSettingsCommand());
 		loadCommand(new StatusCommand());
+		
 		
 		// Initiate all commands used for debugging
 		

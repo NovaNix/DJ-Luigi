@@ -1,6 +1,8 @@
 package DJLuigi.Audio;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.sound.midi.Track;
 
@@ -62,6 +64,23 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		HostServer.player.stopTrack();
 	}
 	
+	// Shuffles the queue. Note: the first item in the queue will not be suffled because it is currently playing
+	public void shuffle()
+	{
+		@SuppressWarnings("unchecked")
+		ArrayList<AudioTrack> queue = (ArrayList<AudioTrack>) Tracks.clone();
+		ArrayList<AudioTrack> shuffled = new ArrayList<AudioTrack>();
+		
+		shuffled.add(queue.remove(0));
+		
+		while (queue.size() > 0)
+		{
+			shuffled.add(queue.remove(ThreadLocalRandom.current().nextInt(queue.size())));
+		}
+		
+		Tracks = shuffled;
+	}
+	
 	@Override
 	public void onPlayerPause(AudioPlayer player) 
 	{
@@ -80,7 +99,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	public void onTrackStart(AudioPlayer player, AudioTrack track) 
 	{
 		// A track started playing
-		HostServer.SendMessage("Now playing " + track.getInfo().title);
+		HostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
 	}
 
 	@Override
@@ -106,9 +125,6 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 					player.playTrack(Tracks.get(0));
 				}
 			}
-			
-			
-			
 		}
 		
 		else
@@ -123,7 +139,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		// An already playing track threw an exception (track end event will still be
 		// received separately)
 		
-		HostServer.SendMessage("Something went wrong while playing the song: " + exception.getMessage());
+		HostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
 	}
 
 	@Override
@@ -131,7 +147,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	{
 		// Audio track has been unable to provide us any audio, might want to just start
 		// a new track
-		HostServer.SendMessage("I think I'm stuck... Imma skip this song...");
+		HostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
 		skip();
 	}
 

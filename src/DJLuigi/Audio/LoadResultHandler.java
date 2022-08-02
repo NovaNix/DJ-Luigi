@@ -22,7 +22,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 	{
 		HostServer.trackScheduler.queue(track);
 		
-		HostServer.SendMessage("Added " + track.getInfo().title);
+		HostServer.SendMessage("Added `" + track.getInfo().title + "`");
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 		if (playlist.isSearchResult())
 		{
 			HostServer.trackScheduler.queue(playlist.getTracks().get(0));
-			HostServer.SendMessage("Added " + playlist.getTracks().get(0).getInfo().title);
+			HostServer.SendMessage("Added `" + playlist.getTracks().get(0).getInfo().title + "`");
 		}
 		
 		else
@@ -55,7 +55,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 	@Override
 	public void loadFailed(FriendlyException exception) 
 	{
-		HostServer.SendMessage("Failed to load song: " + exception.getMessage());
+		HostServer.SendMessage("Failed to load song: `" + exception.getMessage() + "`");
 	}
 
 	

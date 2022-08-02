@@ -42,7 +42,7 @@ public class RemoveFromQueueCommand implements Command
 			
 			else
 			{
-				S.SendMessage("Removed song " + S.trackScheduler.Tracks.get(songIndex).getInfo().title + " from the queue.");
+				S.SendMessage("Removed song `" + S.trackScheduler.Tracks.get(songIndex).getInfo().title + "` from the queue.");
 				S.trackScheduler.remove(songIndex);
 			}
 			
