@@ -37,6 +37,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	
 	public void skip() 
 	{
+		HostServer.SendMessage("Skipping song `" + Tracks.get(0).getInfo().title + "`...");
 		Tracks.remove(0);
 		
 		if (Tracks.size() > 0)
@@ -127,7 +128,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 			}
 		}
 		
-		else
+		else if (Tracks.size() == 0)
 		{
 			HostServer.LeaveVC();
 		}
