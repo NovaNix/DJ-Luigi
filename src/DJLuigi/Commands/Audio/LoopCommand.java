@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 @CommandData
 (
 	command = "loop", 
-	description = "Toggles if the current song should be looped",
+	description = "Toggles if the queue should be looped",
 	aliases = {"l"},
 	djOnly = true,
 	category = CommandCategory.Audio

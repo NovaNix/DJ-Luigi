@@ -21,7 +21,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	
 	public ArrayList<AudioTrack> Tracks = new ArrayList<AudioTrack>();
 	
-	public boolean Looped = false; // Whether the current song should be looped
+	public boolean Looped = false; // Whether the current queue should be looped
 	
 	public TrackScheduler(Server HostServer) 
 	{
@@ -112,19 +112,26 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 			
 			if (Looped)
 			{
-				// Dont remove the song because its going to be played again
-				Tracks.get(0).setPosition(0);
-				player.playTrack(Tracks.get(0));
+				// Add the last song played to the end of the queue
+				
+				Tracks.add(track.makeClone());
 			}
 			
-			else
+			Tracks.remove(0); // Remove the first song in the queue as to not play it again
+			
+			if (Tracks.size() > 0)
 			{
-				Tracks.remove(0);
-				
-				if (Tracks.size() > 0)
-				{
-					player.playTrack(Tracks.get(0));
-				}
+				player.playTrack(Tracks.get(0));
+			}
+		}
+		
+		else if (endReason == AudioTrackEndReason.LOAD_FAILED)
+		{
+			Tracks.remove(0);
+			
+			if (Tracks.size() > 0)
+			{
+				player.playTrack(Tracks.get(0));
 			}
 		}
 		
@@ -132,6 +139,8 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		{
 			HostServer.LeaveVC();
 		}
+		
+		
 	}
 
 	@Override
