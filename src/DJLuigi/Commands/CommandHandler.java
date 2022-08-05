@@ -32,6 +32,7 @@ import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
 import DJLuigi.Commands.Playlist.PlaylistInfoCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
+import DJLuigi.Commands.Playlist.RemoveSongCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -76,6 +77,7 @@ public class CommandHandler
 		loadCommand(new DeletePlaylistCommand());
 		
 		loadCommand(new AddSongCommand());
+		loadCommand(new RemoveSongCommand());
 		
 		loadCommand(new ListPlaylistsCommand());
 		loadCommand(new ListPlaylistSongsCommand());
