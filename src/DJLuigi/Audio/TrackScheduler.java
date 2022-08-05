@@ -184,7 +184,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	@Override
 	public String getName() 
 	{	
-		return "Queue";
+		return "Queue" + (Looped ? " (Looped)" : "");
 	}
 	
 }
