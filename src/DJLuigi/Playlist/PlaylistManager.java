@@ -29,25 +29,30 @@ public class PlaylistManager
 		
 		File playlistDirectory = DirectoryManager.playlistsDirectory;
 		
-		for (File f : playlistDirectory.listFiles())
+		for (File userDirectory : playlistDirectory.listFiles())
 		{
-			try {
-				Playlist p = Playlist.LoadPlaylist(f);
-				
-				if (!p.deleted)
-				{
-					addPlaylist(p);
+			for (File f : userDirectory.listFiles())
+			{
+				try {
+					Playlist p = Playlist.LoadPlaylist(f);
+					
+					if (!p.deleted)
+					{
+						addPlaylist(p);
+					}
+					
+					else
+					{
+						System.out.println("Found deleted playlist: " + p.name + ". Ignoring.");
+					}
+					
+				} catch (IOException e) {
+					System.err.println("There was an error loading playlist: \"" + f.getName() + "\" (" + f.getPath() + ")");
+					e.printStackTrace();
 				}
-				
-				else
-				{
-					System.out.println("Found deleted playlist: " + p.name + ". Ignoring.");
-				}
-				
-			} catch (IOException e) {
-				System.err.println("There was an error loading playlist: \"" + f.getName() + "\" (" + f.getPath() + ")");
-				e.printStackTrace();
 			}
+			
+			
 		}
 	}
 	
@@ -60,15 +65,7 @@ public class PlaylistManager
 		
 		for (int i = 0; i < playlists.size(); i++)
 		{
-			if (playlists.get(i).serverDependent)
-			{
-				if (playlists.get(i).homeServerID.equals(hostID))
-				{
-					serversPlaylists.add(playlists.get(i));
-				}
-			}
-			
-			else
+			if (playlists.get(i).isAllowedServer(hostID))
 			{
 				serversPlaylists.add(playlists.get(i));
 			}

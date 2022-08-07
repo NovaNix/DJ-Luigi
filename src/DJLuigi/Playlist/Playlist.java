@@ -28,8 +28,8 @@ public class Playlist implements ReactionListable
 	
 	@JsonProperty("editPermissions") public int editPermissions = PlaylistEditPermissions.EDIT_EVERYONE;
 	
-	@JsonProperty("serverDependent") public boolean serverDependent = true;
-	@JsonProperty("homeServerID") public String homeServerID;
+	@JsonProperty("isPublic") public boolean isPublic = false;
+	@JsonProperty("allowedServers") public ArrayList<String> allowedServers = new ArrayList<String>();
 
 	@JsonProperty("editors") public ArrayList<String> editors = new ArrayList<String>();
 	
@@ -38,11 +38,11 @@ public class Playlist implements ReactionListable
 	@JsonProperty("deleted") public boolean deleted = false;
 	
 	
-	public Playlist(String name, String creatorID, String homeServerID) throws JsonGenerationException, JsonMappingException, IOException
+	public Playlist(String name, String creatorID, String createdServer) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		this.name = name;
 		this.creatorID = creatorID;
-		this.homeServerID = homeServerID;
+		this.allowedServers.add(createdServer);
 		
 		SavePlaylist();
 	}
@@ -69,6 +69,30 @@ public class Playlist implements ReactionListable
 	public PlaylistEntry removeSong(int songIndex)
 	{
 		return songs.remove(songIndex);
+	}
+	
+	public void addAllowedServer(String serverID)
+	{
+		allowedServers.add(serverID);
+	}
+	
+	public void removeAllowedServer(String serverID)
+	{
+		allowedServers.remove(serverID);
+	}
+	
+	public boolean isAllowedServer(String serverID)
+	{
+		if (isPublic)
+		{
+			return true;
+		}
+		
+		else
+		{
+			return allowedServers.contains(serverID);
+		}
+		
 	}
 	
 	// Returns if the specified member can edit the playlist
@@ -108,7 +132,7 @@ public class Playlist implements ReactionListable
 	
 	private void SavePlaylist() throws JsonGenerationException, JsonMappingException, IOException
 	{
-		DirectoryManager.jsonMapper.writeValue(new File(DirectoryManager.playlistsDirectory, name + ".json"), this);
+		DirectoryManager.jsonMapper.writeValue(new File(DirectoryManager.getUserPlaylistDirectory(creatorID), name + ".json"), this);
 	}
 	
 	public static Playlist LoadPlaylist(File f) throws JsonParseException, JsonMappingException, IOException
@@ -127,7 +151,7 @@ public class Playlist implements ReactionListable
 	// Returns if it was successfully deleted
 	public boolean permaDelete()
 	{
-		File playlistFile = new File(DirectoryManager.playlistsDirectory, name + ".json");
+		File playlistFile = new File(DirectoryManager.getUserPlaylistDirectory(creatorID), name + ".json");
 		
 		return playlistFile.delete();
 	}

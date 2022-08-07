@@ -59,6 +59,14 @@ public class DirectoryManager
 		directoryUtils.validateFolder(playlistsDirectory);
 	}
 	
+	public static File getUserPlaylistDirectory(String userID)
+	{
+		File userDirectory = new File(playlistsDirectory, userID);
+		userDirectory.mkdirs();
+		
+		return userDirectory;
+	}
+	
 	// Checks to see if all of the needed files exist, and if they don't it will create it
 	// Doesnt handle individual server files however
 	private static void validate() throws IOException

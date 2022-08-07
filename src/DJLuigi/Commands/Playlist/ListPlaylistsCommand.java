@@ -8,13 +8,14 @@ import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
+import DJLuigi.utils.DiscordUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
 (
 	command = "listplaylists", 
 	description = "Reloads all of the playlists",
-	aliases = {"playlists"},
+	aliases = {"playlists", "plist"},
 	category = CommandCategory.Playlist
 )
 public class ListPlaylistsCommand implements Command 
@@ -32,7 +33,8 @@ public class ListPlaylistsCommand implements Command
 		
 		for (int i = 0; i < playlists.size(); i++)
 		{
-			list.append(playlists.get(i).name);
+			Playlist playlist = playlists.get(i);
+			list.append(playlist.name + ", " + DiscordUtils.getUsersName(playlist.creatorID) + " (" + playlist.size() + " songs)");
 			list.append("\n");
 		}
 		
