@@ -22,9 +22,7 @@ public class LoopCommand implements Command
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		S.trackScheduler.Looped = !S.trackScheduler.Looped;
-		
-		S.SendMessage("Set looped status to : `" + S.trackScheduler.Looped + "`!");
+		S.SendMessage("Set looped status to : `" + S.queue.toggleLoop() + "`!");
 		
 	}
 

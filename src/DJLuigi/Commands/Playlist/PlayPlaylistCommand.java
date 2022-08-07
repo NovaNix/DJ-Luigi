@@ -3,11 +3,11 @@ package DJLuigi.Commands.Playlist;
 import java.util.ArrayList;
 
 import DJLuigi.DJ;
+import DJLuigi.Audio.Song;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
-import DJLuigi.Playlist.PlaylistEntry;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadHandler;
 import DJLuigi.Server.Server;
@@ -49,7 +49,7 @@ public class PlayPlaylistCommand implements Command
 			return;
 		}
 		
-		ArrayList<PlaylistEntry> songs = p.songs;
+		ArrayList<Song> songs = p.songs;
 		
 		for (int i = 0; i < songs.size(); i++)
 		{

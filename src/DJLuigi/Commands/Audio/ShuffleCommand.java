@@ -22,7 +22,7 @@ public class ShuffleCommand implements Command
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event)
 	{
-		S.trackScheduler.shuffle();
+		S.queue.shuffle();
 		S.SendMessage("The queue has been shuffled!");
 	}
 

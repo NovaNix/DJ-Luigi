@@ -35,15 +35,15 @@ public class RemoveFromQueueCommand implements Command
 				S.SendMessage("You can't remove a song thats currently playing!");
 			}
 			
-			else if (songIndex >= S.trackScheduler.Tracks.size())
+			else if (songIndex >= S.queue.size())
 			{
 				S.SendMessage("That index doesnt exist!");
 			}
 			
 			else
 			{
-				S.SendMessage("Removed song `" + S.trackScheduler.Tracks.get(songIndex).getInfo().title + "` from the queue.");
-				S.trackScheduler.remove(songIndex);
+				S.SendMessage("Removed song `" + S.queue.get(songIndex).name + "` from the queue.");
+				S.queue.remove(songIndex);
 			}
 			
 			

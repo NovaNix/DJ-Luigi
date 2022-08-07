@@ -7,8 +7,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import DJLuigi.Audio.Song;
 import DJLuigi.Playlist.Playlist;
-import DJLuigi.Playlist.PlaylistEntry;
 import DJLuigi.Server.Server;
 
 public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
@@ -27,7 +27,7 @@ public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 	public void trackLoaded(AudioTrack track) 
 	{
 		try {
-			p.addSong(new PlaylistEntry(track));
+			p.addSong(new Song(track));
 			HostServer.SendMessage("Added " + track.getInfo().title + " to playlist " + p.name);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -43,7 +43,7 @@ public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 		for (AudioTrack track : playlist.getTracks()) 
 		{
 			try {
-				p.addSong(new PlaylistEntry(track));
+				p.addSong(new Song(track));
 			} catch (IOException e) {
 				HostServer.SendMessage("Something went wrong adding song " + track.getInfo().title);
 				e.printStackTrace();

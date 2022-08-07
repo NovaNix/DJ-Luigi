@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import DJLuigi.DJ;
 import DJLuigi.Audio.AudioPlayerSendHandler;
 import DJLuigi.Audio.LoadResultHandler;
+import DJLuigi.Audio.Queue;
 import DJLuigi.Audio.TrackScheduler;
 import DJLuigi.IO.ServerData;
 import net.dv8tion.jda.api.entities.Guild;
@@ -22,6 +23,8 @@ public class Server
 	public TrackScheduler trackScheduler;
 	public LoadResultHandler resultHandler;
 	
+	public Queue queue;
+	
 	// The voice channel that the bot is in
 	public String ActiveVoiceChannel = "";
 	// The text channel that the bot should send messages to
@@ -35,6 +38,8 @@ public class Server
 		this.data = new ServerData(guildID); 
 		
 		player = DJ.playerManager.createPlayer();
+		
+		queue = new Queue(this);
 		
 		trackScheduler = new TrackScheduler(this);
 		player.addListener(trackScheduler);
@@ -68,7 +73,7 @@ public class Server
 		
 		audioManager.closeAudioConnection();
 		
-		trackScheduler.clearQueue();
+		queue.clear();
 		
 		ActiveVoiceChannel = "";
 	}

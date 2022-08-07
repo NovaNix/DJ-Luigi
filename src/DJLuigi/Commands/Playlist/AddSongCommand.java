@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
+import DJLuigi.Audio.Song;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
-import DJLuigi.Playlist.PlaylistEntry;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadTrackHandler;
 import DJLuigi.Server.Server;
@@ -58,15 +58,15 @@ public class AddSongCommand implements Command
 
 		if (Parameters.size() == 1) // Add current song
 		{	
-			if (S.trackScheduler.Tracks.size() == 0)
+			if (S.queue.size() == 0)
 			{
 				S.SendMessage("No song is currently playing!");
 				return;
 			}
 			
-			AudioTrack currentSong = S.trackScheduler.Tracks.get(0);
+			AudioTrack currentSong = S.queue.getTrack(0);
 			
-			PlaylistEntry song = new PlaylistEntry(currentSong);
+			Song song = new Song(currentSong);
 			
 			try {
 				p.addSong(song);

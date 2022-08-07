@@ -17,82 +17,26 @@ import DJLuigi.Server.Server;
 
 public class TrackScheduler extends AudioEventAdapter implements ReactionListable
 {
-	private Server HostServer;
-	
-	public ArrayList<AudioTrack> Tracks = new ArrayList<AudioTrack>();
-	
-	public boolean Looped = false; // Whether the current queue should be looped
+	private Server hostServer;
+	private Queue queue;
 	
 	public TrackScheduler(Server HostServer) 
 	{
-		this.HostServer = HostServer;
-	}
-
-	public void queue(AudioTrack t)
-	{
-		Tracks.add(t);
-		
-		HostServer.player.startTrack(t, true); 
-	}
-	
-	public void skip() 
-	{
-		HostServer.SendMessage("Skipping song `" + Tracks.get(0).getInfo().title + "`...");
-		Tracks.remove(0);
-		
-		if (Tracks.size() > 0)
-		{
-			HostServer.player.playTrack(Tracks.get(0));
-		}
-		
-		else
-		{
-			HostServer.player.stopTrack();
-		}
-	}
-	
-	public void remove(int song)
-	{	
-		if (song != 0)
-		{
-			Tracks.remove(song);
-		}
-	}
-	
-	public void clearQueue()
-	{
-		Tracks.clear();
-		HostServer.player.stopTrack();
-	}
-	
-	// Shuffles the queue. Note: the first item in the queue will not be suffled because it is currently playing
-	public void shuffle()
-	{
-		@SuppressWarnings("unchecked")
-		ArrayList<AudioTrack> queue = (ArrayList<AudioTrack>) Tracks.clone();
-		ArrayList<AudioTrack> shuffled = new ArrayList<AudioTrack>();
-		
-		shuffled.add(queue.remove(0));
-		
-		while (queue.size() > 0)
-		{
-			shuffled.add(queue.remove(ThreadLocalRandom.current().nextInt(queue.size())));
-		}
-		
-		Tracks = shuffled;
+		this.hostServer = HostServer;
+		this.queue = hostServer.queue;
 	}
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) 
 	{
-		HostServer.SendMessage("Player was paused");
+		hostServer.SendMessage("Player was paused");
 		// Player was paused
 	}
 
 	@Override
 	public void onPlayerResume(AudioPlayer player) 
 	{
-		HostServer.SendMessage("Player was resumed");
+		hostServer.SendMessage("Player was resumed");
 		// Player was resumed
 	}
 
@@ -100,7 +44,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	public void onTrackStart(AudioPlayer player, AudioTrack track) 
 	{
 		// A track started playing
-		HostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
+		hostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
 	}
 
 	@Override
@@ -110,34 +54,34 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		{
 			// Start next track
 			
-			if (Looped)
+			if (queue.looped)
 			{
 				// Add the last song played to the end of the queue
 				
-				Tracks.add(track.makeClone());
+				queue.add(track.makeClone());
 			}
 			
-			Tracks.remove(0); // Remove the first song in the queue as to not play it again
+			queue.remove(0); // Remove the first song in the queue as to not play it again
 			
-			if (Tracks.size() > 0)
+			if (queue.size() > 0)
 			{
-				player.playTrack(Tracks.get(0));
+				player.playTrack(queue.getTrack(0));
 			}
 		}
 		
 		else if (endReason == AudioTrackEndReason.LOAD_FAILED)
 		{
-			Tracks.remove(0);
+			queue.songs.remove(0);
 			
-			if (Tracks.size() > 0)
+			if (queue.size() > 0)
 			{
-				player.playTrack(Tracks.get(0));
+				player.playTrack(queue.getTrack(0));
 			}
 		}
 		
-		else if (Tracks.size() == 0)
+		else if (queue.size() == 0)
 		{
-			HostServer.LeaveVC();
+			hostServer.LeaveVC();
 		}
 		
 		
@@ -149,7 +93,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		// An already playing track threw an exception (track end event will still be
 		// received separately)
 		
-		HostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
+		hostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
 	}
 
 	@Override
@@ -157,22 +101,22 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	{
 		// Audio track has been unable to provide us any audio, might want to just start
 		// a new track
-		HostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
-		skip();
+		hostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
+		queue.skip();
 	}
 
 	@Override
 	public String getValue(int index) 
 	{	
-		AudioTrack song = Tracks.get(index);
+		Song song = queue.songs.get(index);
 		
-		return (index + 1) + ". [**" + song.getInfo().title + "**](" + song.getInfo().uri + ")";
+		return (index + 1) + ". [**" + song.name + "**](" + song.uri + ")";
 	}
 
 	@Override
 	public int size() 
 	{
-		return Tracks.size();
+		return queue.size();
 	}
 
 	@Override
@@ -184,7 +128,7 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	@Override
 	public String getName() 
 	{	
-		return "Queue" + (Looped ? " (Looped)" : "");
+		return "Queue" + (queue.looped ? " (Looped)" : "");
 	}
 	
 }

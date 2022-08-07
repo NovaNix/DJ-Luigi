@@ -21,7 +21,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 	public void trackLoaded(AudioTrack track) 
 	{
 		HostServer.SendMessage("Added `" + track.getInfo().title + "`");
-		HostServer.trackScheduler.queue(track);
+		HostServer.queue.add(track);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 		if (playlist.isSearchResult())
 		{
 			HostServer.SendMessage("Added `" + playlist.getTracks().get(0).getInfo().title + "`");
-			HostServer.trackScheduler.queue(playlist.getTracks().get(0));
+			HostServer.queue.add(playlist.getTracks().get(0));
 		}
 		
 		else
@@ -38,7 +38,7 @@ public class LoadResultHandler implements AudioLoadResultHandler
 			HostServer.SendMessage("Added " + playlist.getTracks().size() + " Songs");
 			for (AudioTrack track : playlist.getTracks()) 
 			{
-				HostServer.trackScheduler.queue(track);
+				HostServer.queue.add(track);
 			}
 		}
 	}

@@ -37,10 +37,10 @@ public class JoinCommand implements Command
 		
 		S.JoinChannel(channel);
 		
-		if (S.trackScheduler.Tracks.size() == 0)
-		{
-			DJ.playerManager.loadItem("https://www.youtube.com/watch?v=nQTxUKsL7iw", S.resultHandler);
-		}
+//		if (S.trackScheduler.Tracks.size() == 0)
+//		{
+//			DJ.playerManager.loadItem("https://www.youtube.com/watch?v=nQTxUKsL7iw", S.resultHandler);
+//		}
 	}
 	
 }

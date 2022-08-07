@@ -24,11 +24,10 @@ public class QueueCommand implements Command
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		ArrayList<AudioTrack> Tracks = S.trackScheduler.Tracks;
 		
-		if (Tracks.size() > 0)
+		if (S.queue.size() > 0)
 		{
-			S.SendMessage("Queue Size: " + Tracks.size());
+			S.SendMessage("Queue Size: " + S.queue.size());
 			new ReactionList(S.trackScheduler, 0, event);
 		}
 		

@@ -22,7 +22,7 @@ public class ClearQueueCommand implements Command
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		S.trackScheduler.clearQueue();
+		S.queue.clear();
 		S.SendMessage("Queue Cleared!");
 	}
 

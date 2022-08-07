@@ -9,10 +9,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
+import DJLuigi.Audio.Song;
 import DJLuigi.IO.DirectoryManager;
 import DJLuigi.Interaction.List.ReactionListable;
 import DJLuigi.Server.Server;
@@ -33,7 +35,7 @@ public class Playlist implements ReactionListable
 
 	@JsonProperty("editors") public ArrayList<String> editors = new ArrayList<String>();
 	
-	@JsonProperty("songs") public ArrayList<PlaylistEntry> songs = new ArrayList<PlaylistEntry>();
+	@JsonProperty("songs") public ArrayList<Song> songs = new ArrayList<Song>();
 	
 	@JsonProperty("deleted") public boolean deleted = false;
 	
@@ -54,19 +56,20 @@ public class Playlist implements ReactionListable
 		
 	}
 	
-	public void addSong(PlaylistEntry song) throws JsonGenerationException, JsonMappingException, IOException
+	public void addSong(Song song) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		songs.add(song);
 		
 		SavePlaylist();
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public boolean removeSong(String song)
 	{
 		return songs.remove(song);
 	}
 	
-	public PlaylistEntry removeSong(int songIndex)
+	public Song removeSong(int songIndex)
 	{
 		return songs.remove(songIndex);
 	}
@@ -140,6 +143,11 @@ public class Playlist implements ReactionListable
 		return DirectoryManager.jsonMapper.readValue(f, Playlist.class);
 	}
 	
+	public String toJSON() throws JsonProcessingException
+	{
+		return DirectoryManager.jsonMapper.writeValueAsString(this);
+	}
+	
 	// Pseudo delete. Sets the playlist to an inactive state where it cannot be played
 	public void remove() throws JsonGenerationException, JsonMappingException, IOException
 	{
@@ -165,7 +173,7 @@ public class Playlist implements ReactionListable
 	@Override
 	public String getValue(int index) 
 	{
-		PlaylistEntry entry = songs.get(index);
+		Song entry = songs.get(index);
 		
 		return (index + 1) + ". [**" + entry.name + "**](" + entry.uri + ")";
 	}
