@@ -105,6 +105,8 @@ public class CommandHandler
 			loadCommand(new TestReactionListCommand());
 		}
 		
+		System.out.println("Loaded " + commands.size() + " Commands!");
+		
 	}
 	
 	private static void loadCommand(Command c)
