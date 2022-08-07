@@ -87,4 +87,19 @@ public interface Command
 		}
 	}
 	
+	public default CommandCategory getCategory()
+	{
+		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		
+		if (data != null)
+		{
+			return data.category();
+		}
+		
+		else
+		{
+			return CommandCategory.Other;
+		}
+	}
+	
 }
