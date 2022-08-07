@@ -15,6 +15,8 @@ import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Audio.ShuffleCommand;
+import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
+import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
 import DJLuigi.Commands.Debugging.SendParametersCommand;
 import DJLuigi.Commands.Debugging.TestConfirmCommand;
 import DJLuigi.Commands.Debugging.TestReactionListCommand;
@@ -103,6 +105,8 @@ public class CommandHandler
 			loadCommand(new SendParametersCommand());
 			loadCommand(new TestConfirmCommand());
 			loadCommand(new TestReactionListCommand());
+			loadCommand(new QueueAsJSONCommand());
+			loadCommand(new PlaylistAsJSONCommand());
 		}
 		
 		System.out.println("Loaded " + commands.size() + " Commands!");
