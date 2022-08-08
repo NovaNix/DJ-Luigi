@@ -28,7 +28,16 @@ public class PlayCommand implements Command
 		
 		if (!self.getVoiceState().inVoiceChannel())
 		{
-			S.JoinChannel(event.getMember().getVoiceState().getChannel());
+			if (event.getMember().getVoiceState().inVoiceChannel())
+			{
+				S.JoinChannel(event.getMember().getVoiceState().getChannel());
+			}
+			
+			else
+			{
+				S.SendMessage("You must be in a voice channel for me to join!");
+				return;
+			}
 		}
 		
 		String combinedParameters = commandUtils.parametersToString(Parameters);
