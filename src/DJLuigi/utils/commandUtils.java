@@ -33,7 +33,11 @@ public class commandUtils
 		for (int i = 0; i < parameters.size(); i++)
 		{
 			combined.append(parameters.get(i));
-			combined.append(" ");
+			
+			if (i < parameters.size() - 1)
+			{
+				combined.append(" ");
+			}
 		}
 		
 		return combined.toString();
