@@ -94,6 +94,8 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		// received separately)
 		
 		hostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
+		System.err.println("Something broke while playing a track!");
+		exception.printStackTrace();
 	}
 
 	@Override
