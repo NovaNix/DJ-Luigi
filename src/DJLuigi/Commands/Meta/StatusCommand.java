@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "status", 
 	description = "Tells information about the bot",
+	aliases = {"about"},
 	category = CommandCategory.Other
 )
 public class StatusCommand implements Command
@@ -28,7 +29,7 @@ public class StatusCommand implements Command
 	{
 		MessageEmbed e = new EmbedBuilder()
 			    .setTitle("Status")
-			    .setColor(new Color(12390624))
+			    .setColor(DJ.getPrimaryColor())
 			    .addField("Joined Servers", Integer.toString(DJ.getJoinedServersCount()), true)
 			    .addField("Loaded Servers", Integer.toString(DJ.getLoadedServersCount()), true)
 			    .addField("Total Playlists", Integer.toString(PlaylistManager.getTotalPlaylistCount()), false)

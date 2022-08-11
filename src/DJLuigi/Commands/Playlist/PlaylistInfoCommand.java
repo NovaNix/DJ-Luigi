@@ -1,6 +1,5 @@
 package DJLuigi.Commands.Playlist;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import DJLuigi.DJ;
@@ -11,7 +10,6 @@ import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -39,13 +37,11 @@ public class PlaylistInfoCommand implements Command
 		
 		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
 		
-		//Guild g = DJ.jda.getGuildById(p.homeServerID);
-		
 		User user = DJ.jda.getUserById(p.creatorID);
 		
 		MessageEmbed embed = new EmbedBuilder()
 				.setTitle(p.name)
-				.setColor(new Color(6971865))
+				.setColor(DJ.getPrimaryColor())
 				.setFooter("Owner: " + user.getName() + ", " + p.editors.size() + " editors", user.getAvatarUrl())
 				.setThumbnail("https://i.redd.it/b2pilioyu7u21.jpg")
 				.addField("Songs", p.songs.size() + " Songs", false)

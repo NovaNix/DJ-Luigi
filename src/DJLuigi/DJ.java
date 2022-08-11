@@ -1,5 +1,6 @@
 package DJLuigi;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class DJ
 	public static HashMap<String, Server> Servers = new HashMap<String, Server>();
 	
 	public static DJSettings settings;
+	
+	public static final Color DJLuigiYellow = new Color(15060541);
+	public static final Color DJWaluigiPurple = new Color(6971865);
 	
 	public static void main(String[] args) throws LoginException, InterruptedException
     {
@@ -78,6 +82,12 @@ public class DJ
 		}
 		
 		System.out.println("Loaded " + Guilds.size() + " server(s)!");
+	}
+	
+	// Gets the primary color of the bot
+	public static Color getPrimaryColor()
+	{
+		return DJLuigiYellow;
 	}
 	
 	public static int getJoinedServersCount()
