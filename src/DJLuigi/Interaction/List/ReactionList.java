@@ -2,6 +2,7 @@ package DJLuigi.Interaction.List;
 
 import java.awt.Color;
 
+import DJLuigi.DJ;
 import DJLuigi.Interaction.ReactionMenu;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -67,7 +68,7 @@ public class ReactionList extends ReactionMenu
 		
 		MessageEmbed embed = new EmbedBuilder()
 				.setDescription(description.toString())
-				.setColor(new Color(13012625))
+				.setColor(DJ.getPrimaryColor())
 				.setFooter("Page " + (page + 1) + " of " + listed.calculatePageCount(), null)
 				.setAuthor(listed.getName(), null, null)
 				.build();
