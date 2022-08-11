@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import DJLuigi.DJ;
 import DJLuigi.Commands.Audio.ClearQueueCommand;
+import DJLuigi.Commands.Audio.CurrentSongCommand;
 import DJLuigi.Commands.Audio.ForceSkipCommand;
 import DJLuigi.Commands.Audio.LoopCommand;
 import DJLuigi.Commands.Audio.PauseCommand;
@@ -60,6 +61,8 @@ public class CommandHandler
 		loadCommand(new PlayCommand());
 		loadCommand(new PauseCommand());
 		loadCommand(new ResumeCommand());
+		
+		loadCommand(new CurrentSongCommand());
 		
 		// Queue Commands
 		
