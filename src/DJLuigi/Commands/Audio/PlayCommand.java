@@ -40,6 +40,11 @@ public class PlayCommand implements Command
 			}
 		}
 		
+		if (!self.getVoiceState().getChannel().equals(event.getMember().getVoiceState().getChannel()))
+		{
+			S.JoinChannel(event.getMember().getVoiceState().getChannel());
+		}
+		
 		String combinedParameters = commandUtils.parametersToString(Parameters);
 		
 		S.SendMessage("Loading `" + combinedParameters + "`");

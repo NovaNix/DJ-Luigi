@@ -44,6 +44,11 @@ public class PlayPlaylistCommand implements Command
 			}
 		}
 		
+		if (!self.getVoiceState().getChannel().equals(event.getMember().getVoiceState().getChannel()))
+		{
+			S.JoinChannel(event.getMember().getVoiceState().getChannel());
+		}
+		
 		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
 		{
 			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
