@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "help", 
 	description = "Lists the available commands",
-	aliases = {"?", "h"},
+	aliases = {"?", "h", "commands", "hep"},
 	category = CommandCategory.Other
 )
 public class HelpCommand implements Command
