@@ -126,6 +126,23 @@ public class CommandHandler
 		}
 	}
 	
+	// Returns the specified command from the loaded commands. It will also work with aliases.
+	// Returns null if the command does not exist
+	public static Command getCommand(String name)
+	{
+		Command c = commands.get(name);
+		
+		if (c != null)
+		{
+			return c; 
+		}
+		
+		else
+		{
+			return aliasCommands.get(name);
+		}
+	}
+	
 	public static void processCommand(Server server, MessageReceivedEvent event)
 	{
 		Matcher matcher = commandInfoFinder.matcher(event.getMessage().getContentRaw());

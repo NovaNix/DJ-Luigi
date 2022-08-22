@@ -117,4 +117,19 @@ public interface Command
 		}
 	}
 	
+	public default Parameter[] getParameters()
+	{
+		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		
+		if (data != null)
+		{
+			return data.parameters();
+		}
+		
+		else
+		{
+			return new Parameter[] {};
+		}
+	}
+	
 }
