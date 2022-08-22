@@ -31,8 +31,7 @@ public class DJ
 	
 	public static DJSettings settings;
 	
-	public static final Color DJLuigiYellow = new Color(15060541);
-	public static final Color DJWaluigiPurple = new Color(6971865);
+	private static Color primaryColor;
 	
 	public static void main(String[] args) throws LoginException, InterruptedException
     {
@@ -46,6 +45,8 @@ public class DJ
 		DirectoryManager.Init(args[0]);
 		
 		settings = DirectoryManager.loadDJConfig();
+		
+		primaryColor = new Color(settings.botColor);
 		
 		if (settings.botToken.equals(""))
 		{
@@ -87,7 +88,7 @@ public class DJ
 	// Gets the primary color of the bot
 	public static Color getPrimaryColor()
 	{
-		return DJLuigiYellow;
+		return primaryColor;
 	}
 	
 	public static int getJoinedServersCount()
