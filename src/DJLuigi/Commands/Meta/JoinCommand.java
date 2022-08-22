@@ -28,7 +28,7 @@ public class JoinCommand implements Command
 		
 		if (!state.inVoiceChannel())
 		{
-			S.SendMessage("Youre not in a channel!");
+			S.SendMessage("You're not in a channel!");
 			
 			return;
 		}
