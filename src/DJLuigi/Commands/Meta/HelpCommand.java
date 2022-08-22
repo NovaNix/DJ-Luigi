@@ -105,8 +105,14 @@ public class HelpCommand implements Command
 			
 			StringBuilder outline = new StringBuilder();
 			outline.append(c.getDescription() + "\n\n");
+			outline.append("\tParameters\n");
 			
 			Parameter[] parameters = c.getParameters();
+			
+			if (parameters.length == 0)
+			{
+				outline.append("None");
+			}
 			
 			for (int i = 0; i < parameters.length; i++)
 			{
