@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
+import DJLuigi.DJ;
 import DJLuigi.Interaction.List.ReactionListable;
 import DJLuigi.Server.Server;
 
@@ -81,10 +82,11 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		
 		else if (queue.size() == 0)
 		{
-			hostServer.LeaveVC();
+			if (DJ.settings.leaveOnQueueFinish)
+			{
+				hostServer.LeaveVC();
+			}
 		}
-		
-		
 	}
 
 	@Override
