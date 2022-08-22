@@ -15,13 +15,14 @@
     <name>bintray</name>
     <url>http://jcenter.bintray.com</url>
   </repository>
+  
 </repositories>
 
 <dependencies>
 <dependency>
     <groupId>net.dv8tion</groupId>
     <artifactId>JDA</artifactId>
-    <version>4.3.0_324</version>
+    <version>4.4.0_350</version>
 </dependency>
   <dependency>
     <groupId>com.sedmelluq</groupId>
