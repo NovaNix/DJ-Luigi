@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 (
 	command = "status", 
 	description = "Tells information about the bot",
-	aliases = {"about"},
+	aliases = {"about", "info"},
 	category = CommandCategory.Other
 )
 public class StatusCommand implements Command
