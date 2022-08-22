@@ -3,12 +3,14 @@ package DJLuigi.Commands.Meta;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -25,6 +27,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 public class HelpCommand implements Command
 {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
@@ -94,51 +97,72 @@ public class HelpCommand implements Command
 				return;
 			}
 			
-			StringBuilder output = new StringBuilder();
-			output.append("```");
+			StringBuilder title = new StringBuilder();
 			
-			output.append(S.data.settings.commandPrefix);
-			output.append(c.getCommandMessage() + " ");
+			title.append(S.data.settings.commandPrefix);
+			title.append(c.getCommandMessage() + " ");
 			
 			// Start writing the bottom part of the help menu 
 			// We start it here so we can take advantage of the fact that we are already looping over the parameter list
 			
-			StringBuilder outline = new StringBuilder();
-			outline.append(c.getDescription() + "\n\n");
-			outline.append("\tParameters\n");
+			StringBuilder commandParameters = new StringBuilder();
 			
 			Parameter[] parameters = c.getParameters();
 			
 			if (parameters.length == 0)
 			{
-				outline.append("None");
+				commandParameters.append("None");
 			}
 			
-			for (int i = 0; i < parameters.length; i++)
+			else
 			{
-				Parameter p = parameters[i];
-				
-				output.append(parameterToString(p) + " ");
-				
-				outline.append(p.name());
-				outline.append(", ");
-				outline.append(p.type().name());
-				
-				if (!p.required())
+				for (int i = 0; i < parameters.length; i++)
 				{
-					outline.append(" (Optional)");
+					Parameter p = parameters[i];
+					
+					title.append(parameterToString(p) + " ");
+					
+					commandParameters.append(p.name());
+					commandParameters.append(", ");
+					commandParameters.append(p.type().name());
+					
+					if (!p.required())
+					{
+						commandParameters.append(" (Optional)");
+					}
+					
+					commandParameters.append(": ");
+					commandParameters.append(p.description());
 				}
-				
-				outline.append(": ");
-				outline.append(p.description());
 			}
 			
-			output.append("\n\n");
-			output.append(outline.toString());
+			StringBuilder aliases = new StringBuilder();
 			
-			output.append("```");
+			for (int i = 0; i < c.getAliases().length; i++)
+			{
+				aliases.append(c.getAliases()[i]);
+				
+				if (i < c.getAliases().length - 1)
+				{
+					aliases.append(", ");
+				}
+			}
 			
-			S.SendMessage(output.toString());
+			// Create the embed 
+			EmbedBuilder embed = new EmbedBuilder();
+			
+			embed.setTitle(title.toString());
+			embed.setDescription(c.getDescription());
+			
+			if (c.getAliases().length != 0)
+			{
+				embed.addField("Aliases", aliases.toString(), false);
+			}
+			
+			embed.addField("Parameters", commandParameters.toString(), false);
+			embed.setColor(DJ.getPrimaryColor());
+			
+			event.getTextChannel().sendMessage(embed.build()).queue();
 			
 		}
 		
