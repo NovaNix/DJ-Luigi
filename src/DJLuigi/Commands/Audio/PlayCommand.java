@@ -26,6 +26,12 @@ public class PlayCommand implements Command
 	{
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
+		if (Parameters.size() == 0)
+		{
+			S.SendMessage("You have to specify a song!");
+			return;
+		}
+		
 		if (!self.getVoiceState().inVoiceChannel())
 		{
 			if (event.getMember().getVoiceState().inVoiceChannel())
