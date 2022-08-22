@@ -37,7 +37,19 @@ public class HelpCommand implements Command
 		}
 		
 		Comparator<Command> sortCommands = (Command c1, Command c2) -> {
-			return c1.getCategory().order - c2.getCategory().order;
+			// Compare the primary order of the command type
+			int order = c1.getCategory().order - c2.getCategory().order;
+			
+			// If the commands are of the same category, sort them by their sort order
+			if (order == 0)
+			{
+				return c1.getSortOrder() - c2.getSortOrder();
+			}
+			
+			else
+			{
+				return order;
+			}
 		};
 		
 		commands.sort(sortCommands);

@@ -102,4 +102,19 @@ public interface Command
 		}
 	}
 	
+	public default int getSortOrder()
+	{
+		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		
+		if (data != null)
+		{
+			return data.sortOrder();
+		}
+		
+		else
+		{
+			return 10;
+		}
+	}
+	
 }
