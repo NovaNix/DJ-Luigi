@@ -6,16 +6,21 @@ import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
 (
 	command = "play", 
 	description = "Plays a song",
 	aliases = {"p"},
+	parameters = {
+			@Parameter(name = "song", description = "The song that should be played. If the specified text is not a url it will search YouTube for the song.", type = OptionType.STRING, required = true)
+	},
 	category = CommandCategory.Audio
 )
 public class PlayCommand implements Command
