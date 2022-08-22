@@ -13,11 +13,13 @@ Right now DJ Luigi support a lot of the features bots like Rythm had
 - Editable Prefix
 - Queue Looping
 
+## Experimental Features
+- Server Playlists
+
 ## Planned Features
 There are a few features that I'd like to add
 - Skip Command (Forceskip currently works, I just need to add a voteskip)
-- Server Playlists
-- Blacklisted and Whitelisted Channels
+- Rework of the menu system
 
 ## Note
 This is one of my first serious public projects. I'm still new to git and GitHub, and the code still needs a lot of documentation and formatting. 
