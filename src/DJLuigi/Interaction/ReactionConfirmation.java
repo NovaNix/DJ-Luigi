@@ -1,16 +1,14 @@
 package DJLuigi.Interaction;
 
-import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 public class ReactionConfirmation extends ReactionMenu
 {
 
-	public static String ConfirmEmote = "✅";
-	public static String DeclineEmote = "🚫";
+	public static Emoji ConfirmEmoji = Emoji.fromUnicode("✅");
+	public static Emoji DeclineEmoji = Emoji.fromUnicode("🚫");
 	
 	public Runnable onConfirm;
 	public Runnable onDecline;
@@ -20,8 +18,8 @@ public class ReactionConfirmation extends ReactionMenu
 	{
 		super(event.getChannel().sendMessage(message).complete());
 	
-		event.getChannel().addReactionById(messageID, ConfirmEmote).queue();
-		event.getChannel().addReactionById(messageID, DeclineEmote).queue();
+		event.getChannel().addReactionById(messageID, ConfirmEmoji).queue();
+		event.getChannel().addReactionById(messageID, DeclineEmoji).queue();
 		
 		this.personConfirming = event.getAuthor().getId();
 		this.onConfirm = onConfirm;
@@ -29,7 +27,7 @@ public class ReactionConfirmation extends ReactionMenu
 	}
 	
 	@Override
-	public void OnReactionUpdate(GuildMessageReactionAddEvent event) 
+	public void OnReactionUpdate(MessageReactionAddEvent event) 
 	{	
 		System.out.println("Found a reaction on the confirmation.");
 		// RUN CHECK ON IF THE PERSON ADDING THE REACTION IS THE PERSON ASKED
@@ -37,13 +35,13 @@ public class ReactionConfirmation extends ReactionMenu
 		{
 			System.out.println("The user who sent it was the person we asked to confirm");
 			// Check if the reactions are the right ones
-			if (EventIsEmoji(event, ConfirmEmote))
+			if (EventIsEmoji(event, ConfirmEmoji))
 			{
 				onConfirm.run();
 				Delete();
 			}
 			
-			else if (EventIsEmoji(event, DeclineEmote))
+			else if (EventIsEmoji(event, DeclineEmoji))
 			{
 				onDecline.run();
 				Delete();

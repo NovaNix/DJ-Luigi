@@ -6,12 +6,14 @@ import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Interaction.ReactionMenuManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventHandler extends ListenerAdapter 
@@ -39,6 +41,12 @@ public class EventHandler extends ListenerAdapter
 		
 	}
 	
+	@Override
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
+	{
+		
+	}
+	
 //	@Override
 //	public void onGuildVoiceJoin(GuildVoiceJoinEvent event)
 //	{
@@ -48,7 +56,7 @@ public class EventHandler extends ListenerAdapter
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event)
 	{
-		VoiceChannel left = event.getChannelLeft();
+		AudioChannel left = event.getChannelLeft();
 		
 		Server host = DJ.Servers.get(left.getGuild().getId());
 		
@@ -75,7 +83,7 @@ public class EventHandler extends ListenerAdapter
 				    .addField("I'm honing my skills!", "I'm still improving, because I'm always on that grind. I should be ready to DJ for you by Friday!", false)
 				    .build();
 					
-					event.getGuild().getSystemChannel().sendMessage(sendMessage).queue();
+					event.getGuild().getSystemChannel().sendMessageEmbeds(sendMessage).queue();
 					
 					DJ.Servers.put(event.getGuild().getId(), new Server(event.getGuild().getId()));
 		}
@@ -83,7 +91,7 @@ public class EventHandler extends ListenerAdapter
     }
 	
 	@Override
-	public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event)
+	public void onMessageReactionAdd(MessageReactionAddEvent event)
 	{
 		ReactionMenuManager.onReactionEvent(event);
 	}

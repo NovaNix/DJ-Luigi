@@ -6,6 +6,7 @@ import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -26,14 +27,14 @@ public class JoinCommand implements Command
 	{
 		GuildVoiceState state = event.getMember().getVoiceState();
 		
-		if (!state.inVoiceChannel())
+		if (!state.inAudioChannel())
 		{
 			S.SendMessage("You're not in a channel!");
 			
 			return;
 		}
 		
-		VoiceChannel channel = state.getChannel();
+		AudioChannel channel = state.getChannel();
 		
 		S.JoinChannel(channel);
 		

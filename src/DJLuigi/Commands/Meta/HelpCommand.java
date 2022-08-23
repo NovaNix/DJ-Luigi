@@ -162,7 +162,7 @@ public class HelpCommand implements Command
 			embed.addField("Parameters", commandParameters.toString(), false);
 			embed.setColor(DJ.getPrimaryColor());
 			
-			event.getTextChannel().sendMessage(embed.build()).queue();
+			event.getChannel().sendMessageEmbeds(embed.build()).queue();
 			
 		}
 		

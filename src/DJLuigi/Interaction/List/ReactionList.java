@@ -1,23 +1,21 @@
 package DJLuigi.Interaction.List;
 
-import java.awt.Color;
-
 import DJLuigi.DJ;
 import DJLuigi.Interaction.ReactionMenu;
-import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 public class ReactionList extends ReactionMenu
 {
 
 	public static boolean NewMessageOnUpdate = true;
 	
-	public static String ForwardEmote = "➡️";
-	public static String BackEmote = "⬅️";
+	public static Emoji ForwardEmote = Emoji.fromUnicode("➡️");
+	public static Emoji BackEmote = Emoji.fromUnicode("⬅️");
 		
 	public int Page = 0;
 	
@@ -45,10 +43,9 @@ public class ReactionList extends ReactionMenu
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static Message generateList(ReactionListable listed, int page, MessageReceivedEvent event)
 	{
-		return event.getChannel().sendMessage(generateEmbed(listed, page)).complete();
+		return event.getChannel().sendMessageEmbeds(generateEmbed(listed, page)).complete();
 	}
 	
 	public static MessageEmbed generateEmbed(ReactionListable listed, int page)
@@ -86,7 +83,7 @@ public class ReactionList extends ReactionMenu
 	}
 	
 	@Override
-	public void OnReactionUpdate(GuildMessageReactionAddEvent event) 
+	public void OnReactionUpdate(MessageReactionAddEvent event) 
 	{
 		if (EventIsEmoji(event, ForwardEmote))
 		{

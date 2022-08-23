@@ -4,9 +4,8 @@ import java.util.Objects;
 
 import DJLuigi.DJ;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageReaction.ReactionEmote;
-import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactionEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 public abstract class ReactionMenu 
 {
@@ -21,16 +20,16 @@ public abstract class ReactionMenu
 		ReactionMenuManager.Menus.add(this);
 	}
 	
-	public abstract void OnReactionUpdate(GuildMessageReactionAddEvent event);
+	public abstract void OnReactionUpdate(MessageReactionAddEvent event);
 	
 	public Message GetMessage()
 	{
 		return DJ.jda.getTextChannelById(channelID).retrieveMessageById(messageID).complete();
 	}
 	
-	public boolean EventIsEmoji(GuildMessageReactionAddEvent event, String emoji)
+	public boolean EventIsEmoji(MessageReactionAddEvent event, Emoji emoji)
 	{
-		return event.getReaction().getReactionEmote().getEmoji().equals(emoji);
+		return event.getReaction().getEmoji().asUnicode().equals(emoji);
 	}
 	
 	// Prevents the menu from updating more, removes it from the manager

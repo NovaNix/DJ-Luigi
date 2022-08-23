@@ -35,7 +35,7 @@ public class StatusCommand implements Command
 			    .addField("Total Playlists", Integer.toString(PlaylistManager.getTotalPlaylistCount()), false)
 			    .build();
 		
-		event.getChannel().sendMessage(e).queue();
+		event.getChannel().sendMessageEmbeds(e).queue();
 	}
 
 }

@@ -49,7 +49,7 @@ public class PlaylistInfoCommand implements Command
 				.addField("Edit Status", p.editPermissions + " (will be replaced with more readable value later)", false)
 				.build();
 		
-		  event.getChannel().sendMessage(embed).queue();
+		  event.getChannel().sendMessageEmbeds(embed).queue();
 	}
 
 }

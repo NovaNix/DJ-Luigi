@@ -8,6 +8,7 @@ import DJLuigi.Audio.LoadResultHandler;
 import DJLuigi.Audio.Queue;
 import DJLuigi.Audio.TrackScheduler;
 import DJLuigi.IO.ServerData;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -57,7 +58,7 @@ public class Server
 		ActiveTextChannel = channel.getId();
 	}
 	
-	public void JoinChannel(VoiceChannel channel)
+	public void JoinChannel(AudioChannel channel)
 	{
 		AudioManager audioManager = getGuild().getAudioManager();
 		

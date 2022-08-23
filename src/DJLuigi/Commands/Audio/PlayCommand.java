@@ -37,9 +37,9 @@ public class PlayCommand implements Command
 			return;
 		}
 		
-		if (!self.getVoiceState().inVoiceChannel())
+		if (!self.getVoiceState().inAudioChannel())
 		{
-			if (event.getMember().getVoiceState().inVoiceChannel())
+			if (event.getMember().getVoiceState().inAudioChannel())
 			{
 				S.JoinChannel(event.getMember().getVoiceState().getChannel());
 			}

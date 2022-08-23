@@ -54,7 +54,7 @@ public class DJ
 			System.exit(1);
 		}
 		
-        jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
+        jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
 //        	.setAudioSendFactory(new NativeAudioSendFactory())
             .addEventListeners(new EventHandler())
             .setActivity(Activity.playing("Epic Tunes!"))

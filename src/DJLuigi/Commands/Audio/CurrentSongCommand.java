@@ -42,7 +42,7 @@ public class CurrentSongCommand implements Command
 											.setDescription("*" + currentSong.author + ", " + currentSong.getLengthString() + "*")
 											.build();
 
-		event.getChannel().sendMessage(e).queue();
+		event.getChannel().sendMessageEmbeds(e).queue();
 		
 	}
 

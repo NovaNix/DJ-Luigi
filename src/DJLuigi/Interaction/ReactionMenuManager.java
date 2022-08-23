@@ -2,13 +2,13 @@ package DJLuigi.Interaction;
 
 import java.util.ArrayList;
 
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 public class ReactionMenuManager 
 {
 	public static ArrayList<ReactionMenu> Menus = new ArrayList<ReactionMenu>();
 	
-	public static void onReactionEvent(GuildMessageReactionAddEvent event)
+	public static void onReactionEvent(MessageReactionAddEvent event)
 	{		
 		if (event.getUser().isBot())
 			return;
