@@ -36,15 +36,21 @@ public class DJ
 	public static void main(String[] args) throws LoginException, InterruptedException
     {
 		
+		System.out.println("Starting...");
+		
 		if (args.length == 0)
 		{
 			System.err.println("You must specify the home directory in the program arguments!");
 			System.exit(1);
 		}
 		
+		System.out.println("Loading home directory \"" + args[0] + "\"");
+		
 		DirectoryManager.Init(args[0]);
 		
 		settings = DirectoryManager.loadDJConfig();
+		
+		System.out.println("Config file loaded.");
 		
 		primaryColor = new Color(settings.botColor);
 		
@@ -53,6 +59,8 @@ public class DJ
 			System.err.println("You must specify the bot token in the config file!");
 			System.exit(1);
 		}
+		
+		System.out.println("Setting up JDA instance...");
 		
         jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
 //        	.setAudioSendFactory(new NativeAudioSendFactory())
@@ -65,6 +73,8 @@ public class DJ
         
         // optionally block until JDA is ready
         jda.awaitReady();
+        
+        System.out.println("JDA loaded");
 
         PlaylistManager.init();
         LoadServers();

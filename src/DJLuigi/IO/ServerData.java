@@ -42,6 +42,7 @@ public class ServerData
 		
 		if (!settingsFile.exists())
 		{
+			System.out.println("Failed to find config file. Creating a new one.");
 			settingsFile.createNewFile();
 			new ServerSettings().Save(settingsFile);
 		}
@@ -60,7 +61,6 @@ public class ServerData
 		try {
 			saveSettings();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

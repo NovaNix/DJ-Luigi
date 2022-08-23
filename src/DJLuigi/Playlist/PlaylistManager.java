@@ -17,9 +17,13 @@ public class PlaylistManager
 	
 	public static void init()
 	{
+		System.out.println("Loading playlists...");
+		
 		DirectoryManager.initPlaylistDirectory();
 		
 		reloadPlaylists();
+		
+		System.out.println("Loaded " + playlists.size() + " playlist" + (playlists.size() != 1 ? "s" : ""));
 	}
 	
 	public static void reloadPlaylists()
