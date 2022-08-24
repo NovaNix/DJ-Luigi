@@ -11,6 +11,7 @@ import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadHandler;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -27,14 +28,23 @@ public class PlayPlaylistCommand implements Command
 	@Override
 	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
 	{
-		
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
-		if (!self.getVoiceState().inAudioChannel())
+		AudioChannel currentChannel = self.getVoiceState().getChannel();
+		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
+		
+		if (Parameters.size() == 0)
 		{
-			if (event.getMember().getVoiceState().inAudioChannel())
+			S.SendMessage("You have to specify a song!");
+			return;
+		}
+		
+		if (currentChannel == null)
+		{
+			if (userChannel != null)
 			{
-				S.JoinChannel(event.getMember().getVoiceState().getChannel());
+				S.JoinChannel(userChannel);
+				currentChannel = userChannel;
 			}
 			
 			else
@@ -44,9 +54,10 @@ public class PlayPlaylistCommand implements Command
 			}
 		}
 		
-		if (!self.getVoiceState().getChannel().equals(event.getMember().getVoiceState().getChannel()))
+		else if (!currentChannel.equals(userChannel))
 		{
-			S.JoinChannel(event.getMember().getVoiceState().getChannel());
+			S.JoinChannel(userChannel);
+			currentChannel = userChannel;
 		}
 		
 		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
