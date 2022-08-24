@@ -1,14 +1,11 @@
 package DJLuigi;
 
-import java.awt.Color;
-
 import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Interaction.ReactionMenuManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -66,7 +63,6 @@ public class EventHandler extends ListenerAdapter
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
     public void onGuildJoin(GuildJoinEvent event)
     {
