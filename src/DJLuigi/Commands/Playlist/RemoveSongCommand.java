@@ -7,6 +7,7 @@ import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -16,11 +17,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"playlistremove"},
 	category = CommandCategory.Playlist
 )
-public class RemoveSongCommand implements Command
+public class RemoveSongCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
 		{

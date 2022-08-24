@@ -21,27 +21,30 @@ public class EventHandler extends ListenerAdapter
 		CommandHandler.init();
 	}
 	
-	@Override
-	public void onMessageReceived(MessageReceivedEvent event) 
-	{
-		if (event.getAuthor().isBot()) { return; }
-		
-		Server host = DJ.Servers.get(event.getGuild().getId());
-		
-		String serverCommandPrefix = host.data.settings.commandPrefix;
-		
-		if (event.getMessage().getContentRaw().startsWith(serverCommandPrefix))
-		{
-			host.SetActiveTextChannel(event.getChannel());
-			CommandHandler.processCommand(host, event);
-		}
-		
-	}
+//	@Override
+//	public void onMessageReceived(MessageReceivedEvent event) 
+//	{
+//		if (event.getAuthor().isBot()) { return; }
+//		
+//		Server host = DJ.Servers.get(event.getGuild().getId());
+//		
+//		String serverCommandPrefix = host.data.settings.commandPrefix;
+//		
+//		if (event.getMessage().getContentRaw().startsWith(serverCommandPrefix))
+//		{
+//			host.SetActiveTextChannel(event.getChannel());
+//			CommandHandler.processCommand(host, event);
+//		}
+//		
+//	}
 	
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
+		Server host = DJ.Servers.get(event.getGuild().getId());
+		host.SetActiveTextChannel(event.getChannel());
 		
+		CommandHandler.processCommand(host, event);
 	}
 	
 //	@Override

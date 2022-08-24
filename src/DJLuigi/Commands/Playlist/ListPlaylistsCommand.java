@@ -9,7 +9,7 @@ import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.DiscordUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -18,12 +18,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"playlists", "plist"},
 	category = CommandCategory.Playlist
 )
-public class ListPlaylistsCommand implements Command 
+public class ListPlaylistsCommand extends Command 
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
+		event.deferReply().queue(); // Tell the user that we know that they sent the message 
+		
 		ArrayList<Playlist> playlists = PlaylistManager.getPlaylists(S);
 		
 		StringBuilder list = new StringBuilder();
@@ -40,7 +42,7 @@ public class ListPlaylistsCommand implements Command
 		
 		list.append("```");
 		
-		S.SendMessage(list.toString());
+		event.getHook().sendMessage(list.toString());
 		
 	}
 

@@ -13,6 +13,7 @@ import DJLuigi.Playlist.Loading.PlaylistLoadHandler;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -22,11 +23,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"pp", "pplaylist"},
 	category = CommandCategory.Playlist
 )
-public class PlayPlaylistCommand implements Command
+public class PlayPlaylistCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		

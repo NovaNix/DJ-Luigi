@@ -48,6 +48,8 @@ public class Server
 		resultHandler = new LoadResultHandler(this);
 	}
 	
+	// Sends a message to the current active text channel. 
+	// Note: should never be used by a command, because slash commands require a reply through the event
 	public void SendMessage(String message)
 	{
 		getActiveChannel().sendMessage(message).queue();

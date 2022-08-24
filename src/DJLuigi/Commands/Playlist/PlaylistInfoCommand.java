@@ -12,6 +12,7 @@ import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -21,12 +22,12 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"info", "pinfo"},
 	category = CommandCategory.Playlist
 )
-public class PlaylistInfoCommand implements Command 
+public class PlaylistInfoCommand extends Command 
 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{			
 		
 		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))

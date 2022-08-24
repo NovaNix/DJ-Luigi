@@ -1,15 +1,10 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
-import DJLuigi.Interaction.List.ReactionList;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -18,22 +13,24 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"list", "q"},
 	category = CommandCategory.Audio
 )
-public class QueueCommand implements Command
+public class QueueCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		
 		if (S.queue.size() > 0)
 		{
 			S.SendMessage("Queue Size: " + S.queue.size());
-			new ReactionList(S.trackScheduler, 0, event);
+			//new ReactionList(S.trackScheduler, 0, event);
+			
+			event.reply("Queue command broke rn, come back later").queue();
 		}
 		
 		else
 		{
-			S.SendMessage("There are no songs in the queue!");
+			event.reply("There are no songs in the queue!").queue();
 		}
 		
 	}

@@ -10,6 +10,7 @@ import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -20,11 +21,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	debug = true,
 	category = CommandCategory.Other
 )
-public class PlaylistAsJSONCommand implements Command
+public class PlaylistAsJSONCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event)
+	public void executeCommand(Server S, SlashCommandInteractionEvent event)
 	{
 		
 		if (Parameters.size() == 0)

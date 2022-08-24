@@ -12,6 +12,7 @@ import DJLuigi.Interaction.ReactionConfirmation;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -20,11 +21,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	description = "Deletes the playlist (WARNING: THERES NO GOING BACK!)",
 	category = CommandCategory.Playlist
 )
-public class DeletePlaylistCommand implements Command
+public class DeletePlaylistCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		switch(Parameters.size())
 		{

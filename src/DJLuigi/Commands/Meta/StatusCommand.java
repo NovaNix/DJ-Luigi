@@ -1,8 +1,5 @@
 package DJLuigi.Commands.Meta;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
 import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
@@ -11,7 +8,7 @@ import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -20,12 +17,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"about", "info"},
 	category = CommandCategory.Other
 )
-public class StatusCommand implements Command
+public class StatusCommand extends Command
 {
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		MessageEmbed e = new EmbedBuilder()
 			    .setTitle("Status")
@@ -35,7 +31,7 @@ public class StatusCommand implements Command
 			    .addField("Total Playlists", Integer.toString(PlaylistManager.getTotalPlaylistCount()), false)
 			    .build();
 		
-		event.getChannel().sendMessageEmbeds(e).queue();
+		event.replyEmbeds(e).queue();
 	}
 
 }

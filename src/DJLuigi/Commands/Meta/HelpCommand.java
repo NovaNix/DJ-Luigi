@@ -11,6 +11,7 @@ import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -24,12 +25,12 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 	aliases = {"?", "h", "commands", "hep"},
 	category = CommandCategory.Other
 )
-public class HelpCommand implements Command
+public class HelpCommand extends Command
 {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		if (Parameters.size() == 0)
 		{

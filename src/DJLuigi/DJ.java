@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import DJLuigi.Commands.CommandHandler;
 import DJLuigi.IO.DirectoryManager;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
@@ -78,6 +79,8 @@ public class DJ
 
         PlaylistManager.init();
         LoadServers();
+        
+        CommandHandler.initSlashCommands();
                 
         System.out.println("Ready to accept user input!");
         

@@ -38,11 +38,19 @@ import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Commands.Playlist.RemoveSongCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class CommandHandler 
 {
-
+	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
 	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
 
@@ -126,6 +134,60 @@ public class CommandHandler
 		}
 	}
 	
+	public static void initSlashCommands()
+	{
+		System.out.println("Loading slash commands...");
+		
+		for (Server s : DJ.Servers.values())
+		{
+			generateSlashCommands(s.getGuild());
+		}
+		
+		System.out.println("Finished loading slash commands for each server");
+	}
+	
+	private static void generateSlashCommands(Guild guild)
+	{
+		System.out.println("Loading slash commands for \"" + guild.getName() + "\"");
+		
+		ArrayList<SlashCommandData> loadedCommands = new ArrayList<SlashCommandData>();
+		
+		for (Command c : commands.values())
+		{
+			try {
+				loadedCommands.add(generateSlashCommand(c));			
+			} catch (IllegalArgumentException e) 
+			{
+				System.err.println("Failed to generate command \"" + c.getCommandMessage() + "\"");
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println(String.format("Generated %d/%d commands", loadedCommands.size(), commands.size()));
+		
+		guild.updateCommands().addCommands(loadedCommands).queue();
+		
+	}
+	
+	private static SlashCommandData generateSlashCommand(Command c)
+	{
+		SlashCommandData data = Commands.slash(c.getCommandMessage(), c.getDescription());
+		
+		for (int i = 0; i < c.getParameters().length; i++)
+		{
+			Parameter parameter = c.getParameters()[i];
+			
+			data.addOption(parameter.type(), parameter.name(), parameter.description(), parameter.required());
+		}
+		
+		if (c.isDJOnly())
+		{
+			data.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ALL_VOICE_PERMISSIONS));
+		}
+			
+		return data;
+	}
+	
 	// Returns the specified command from the loaded commands. It will also work with aliases.
 	// Returns null if the command does not exist
 	public static Command getCommand(String name)
@@ -143,19 +205,19 @@ public class CommandHandler
 		}
 	}
 	
-	public static void processCommand(Server server, MessageReceivedEvent event)
+	public static void processCommand(Server server, SlashCommandInteractionEvent event)
 	{
-		Matcher matcher = commandInfoFinder.matcher(event.getMessage().getContentRaw());
+//		Matcher matcher = commandInfoFinder.matcher(event.getMessage().getContentRaw());
+//		
+//	    if (!matcher.find()) 
+//	    { 
+//	    	System.out.println("Invalid regex result! Regex might be broken!");
+//	    	
+//	    	return; 
+//	    } 
+//	    
+	    String requestedCommand = event.getName();
 		
-	    if (!matcher.find()) 
-	    { 
-	    	System.out.println("Invalid regex result! Regex might be broken!");
-	    	
-	    	return; 
-	    } 
-	    
-	    String requestedCommand = matcher.group(1);
-	    
 	    System.out.println("Found command: " + requestedCommand);
 	    
 	    Command c = null;
@@ -165,14 +227,14 @@ public class CommandHandler
 	    	c = commands.get(requestedCommand);
 	    }
 	    
-	    else if (aliasCommands.containsKey(requestedCommand))
-	    {
-	    	c = aliasCommands.get(requestedCommand);
-	    }
+//	    else if (aliasCommands.containsKey(requestedCommand))
+//	    {
+//	    	c = aliasCommands.get(requestedCommand);
+//	    }
 	    
 	    else
 	    {
-	    	server.SendMessage("Invalid command: \"" + matcher.group(1) + "\"!");
+	    	server.SendMessage("Invalid command: \"" + requestedCommand + "\"!");
 	    	return;
 	    }
 	    
@@ -184,28 +246,16 @@ public class CommandHandler
 	    		return;
 	    	}
 	    }
-	    
-	    if (c.isDJOnly())
-	    {
-	    	if (!commandUtils.isMemberDJ(event.getMember()))
-	    	{
-	    		server.SendMessage("You must be a DJ to use this command!");
-	    		return;
-	    	}
-	    }
-	    
-	    if (c.isOwnerOnly())
-	    {
-	    	if (!event.getMember().isOwner())
-	    	{
-	    		server.SendMessage("You must be the owner to run this command!");
-	    		return;
-	    	}
-	    }
 	    	
-	    ArrayList<String> parameters = extractParameters(matcher.group(2));
+	    //ArrayList<String> parameters = extractParameters(matcher.group(2));
 	    
-	    c.executeCommand(server, parameters, event);
+	    c.executeCommand(server, event);
+	    
+	    // Ensure that the interaction was acknowledged. Discord requires them to be
+	    if (!event.isAcknowledged())
+	    {
+	    	event.reply("I FORGOT TO ADD A RESPONSE FOR THIS MESSAGE! NOTIFY A DEVELOPER IMMEDIETLY!").queue();
+	    }
 	  
 	}
 	

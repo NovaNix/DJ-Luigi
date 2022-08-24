@@ -1,14 +1,12 @@
 package DJLuigi.Commands.Debugging;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -18,18 +16,18 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	debug = true,
 	category = CommandCategory.Other
 )
-public class QueueAsJSONCommand implements Command
+public class QueueAsJSONCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event)
+	public void executeCommand(Server S, SlashCommandInteractionEvent event)
 	{
 		try
 		{
-			S.SendMessage(S.queue.toJSON());
+			event.reply("```JSON\n" + S.queue.toJSON() + "```").queue();
 		} catch (JsonProcessingException e)
 		{
-			S.SendMessage("Failed to output queue as JSON. Check console for details...");
+			event.reply("Failed to output queue as JSON. Check console for details...").queue();
 			e.printStackTrace();
 		}
 		

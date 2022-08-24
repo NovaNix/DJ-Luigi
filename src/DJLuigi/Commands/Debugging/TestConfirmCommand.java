@@ -1,13 +1,10 @@
 package DJLuigi.Commands.Debugging;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
-import DJLuigi.Interaction.ReactionConfirmation;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -16,16 +13,16 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	debug = true,
 	category = CommandCategory.Other
 )
-public class TestConfirmCommand implements Command
+public class TestConfirmCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		
-		new ReactionConfirmation("This is a test. Accept?", event, 
-				() -> S.SendMessage("Approved"),
-				() -> S.SendMessage("Denied"));
+		event.reply("This command is broken rn, come back later").queue();
+//		new ReactionConfirmation("This is a test. Accept?", event, 
+//				() -> S.SendMessage("Approved"),
+//				() -> S.SendMessage("Denied"));
 		
 	}
 

@@ -1,12 +1,10 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -16,14 +14,13 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	djOnly = true,
 	category = CommandCategory.Audio
 )
-public class LoopCommand implements Command
+public class LoopCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		S.SendMessage("Set looped status to : `" + S.queue.toggleLoop() + "`!");
-		
+		event.reply("Set looped status to : `" + S.queue.toggleLoop() + "`!").queue();
 	}
 
 }

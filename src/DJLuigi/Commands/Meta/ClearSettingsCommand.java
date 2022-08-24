@@ -1,15 +1,12 @@
 package DJLuigi.Commands.Meta;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
-import DJLuigi.Interaction.ReactionConfirmation;
 import DJLuigi.Server.Server;
 import DJLuigi.Server.ServerSettings;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -19,15 +16,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	ownerOnly = true,
 	category = CommandCategory.Settings
 )
-public class ClearSettingsCommand implements Command
+public class ClearSettingsCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		new ReactionConfirmation("Do you really want to clear all of the settings? There's no going back...", event,
-			() -> clearSettings(S),
-			() -> S.SendMessage("Clear Settings Aborted"));
+		event.reply("This command is broken right now, come back later").queue();
+		
+//		new ReactionConfirmation("Do you really want to clear all of the settings? There's no going back...", event,
+//			() -> clearSettings(S),
+//			() -> S.SendMessage("Clear Settings Aborted"));
 	}
 	
 	public void clearSettings(Server S)

@@ -4,12 +4,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
 public class commandUtils 
 {
 
+	// The permissions required to be considered a DJ
+	public static final long DJ_REQUIRED_PERMISSIONS = Permission.ALL_VOICE_PERMISSIONS;
+	
 	// Pulled from https://www.geeksforgeeks.org/check-if-url-is-valid-or-not-in-java/
 	public static boolean isValidURL(String url)
     {
@@ -50,18 +54,7 @@ public class commandUtils
 	
 	public static boolean isMemberDJ(Member u)
 	{
-		List<Role> Roles = u.getRoles();
-		
-		for (int i = 0; i < Roles.size(); i++)
-		{
-			if (Roles.get(i).getName().equalsIgnoreCase("dj"))
-			{
-				return true;
-			}
-		}
-		
-		return false;
-		
+		return u.hasPermission(Permission.getPermissions(DJ_REQUIRED_PERMISSIONS));
 	}
 	
 }

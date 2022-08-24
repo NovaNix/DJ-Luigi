@@ -1,135 +1,63 @@
 package DJLuigi.Commands;
 
-import java.util.ArrayList;
-
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-public interface Command 
+public abstract class Command 
 {
 
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event);
+	private CommandData data;
 	
-	public default String getCommandMessage()
+	public Command()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		this.data = this.getClass().getAnnotation(CommandData.class);
 		
-		if (data != null)
+		if (data == null)
 		{
-			return data.command();
-		}
-		
-		else
-		{
-			System.out.println("COMMAND MESSAGE IS MISSING! FIX!!!!!!");
-			return "MISSING COMMAND";
+			System.err.println("CANNOT FIND THE COMMANDDATA ANNOTATION ON CLASS " + this.getClass().getName() + ". FIX IMMEDIATELY!");
 		}
 	}
 	
-	public default String getDescription()
+	public abstract void executeCommand(Server S, SlashCommandInteractionEvent event);
+	
+	public String getCommandMessage()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.description();
-		}
-		
-		else
-		{
-			System.out.println("COMMAND DESCRIPTION IS MISSING! FIX!!!!!!");
-			return "MISSING DESCRIPTION";
-		}
+		return data.command();
 	}
 	
-	public default boolean isDJOnly()
+	public String getDescription()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.djOnly();
-		}
-		
-		else
-		{
-			return false;
-		}
+		return data.description();
 	}
 	
-	public default boolean isOwnerOnly()
+	public boolean isDJOnly()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.ownerOnly();
-		}
-		
-		else
-		{
-			return true; // RETURN TRUE BECAUSE OWNER ONLY COMMANDS ARE POWERFUL AND IF SOMETHING GOES WRONG NOT ALLOWING THE COMMAND IS BETTER THAN ALLOWING IT
-		}
+		return data.djOnly();
 	}
 	
-	public default String[] getAliases()
+	public boolean isOwnerOnly()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.aliases();
-		}
-		
-		else
-		{
-			return new String[] {};
-		}
+		return data.ownerOnly();
 	}
 	
-	public default CommandCategory getCategory()
+	public String[] getAliases()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.category();
-		}
-		
-		else
-		{
-			return CommandCategory.Other;
-		}
+		return data.aliases();
 	}
 	
-	public default int getSortOrder()
+	public CommandCategory getCategory()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.sortOrder();
-		}
-		
-		else
-		{
-			return 10;
-		}
+		return data.category();
 	}
 	
-	public default Parameter[] getParameters()
+	public int getSortOrder()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.parameters();
-		}
-		
-		else
-		{
-			return new Parameter[] {};
-		}
+		return data.sortOrder();
+	}
+	
+	public Parameter[] getParameters()
+	{
+		return data.parameters();
 	}
 	
 }

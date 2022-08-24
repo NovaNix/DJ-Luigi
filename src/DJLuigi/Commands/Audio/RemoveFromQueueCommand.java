@@ -7,6 +7,7 @@ import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -20,11 +21,11 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 	aliases = {"removesong"},
 	category = CommandCategory.Audio
 )
-public class RemoveFromQueueCommand implements Command
+public class RemoveFromQueueCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		try
 		{

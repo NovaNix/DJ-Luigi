@@ -15,6 +15,7 @@ import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadTrackHandler;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -24,11 +25,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"addsong", "padd"},
 	category = CommandCategory.Playlist
 )
-public class AddSongCommand implements Command
+public class AddSongCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		if (Parameters.size() == 0)
 		{

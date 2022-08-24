@@ -6,6 +6,7 @@ import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
@@ -16,15 +17,16 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	djOnly = true,
 	category = CommandCategory.Audio
 )
-public class ForceSkipCommand implements Command
+public class ForceSkipCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
+		// TODO output the name of the skipped song in the message
 		S.queue.skip();
 		
-		S.SendMessage("Song Skipped!");
+		event.reply("Song Skipped!").queue();
 	}
 	
 }

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 public @interface Parameter 
 {
 	public String name();
+	// Note: the description cannot be longer than 100 characters due to discord limitations
 	public String description() default "";
 	public OptionType type();
 	public boolean required() default true;
