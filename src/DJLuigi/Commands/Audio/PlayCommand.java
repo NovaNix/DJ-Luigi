@@ -9,6 +9,7 @@ import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -31,17 +32,21 @@ public class PlayCommand implements Command
 	{
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
+		AudioChannel currentChannel = self.getVoiceState().getChannel();
+		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
+		
 		if (Parameters.size() == 0)
 		{
 			S.SendMessage("You have to specify a song!");
 			return;
 		}
 		
-		if (!self.getVoiceState().inAudioChannel())
+		if (currentChannel == null)
 		{
-			if (event.getMember().getVoiceState().inAudioChannel())
+			if (userChannel != null)
 			{
-				S.JoinChannel(event.getMember().getVoiceState().getChannel());
+				S.JoinChannel(userChannel);
+				currentChannel = userChannel;
 			}
 			
 			else
@@ -51,9 +56,10 @@ public class PlayCommand implements Command
 			}
 		}
 		
-		if (!self.getVoiceState().getChannel().equals(event.getMember().getVoiceState().getChannel()))
+		else if (!currentChannel.equals(userChannel))
 		{
-			S.JoinChannel(event.getMember().getVoiceState().getChannel());
+			S.JoinChannel(userChannel);
+			currentChannel = userChannel;
 		}
 		
 		String combinedParameters = commandUtils.parametersToString(Parameters);
