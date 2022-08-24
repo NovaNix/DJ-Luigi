@@ -19,8 +19,17 @@ public class DisconnectCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		S.LeaveVC();
-		event.reply("Disconnected!").queue();
+		if (S.isInVC())
+		{
+			S.LeaveVC();
+			event.reply("Disconnected!").queue();
+		}
+		
+		else
+		{
+			event.reply("I am not in a voice channel!").setEphemeral(true).queue();
+		}
+		
 	}
 
 }

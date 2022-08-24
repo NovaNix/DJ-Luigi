@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.Server.Server;
 
+// TODO Delete LoadResultHandler?
 public class LoadResultHandler implements AudioLoadResultHandler
 {
 

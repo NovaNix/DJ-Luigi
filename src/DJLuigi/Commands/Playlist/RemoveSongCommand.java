@@ -23,10 +23,13 @@ public class RemoveSongCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
-		{
-			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
-		}
+		event.reply("Sorry, this command is broken right now. Come back later").queue();
+		
+		
+//		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
+//		{
+//			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+//		}
 		
 	}
 

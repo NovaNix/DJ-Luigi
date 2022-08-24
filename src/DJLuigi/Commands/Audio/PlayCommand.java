@@ -1,8 +1,7 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.DJ;
+import DJLuigi.Audio.SlashLoadResultHandler;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
@@ -12,7 +11,6 @@ import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
@@ -36,11 +34,7 @@ public class PlayCommand extends Command
 		AudioChannel currentChannel = self.getVoiceState().getChannel();
 		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
 		
-		if (Parameters.size() == 0)
-		{
-			S.SendMessage("You have to specify a song!");
-			return;
-		}
+		String song = event.getOption("song").getAsString();
 		
 		if (currentChannel == null)
 		{
@@ -52,7 +46,7 @@ public class PlayCommand extends Command
 			
 			else
 			{
-				S.SendMessage("You must be in a voice channel for me to join!");
+				event.reply("You must be in a voice channel for me to join!").queue();
 				return;
 			}
 		}
@@ -62,19 +56,18 @@ public class PlayCommand extends Command
 			S.JoinChannel(userChannel);
 			currentChannel = userChannel;
 		}
+
+		// Tell the user that we are loading
+		event.deferReply().queue();
 		
-		String combinedParameters = commandUtils.parametersToString(Parameters);
-		
-		S.SendMessage("Loading `" + combinedParameters + "`");
-		
-		if (commandUtils.isValidURL(Parameters.get(0)))
+		if (commandUtils.isValidURL(song))
 		{
-			DJ.playerManager.loadItem(Parameters.get(0), S.resultHandler);
+			DJ.playerManager.loadItem(song, new SlashLoadResultHandler(S, event));
 		}
 		
 		else
 		{
-			DJ.playerManager.loadItem("ytsearch:" + combinedParameters, S.resultHandler);
+			DJ.playerManager.loadItem("ytsearch:" + song, new SlashLoadResultHandler(S, event));
 		}
 		
 	}

@@ -1,11 +1,5 @@
 package DJLuigi.Audio;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
-import javax.sound.midi.Track;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -30,14 +24,14 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	@Override
 	public void onPlayerPause(AudioPlayer player) 
 	{
-		hostServer.SendMessage("Player was paused");
+		//hostServer.SendMessage("Player was paused");
 		// Player was paused
 	}
 
 	@Override
 	public void onPlayerResume(AudioPlayer player) 
 	{
-		hostServer.SendMessage("Player was resumed");
+		//hostServer.SendMessage("Player was resumed");
 		// Player was resumed
 	}
 

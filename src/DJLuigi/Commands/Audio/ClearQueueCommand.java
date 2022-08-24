@@ -8,9 +8,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 @CommandData
 (
-	command = "clearqueue", 
+	command = "clear", 
 	description = "Clears the queue",
-	aliases = {"clear"},
+	aliases = {"clearqueue"},
 	djOnly = true,
 	category = CommandCategory.Audio
 )

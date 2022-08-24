@@ -11,8 +11,8 @@ import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
@@ -27,150 +27,169 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 )
 public class HelpCommand extends Command
 {
+	// A comparator that handles sorting commands
+	private static Comparator<Command> sortCommands = (Command c1, Command c2) -> {
+		// Compare the primary order of the command type
+		int order = c1.getCategory().order - c2.getCategory().order;
 
-	@SuppressWarnings("deprecation")
+		// If the commands are of the same category, sort them by their sort order
+		if (order == 0)
+		{
+			return c1.getSortOrder() - c2.getSortOrder();
+		}
+
+		else
+		{
+			return order;
+		}
+	};
+	
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		if (Parameters.size() == 0)
+		// Tell the user that it might take a second
+		event.deferReply().queue();
+		
+		if (event.getOption("command") == null)
 		{
-			// Send a list of all of the commands!
-			
-			S.SendMessage("Commands:");
-			
-			StringBuilder commandList = new StringBuilder();
-			
-			commandList.append("```YML\n");
-			
-			ArrayList<Command> commands = new ArrayList<Command>();
-			
-			for (Command c : CommandHandler.commands.values())
-			{
-				commands.add(c);
-			}
-			
-			Comparator<Command> sortCommands = (Command c1, Command c2) -> {
-				// Compare the primary order of the command type
-				int order = c1.getCategory().order - c2.getCategory().order;
-				
-				// If the commands are of the same category, sort them by their sort order
-				if (order == 0)
-				{
-					return c1.getSortOrder() - c2.getSortOrder();
-				}
-				
-				else
-				{
-					return order;
-				}
-			};
-			
-			commands.sort(sortCommands);
-			
-			String currentCategory = "";
-			
-			for (Command c : commands)
-			{
-				if (currentCategory != c.getCategory().name())
-				{
-					currentCategory = c.getCategory().name();
-					commandList.append("\n\t" + currentCategory + "\n");
-				}
-				
-				commandList.append(c.getCommandMessage() + ": " + c.getDescription());
-				commandList.append("\n");
-			}
-			
-			commandList.append("```");
-			
-			S.SendMessage(commandList.toString());
+			sendHelpMenu(S, event);
 		}
 		
 		else
 		{
-			// Send a help menu for a specific command
-			
-			Command c = CommandHandler.getCommand(Parameters.get(0));
-			
-			if (c == null)
-			{
-				S.SendMessage("Invalid command: `" + Parameters.get(0) + "`");
-				return;
-			}
-			
-			StringBuilder title = new StringBuilder();
-			
-			title.append(S.data.settings.commandPrefix);
-			title.append(c.getCommandMessage() + " ");
-			
-			// Start writing the bottom part of the help menu 
-			// We start it here so we can take advantage of the fact that we are already looping over the parameter list
-			
-			StringBuilder commandParameters = new StringBuilder();
-			
-			Parameter[] parameters = c.getParameters();
-			
-			if (parameters.length == 0)
-			{
-				commandParameters.append("None");
-			}
-			
-			else
-			{
-				for (int i = 0; i < parameters.length; i++)
-				{
-					Parameter p = parameters[i];
-					
-					title.append(parameterToString(p) + " ");
-					
-					commandParameters.append(p.name());
-					commandParameters.append(", ");
-					commandParameters.append(p.type().name());
-					
-					if (!p.required())
-					{
-						commandParameters.append(" (Optional)");
-					}
-					
-					commandParameters.append(": ");
-					commandParameters.append(p.description());
-				}
-			}
-			
-			StringBuilder aliases = new StringBuilder();
-			
-			for (int i = 0; i < c.getAliases().length; i++)
-			{
-				aliases.append(c.getAliases()[i]);
-				
-				if (i < c.getAliases().length - 1)
-				{
-					aliases.append(", ");
-				}
-			}
-			
-			// Create the embed 
-			EmbedBuilder embed = new EmbedBuilder();
-			
-			embed.setTitle(title.toString());
-			embed.setDescription(c.getDescription());
-			
-			if (c.getAliases().length != 0)
-			{
-				embed.addField("Aliases", aliases.toString(), false);
-			}
-			
-			embed.addField("Parameters", commandParameters.toString(), false);
-			embed.setColor(DJ.getPrimaryColor());
-			
-			event.getChannel().sendMessageEmbeds(embed.build()).queue();
-			
+			sendCommandMenu(S, event, event.getOption("command").getAsString());
 		}
-		
+			
 	}
 	
+	// Sends a list of all of the commands the user can see
+	// TODO Turn the list sent into an embed that can be navigated using interactables
+	private static void sendHelpMenu(Server s, SlashCommandInteractionEvent event)
+	{
+		Member user = event.getMember();
+		
+		StringBuilder commandList = new StringBuilder();
+	
+		commandList.append("Commands:\n");
+		commandList.append("```YML\n");
+					
+		// Create a list of the commands the user can use
+		
+		ArrayList<Command> commands = new ArrayList<Command>();
+					
+		for (Command c : CommandHandler.commands.values())
+		{
+			// TODO check if the user can use the command
+			commands.add(c);
+		}
+					
+		// Sort the commands so they are in a more readable order
+		commands.sort(sortCommands);
+
+		// Generate the help menu
+		
+		String currentCategory = "";
+
+		for (Command c : commands)
+		{
+			if (currentCategory != c.getCategory().name())
+			{
+				currentCategory = c.getCategory().name();
+				commandList.append("\n\t" + currentCategory + "\n");
+			}
+
+			commandList.append(c.getCommandMessage() + ": " + c.getDescription());
+			commandList.append("\n");
+		}
+
+		commandList.append("```");
+
+		event.getHook().sendMessage(commandList.toString()).queue();
+	}
+
+	private static void sendCommandMenu(Server s, SlashCommandInteractionEvent event, String commandName)
+	{
+		// Send a help menu for a specific command
+
+		Command c = CommandHandler.getCommand(commandName);
+
+		if (c == null)
+		{
+			event.getHook().sendMessage("Invalid command: `" + commandName + "`").queue();
+			return;
+		}
+
+		StringBuilder title = new StringBuilder();
+
+		title.append("/" + c.getCommandMessage() + " ");
+
+		// Start writing the bottom part of the help menu
+		// We start it here so we can take advantage of the fact that we are already
+		// looping over the parameter list
+
+		StringBuilder commandParameters = new StringBuilder();
+
+		Parameter[] parameters = c.getParameters();
+
+		if (parameters.length == 0)
+		{
+			commandParameters.append("None");
+		}
+
+		else
+		{
+			for (int i = 0; i < parameters.length; i++)
+			{
+				Parameter p = parameters[i];
+
+				title.append(parameterToString(p) + " ");
+
+				commandParameters.append(p.name());
+				commandParameters.append(", ");
+				commandParameters.append(p.type().name());
+
+				if (!p.required())
+				{
+					commandParameters.append(" (Optional)");
+				}
+
+				commandParameters.append(": ");
+				commandParameters.append(p.description());
+			}
+		}
+
+		StringBuilder aliases = new StringBuilder();
+
+		for (int i = 0; i < c.getAliases().length; i++)
+		{
+			aliases.append(c.getAliases()[i]);
+
+			if (i < c.getAliases().length - 1)
+			{
+				aliases.append(", ");
+			}
+		}
+
+		// Create the embed
+		EmbedBuilder embed = new EmbedBuilder();
+
+		embed.setTitle(title.toString());
+		embed.setDescription(c.getDescription());
+
+		if (c.getAliases().length != 0)
+		{
+			embed.addField("Aliases", aliases.toString(), false);
+		}
+
+		embed.addField("Parameters", commandParameters.toString(), false);
+		embed.setColor(DJ.getPrimaryColor());
+
+		event.getHook().sendMessageEmbeds(embed.build()).queue();
+
+	}
+
 	// Returns the parameter represented in a way that shows it's name, type, and if it is optional or not
-	public static String parameterToString(Parameter parameter)
+	private static String parameterToString(Parameter parameter)
 	{
 		String innerText = parameter.name() + ", " + parameter.type().name();
 		

@@ -1,14 +1,12 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
+import DJLuigi.Audio.Song;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
@@ -27,37 +25,34 @@ public class RemoveFromQueueCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		try
-		{
-			int songIndex = Integer.parseInt(Parameters.get(0)) - 1;
+		int songIndex = event.getOption("index").getAsInt() - 1;
 		
-			if (songIndex < 0)
-			{
-				S.SendMessage("Song Index Cannot be Negative!");
-			}
-			
-			else if (songIndex == 0)
-			{
-				S.SendMessage("You can't remove a song thats currently playing!");
-			}
-			
-			else if (songIndex >= S.queue.size())
-			{
-				S.SendMessage("That index doesnt exist!");
-			}
-			
-			else
-			{
-				S.SendMessage("Removed song `" + S.queue.get(songIndex).name + "` from the queue.");
-				S.queue.remove(songIndex);
-			}
-			
-			
-		} catch (NumberFormatException e)
+		if (songIndex == -1)
 		{
-			S.SendMessage(Parameters.get(0) + " is not a valid number!");
+			event.reply("Index cannot be 0!").queue();
 		}
 		
+		else if (songIndex < 0)
+		{
+			event.reply("Song Index Cannot be Negative!").queue();
+		}
+			
+		else if (songIndex == 0)
+		{
+			event.reply("You can't remove a song thats currently playing!").queue();
+		}
+			
+		else if (songIndex >= S.queue.size())
+		{
+			event.reply("That index is out of bounds! (Current queue length is " + S.queue.size() + ")").queue();;
+		}
+			
+		else
+		{
+			Song removed = S.queue.remove(songIndex);
+			event.reply("Removed song `" + removed.name + "` from the queue.").queue();
+			
+		}
 	}
 
 	

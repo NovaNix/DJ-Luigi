@@ -30,27 +30,30 @@ public class PlaylistInfoCommand extends Command
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{			
 		
-		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
-		{
-			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
-			return;
-		}
+		event.reply("Sorry, this command is broken right now. Come back later").queue();
 		
-		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
 		
-		User user = DJ.jda.getUserById(p.creatorID);
-		
-		MessageEmbed embed = new EmbedBuilder()
-				.setTitle(p.name)
-				.setColor(DJ.getPrimaryColor())
-				.setFooter("Owner: " + user.getName() + ", " + p.editors.size() + " editors", user.getAvatarUrl())
-				.setThumbnail("https://i.redd.it/b2pilioyu7u21.jpg")
-				.addField("Songs", p.songs.size() + " Songs", false)
-				.addField("Is Public", "" + p.isPublic, false)
-				.addField("Edit Status", p.editPermissions + " (will be replaced with more readable value later)", false)
-				.build();
-		
-		  event.getChannel().sendMessageEmbeds(embed).queue();
+//		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
+//		{
+//			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+//			return;
+//		}
+//		
+//		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
+//		
+//		User user = DJ.jda.getUserById(p.creatorID);
+//		
+//		MessageEmbed embed = new EmbedBuilder()
+//				.setTitle(p.name)
+//				.setColor(DJ.getPrimaryColor())
+//				.setFooter("Owner: " + user.getName() + ", " + p.editors.size() + " editors", user.getAvatarUrl())
+//				.setThumbnail("https://i.redd.it/b2pilioyu7u21.jpg")
+//				.addField("Songs", p.songs.size() + " Songs", false)
+//				.addField("Is Public", "" + p.isPublic, false)
+//				.addField("Edit Status", p.editPermissions + " (will be replaced with more readable value later)", false)
+//				.build();
+//		
+//		  event.getChannel().sendMessageEmbeds(embed).queue();
 	}
 
 }

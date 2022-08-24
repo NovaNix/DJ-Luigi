@@ -25,32 +25,35 @@ public class CreatePlaylistCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event)
 	{
-		switch(Parameters.size())
-		{
-		case 0:
-			S.SendMessage("You have to specify a playlist name!");
-			break;
-		case 1:
-			try {
-				
-				if (PlaylistManager.hasPlaylist(Parameters.get(0)))
-				{
-					S.SendMessage("There is already a playlist with that name! (Right now deleted playlists count)");
-					return;
-				}
-				
-				Playlist created = new Playlist(Parameters.get(0), event.getAuthor().getId(), S.guildID);
-				PlaylistManager.addPlaylist(created);
-				S.SendMessage("Created playlist: " + created.name);
-			} catch (IOException e) {
-				S.SendMessage("Sorry, but there was an error!");
-				e.printStackTrace();
-			}
-			break;
-		default:
-			S.SendMessage("There are too many parameters! Please don't use spaces!");
-			break;
-		}
+		event.reply("Sorry, this command is broken right now. Come back later").queue();
+		
+		
+//		switch(Parameters.size())
+//		{
+//		case 0:
+//			S.SendMessage("You have to specify a playlist name!");
+//			break;
+//		case 1:
+//			try {
+//				
+//				if (PlaylistManager.hasPlaylist(Parameters.get(0)))
+//				{
+//					S.SendMessage("There is already a playlist with that name! (Right now deleted playlists count)");
+//					return;
+//				}
+//				
+//				Playlist created = new Playlist(Parameters.get(0), event.getAuthor().getId(), S.guildID);
+//				PlaylistManager.addPlaylist(created);
+//				S.SendMessage("Created playlist: " + created.name);
+//			} catch (IOException e) {
+//				S.SendMessage("Sorry, but there was an error!");
+//				e.printStackTrace();
+//			}
+//			break;
+//		default:
+//			S.SendMessage("There are too many parameters! Please don't use spaces!");
+//			break;
+//		}
 		
 		
 		

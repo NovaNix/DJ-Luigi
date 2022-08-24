@@ -1,13 +1,11 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
+import DJLuigi.Audio.Song;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @CommandData
 (
@@ -23,10 +21,17 @@ public class ForceSkipCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		// TODO output the name of the skipped song in the message
-		S.queue.skip();
+		if (S.queue.size() == 0)
+		{
+			event.reply("There's nothing to skip!").queue();
+		}
 		
-		event.reply("Song Skipped!").queue();
+		event.reply("Skipping...").queue();
+		
+		Song removed = S.queue.skip();
+		
+		event.getHook().editOriginal("Skipped `" + removed.name + "`...").queue();
+		
 	}
 	
 }

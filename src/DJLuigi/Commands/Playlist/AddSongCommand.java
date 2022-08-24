@@ -31,65 +31,68 @@ public class AddSongCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		if (Parameters.size() == 0)
-		{
-			S.SendMessage("You need to specify the playlist!");
-			return;
-		}
+		event.reply("Sorry, this command is broken right now. Come back later").queue();
 		
-		else if (Parameters.size() > 2)
-		{
-			S.SendMessage("Thats too many parameters!");
-			return;
-		}
 		
-		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
-		{
-			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
-			return;
-		}
-		
-		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
-		
-		if (!p.memberCanEdit(event.getMember()))
-		{
-			S.SendMessage("You don't have permission to edit this playlist!");
-			return;
-		}
-
-		if (Parameters.size() == 1) // Add current song
-		{	
-			if (S.queue.size() == 0)
-			{
-				S.SendMessage("No song is currently playing!");
-				return;
-			}
-			
-			AudioTrack currentSong = S.queue.getTrack(0);
-			
-			Song song = new Song(currentSong);
-			
-			try {
-				p.addSong(song);
-				S.SendMessage("Added song: `" + song.name + "` to playlist " + p.name);
-			} catch (IOException e) {
-				S.SendMessage("Something went wrong!");
-				e.printStackTrace();
-				return;
-			}
-
-		}
-		
-		else // Add specified song
-		{	
-			if (!commandUtils.isValidURL(Parameters.get(1)))
-			{
-				S.SendMessage("Invalid song link: " + Parameters.get(1));
-				return;
-			}
-			
-			DJ.playerManager.loadItem(Parameters.get(1), new PlaylistLoadTrackHandler(S, p));
-		}
+//		if (Parameters.size() == 0)
+//		{
+//			S.SendMessage("You need to specify the playlist!");
+//			return;
+//		}
+//		
+//		else if (Parameters.size() > 2)
+//		{
+//			S.SendMessage("Thats too many parameters!");
+//			return;
+//		}
+//		
+//		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
+//		{
+//			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+//			return;
+//		}
+//		
+//		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
+//		
+//		if (!p.memberCanEdit(event.getMember()))
+//		{
+//			S.SendMessage("You don't have permission to edit this playlist!");
+//			return;
+//		}
+//
+//		if (Parameters.size() == 1) // Add current song
+//		{	
+//			if (S.queue.size() == 0)
+//			{
+//				S.SendMessage("No song is currently playing!");
+//				return;
+//			}
+//			
+//			AudioTrack currentSong = S.queue.getTrack(0);
+//			
+//			Song song = new Song(currentSong);
+//			
+//			try {
+//				p.addSong(song);
+//				S.SendMessage("Added song: `" + song.name + "` to playlist " + p.name);
+//			} catch (IOException e) {
+//				S.SendMessage("Something went wrong!");
+//				e.printStackTrace();
+//				return;
+//			}
+//
+//		}
+//		
+//		else // Add specified song
+//		{	
+//			if (!commandUtils.isValidURL(Parameters.get(1)))
+//			{
+//				S.SendMessage("Invalid song link: " + Parameters.get(1));
+//				return;
+//			}
+//			
+//			DJ.playerManager.loadItem(Parameters.get(1), new PlaylistLoadTrackHandler(S, p));
+//		}
 		
 	}
 

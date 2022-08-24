@@ -1,23 +1,25 @@
 package DJLuigi.Commands.Debugging;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Commands.Parameter;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
 (
 	command = "playlistasjson", 
 	description = "(Debug) Outputs a playlist as a json file",
 	aliases = {"jsonplaylist", "playlistjson"},
+	parameters = {
+			@Parameter(name = "playlist", description = "The playlist that should be outputted", type = OptionType.STRING, required = true)
+	},
 	debug = true,
 	category = CommandCategory.Other
 )
@@ -28,26 +30,22 @@ public class PlaylistAsJSONCommand extends Command
 	public void executeCommand(Server S, SlashCommandInteractionEvent event)
 	{
 		
-		if (Parameters.size() == 0)
+		String playlistName = event.getOption("playlist").getAsString();
+		
+		if (!PlaylistManager.hasPlaylist(playlistName))
 		{
-			S.SendMessage("You need to specify the playlist!");
+			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
 			return;
 		}
 		
-		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
-		{
-			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
-			return;
-		}
-		
-		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
+		Playlist p = PlaylistManager.getPlaylist(playlistName);
 		
 		try
 		{
-			S.SendMessage(p.toJSON());
+			event.reply("```json\n" + p.toJSON() + "```").queue();
 		} catch (JsonProcessingException e)
 		{
-			S.SendMessage("Failed to output playlist " + p.name + " as JSON. Check console for details...");
+			event.reply("Failed to output playlist " + p.name + " as JSON. Check console for details...").queue();
 			e.printStackTrace();
 		}
 		

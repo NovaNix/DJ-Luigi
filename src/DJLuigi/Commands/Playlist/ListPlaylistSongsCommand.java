@@ -25,30 +25,33 @@ public class ListPlaylistSongsCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		if (Parameters.size() == 0)
-		{
-			S.SendMessage("You need to specify the playlist!");
-			return;
-		}
+		event.reply("Sorry, this command is broken right now. Come back later").queue();
 		
-		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
-		{
-			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
-			return;
-		}
 		
-		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
-		
-		if (p.size() > 0)
-		{
-			S.SendMessage("Playlist Size: " + p.size() + " Songs");
-			new ReactionList(p, 0, event);
-		}
-		
-		else
-		{
-			S.SendMessage("There are no songs in the playlist!");
-		}
+//		if (Parameters.size() == 0)
+//		{
+//			S.SendMessage("You need to specify the playlist!");
+//			return;
+//		}
+//		
+//		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
+//		{
+//			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+//			return;
+//		}
+//		
+//		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
+//		
+//		if (p.size() > 0)
+//		{
+//			S.SendMessage("Playlist Size: " + p.size() + " Songs");
+//			new ReactionList(p, 0, event);
+//		}
+//		
+//		else
+//		{
+//			S.SendMessage("There are no songs in the playlist!");
+//		}
 		
 	}
 

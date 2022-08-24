@@ -2,9 +2,6 @@ package DJLuigi.Commands;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import DJLuigi.DJ;
 import DJLuigi.Commands.Audio.ClearQueueCommand;
 import DJLuigi.Commands.Audio.CurrentSongCommand;
@@ -18,10 +15,8 @@ import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Audio.ShuffleCommand;
 import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
 import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
-import DJLuigi.Commands.Debugging.SendParametersCommand;
 import DJLuigi.Commands.Debugging.TestConfirmCommand;
 import DJLuigi.Commands.Debugging.TestReactionListCommand;
-import DJLuigi.Commands.Meta.ClearSettingsCommand;
 import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
@@ -38,24 +33,19 @@ import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Commands.Playlist.RemoveSongCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class CommandHandler 
 {
 	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
-	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
+	// TODO consider removing aliases as slash commands no longer support them
+//	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
 
-	private static Pattern commandInfoFinder = Pattern.compile("(\\w+)\\s*(.*)", Pattern.CASE_INSENSITIVE);
-	private static Pattern commandParameterFinder = Pattern.compile("(\\S+)");
+//	private static Pattern commandInfoFinder = Pattern.compile("(\\w+)\\s*(.*)", Pattern.CASE_INSENSITIVE);
+//	private static Pattern commandParameterFinder = Pattern.compile("(\\S+)");
 	
 	// Loads all of the commands and prepares the command handler
 	public static void init()
@@ -105,7 +95,6 @@ public class CommandHandler
 		loadCommand(new HelpCommand());
 		
 		loadCommand(new SettingsCommand());
-		loadCommand(new ClearSettingsCommand());
 		loadCommand(new StatusCommand());
 		
 		
@@ -113,7 +102,6 @@ public class CommandHandler
 		
 		if (DJ.settings.debugMode)
 		{
-			loadCommand(new SendParametersCommand());
 			loadCommand(new TestConfirmCommand());
 			loadCommand(new TestReactionListCommand());
 			loadCommand(new QueueAsJSONCommand());
@@ -128,10 +116,10 @@ public class CommandHandler
 	{
 		commands.put(c.getCommandMessage(), c);
 		
-		for (String alias : c.getAliases())
-		{
-			aliasCommands.put(alias, c);
-		}
+//		for (String alias : c.getAliases())
+//		{
+//			aliasCommands.put(alias, c);
+//		}
 	}
 	
 	public static void initSlashCommands()
@@ -150,12 +138,16 @@ public class CommandHandler
 	{
 		System.out.println("Loading slash commands for \"" + guild.getName() + "\"");
 		
+		int serverCommandCount = guild.retrieveCommands().complete().size();
+		
+		System.out.println("Current number of commands in the guild: " + serverCommandCount);
+		
 		ArrayList<SlashCommandData> loadedCommands = new ArrayList<SlashCommandData>();
 		
 		for (Command c : commands.values())
 		{
 			try {
-				loadedCommands.add(generateSlashCommand(c));			
+				loadedCommands.add(c.generateSlashCommand());			
 			} catch (IllegalArgumentException e) 
 			{
 				System.err.println("Failed to generate command \"" + c.getCommandMessage() + "\"");
@@ -169,56 +161,19 @@ public class CommandHandler
 		
 	}
 	
-	private static SlashCommandData generateSlashCommand(Command c)
-	{
-		SlashCommandData data = Commands.slash(c.getCommandMessage(), c.getDescription());
-		
-		for (int i = 0; i < c.getParameters().length; i++)
-		{
-			Parameter parameter = c.getParameters()[i];
-			
-			data.addOption(parameter.type(), parameter.name(), parameter.description(), parameter.required());
-		}
-		
-		if (c.isDJOnly())
-		{
-			data.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ALL_VOICE_PERMISSIONS));
-		}
-			
-		return data;
-	}
-	
 	// Returns the specified command from the loaded commands. It will also work with aliases.
 	// Returns null if the command does not exist
 	public static Command getCommand(String name)
 	{
-		Command c = commands.get(name);
-		
-		if (c != null)
-		{
-			return c; 
-		}
-		
-		else
-		{
-			return aliasCommands.get(name);
-		}
+		return commands.get(name);
 	}
 	
 	public static void processCommand(Server server, SlashCommandInteractionEvent event)
 	{
-//		Matcher matcher = commandInfoFinder.matcher(event.getMessage().getContentRaw());
-//		
-//	    if (!matcher.find()) 
-//	    { 
-//	    	System.out.println("Invalid regex result! Regex might be broken!");
-//	    	
-//	    	return; 
-//	    } 
-//	    
+
 	    String requestedCommand = event.getName();
 		
-	    System.out.println("Found command: " + requestedCommand);
+	    System.out.println("Processing command \"" + event.getCommandString() + "\"");
 	    
 	    Command c = null;
 	    
@@ -227,14 +182,10 @@ public class CommandHandler
 	    	c = commands.get(requestedCommand);
 	    }
 	    
-//	    else if (aliasCommands.containsKey(requestedCommand))
-//	    {
-//	    	c = aliasCommands.get(requestedCommand);
-//	    }
-	    
 	    else
 	    {
-	    	server.SendMessage("Invalid command: \"" + requestedCommand + "\"!");
+	    	System.out.println("Failed to find command...");
+	    	event.reply("Invalid command: \"" + requestedCommand + "\"!").setEphemeral(true).queue();
 	    	return;
 	    }
 	    
@@ -242,35 +193,32 @@ public class CommandHandler
 	    {
 	    	if (!commandUtils.isMemberDJ(event.getMember()))
 	    	{
-	    		server.SendMessage("The server is in DJ Only Mode!");
+	    		event.reply("The server is in DJ Only Mode!").setEphemeral(true).queue();
 	    		return;
 	    	}
 	    }
-	    	
-	    //ArrayList<String> parameters = extractParameters(matcher.group(2));
 	    
-	    c.executeCommand(server, event);
+	    // The execution of the command is wrapped in a try catch block to provide a user friendly response if the command has a problem
+	    try 
+	    {
+	    	c.executeCommand(server, event);
+	    	
+	    } catch (Exception e)
+	    {
+	    	System.err.println("The slash command " + event.getName() + " threw an error. Please fix.");
+	    	e.printStackTrace();
+	    	
+	    	event.reply("Something went wrong while executing your command. Please notify a developer.").queue();
+	    	return;
+	    }
 	    
 	    // Ensure that the interaction was acknowledged. Discord requires them to be
 	    if (!event.isAcknowledged())
 	    {
-	    	event.reply("I FORGOT TO ADD A RESPONSE FOR THIS MESSAGE! NOTIFY A DEVELOPER IMMEDIETLY!").queue();
+	    	System.err.println("The slash command " + event.getName() + " did not acknowledge the event. Please fix.");
+	    	event.reply("Something went wrong while trying to respond to your command. Please notify a developer.").queue();
 	    }
 	  
-	}
-	
-	private static ArrayList<String> extractParameters(String input)
-	{
-		Matcher parameterMatcher = commandParameterFinder.matcher(input);
-    	
-    	ArrayList<String> parameters = new ArrayList<String>();
-    	
-    	while (parameterMatcher.find()) 
-    	{
-    		parameters.add(parameterMatcher.group());
-    	}
-    	
-    	return parameters;
 	}
 	
 }

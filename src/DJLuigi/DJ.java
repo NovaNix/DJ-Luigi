@@ -95,7 +95,7 @@ public class DJ
 			Servers.put(Guilds.get(i).getId(), new Server(Guilds.get(i).getId()));
 		}
 		
-		System.out.println("Loaded " + Guilds.size() + " server(s)!");
+		System.out.println("Loaded " + Guilds.size() + " server" + (Guilds.size() != 1 ? "s" : ""));
 	}
 	
 	// Gets the primary color of the bot

@@ -21,6 +21,8 @@ public class TestReactionListCommand extends Command implements ReactionListable
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		//new ReactionList(this, 0, event);
+		
+		
 	}
 
 	@Override

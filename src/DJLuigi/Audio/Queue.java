@@ -36,6 +36,11 @@ public class Queue
 			
 			hostServer.player.startTrack(song.track, true); 
 		}
+		
+		else
+		{
+			System.err.println("Tried to add an unplayable song to the queue!");
+		}
 	}
 	
 	public void add(AudioTrack track)
@@ -53,10 +58,12 @@ public class Queue
 		return songs.get(index).track;
 	}
 	
-	public void skip() 
+	// Skips the current song. 
+	// Returns the skipped song
+	public Song skip() 
 	{
-		hostServer.SendMessage("Skipping song `" + songs.get(0).name + "`...");
-		songs.remove(0);
+		//hostServer.SendMessage("Skipping song `" + songs.get(0).name + "`...");
+		Song removed = songs.remove(0);
 		
 		if (size() > 0)
 		{
@@ -67,18 +74,29 @@ public class Queue
 		{
 			hostServer.player.stopTrack();
 		}
+		
+		return removed;
 	}
 	
-	// Toggles if the queue is currently looped. Returns the new value of looped
+	// Sets if the queue should be looped
+	public void setLoop(boolean loop)
+	{
+		looped = loop;
+	}
+	
+	// Toggles if the queue is currently looped. 
+	// Returns the new value of looped
 	public boolean toggleLoop()
 	{
 		looped = !looped;
 		return looped;
 	}
 	
-	public void remove(int index)
+	// Removes the song at the specified index
+	// Returns the removed song
+	public Song remove(int index)
 	{
-		songs.remove(index);
+		return songs.remove(index);
 	}
 	
 	// Shuffles the queue. Note: the first item in the queue will not be suffled because it is currently playing

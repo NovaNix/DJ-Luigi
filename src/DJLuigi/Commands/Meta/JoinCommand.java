@@ -35,11 +35,6 @@ public class JoinCommand extends Command
 		S.JoinChannel(channel);
 		
 		event.reply("Joined `" + channel.getName() + "`").queue();
-		
-//		if (S.trackScheduler.Tracks.size() == 0)
-//		{
-//			DJ.playerManager.loadItem("https://www.youtube.com/watch?v=nQTxUKsL7iw", S.resultHandler);
-//		}
 	}
 	
 }

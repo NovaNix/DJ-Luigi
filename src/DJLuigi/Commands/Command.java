@@ -1,7 +1,11 @@
 package DJLuigi.Commands;
 
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public abstract class Command 
 {
@@ -58,6 +62,43 @@ public abstract class Command
 	public Parameter[] getParameters()
 	{
 		return data.parameters();
+	}
+	
+	public SlashCommandData generateSlashCommand()
+	{
+		SlashCommandData data = Commands.slash(getCommandMessage(), getDescription());
+		
+		setSlashCommandParameters(data);
+		
+		setSlashCommandPermissions(data);
+			
+		return data;
+	}
+	
+	// Sets the parameters for the slash command
+	protected void setSlashCommandParameters(SlashCommandData data)
+	{
+		for (int i = 0; i < getParameters().length; i++)
+		{
+			Parameter parameter = getParameters()[i];
+			
+			data.addOption(parameter.type(), parameter.name(), parameter.description(), parameter.required());
+		}
+	}
+	
+	// Sets the default permissions for the slash command
+	protected void setSlashCommandPermissions(SlashCommandData data)
+	{
+		if (isDJOnly())
+		{
+			data.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ALL_VOICE_PERMISSIONS));
+		}
+		
+		else if (isOwnerOnly())
+		{
+			// By setting it to disabled only administrators can use it
+			data.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+		}
 	}
 	
 }
