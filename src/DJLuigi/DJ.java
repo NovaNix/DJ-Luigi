@@ -13,6 +13,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import DJLuigi.Commands.CommandHandler;
 import DJLuigi.IO.DirectoryManager;
+import DJLuigi.Interaction.MenuHandler;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.JDA;
@@ -65,7 +66,9 @@ public class DJ
 		
         jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
 //        	.setAudioSendFactory(new NativeAudioSendFactory())
-            .addEventListeners(new EventHandler())
+            .addEventListeners(
+            		new EventHandler(),
+            		new MenuHandler())
             .setActivity(Activity.playing("Epic Tunes!"))
             .build();
 
@@ -96,6 +99,11 @@ public class DJ
 		}
 		
 		System.out.println("Loaded " + Guilds.size() + " server" + (Guilds.size() != 1 ? "s" : ""));
+	}
+	
+	public static Server getServer(String id)
+	{
+		return Servers.get(id);
 	}
 	
 	// Gets the primary color of the bot
