@@ -16,7 +16,7 @@ import DJLuigi.Commands.Audio.ShuffleCommand;
 import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
 import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
 import DJLuigi.Commands.Debugging.TestConfirmCommand;
-import DJLuigi.Commands.Debugging.TestReactionListCommand;
+import DJLuigi.Commands.Debugging.TestMenuListCommand;
 import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
@@ -103,7 +103,7 @@ public class CommandHandler
 		if (DJ.settings.debugMode)
 		{
 			loadCommand(new TestConfirmCommand());
-			loadCommand(new TestReactionListCommand());
+			loadCommand(new TestMenuListCommand());
 			loadCommand(new QueueAsJSONCommand());
 			loadCommand(new PlaylistAsJSONCommand());
 		}

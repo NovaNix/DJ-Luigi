@@ -5,18 +5,22 @@ import java.util.HashMap;
 
 import javax.annotation.Nonnull;
 
+import DJLuigi.DJ;
 import DJLuigi.Interaction.Menus.QueueMenu;
+import DJLuigi.Interaction.Menus.TestListMenu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+// Handles creating, distributing events, and accessing menus
 public class MenuHandler extends ListenerAdapter 
 {
 
-	private ArrayList<Menu> menus = new ArrayList<Menu>();
-	private HashMap<String, Menu> menuMap = new HashMap<String, Menu>();
+	private static ArrayList<Menu> menus = new ArrayList<Menu>();
+	private static HashMap<String, Menu> menuMap = new HashMap<String, Menu>();
 	
 	public MenuHandler()
 	{
@@ -24,7 +28,27 @@ public class MenuHandler extends ListenerAdapter
 		
 		loadMenu(new QueueMenu());
 		
+		// Load debug mode exclusive menus
+		if (DJ.settings.debugMode)
+		{
+			loadMenu(new TestListMenu());
+		}
+		
 		System.out.println("Loaded " + menus.size() + " menus");
+	}
+	
+	public static void createMenu(String ID, SlashCommandInteractionEvent event)
+	{
+		Menu menu = menuMap.get(ID);
+		
+		if (menu == null)
+		{
+			event.reply("Something went wrong! Please contact a developer!").queue();
+			System.err.println("Failed to find menu \"" + ID + "\"");
+			return;
+		}
+		
+		menu.generate(event);
 	}
 	
 	private void loadMenu(Menu menu)
@@ -48,19 +72,21 @@ public class MenuHandler extends ListenerAdapter
 	{
 		Menu menu = findEventMenu(event);
 		
-		
+		menu.onButtonInteraction(event);
 	}
 	
 	@Override
 	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) 
 	{
 		Menu menu = findEventMenu(event);
+		
+		menu.onSelectMenuInteraction(event);
 	}
 	
 	@Override
 	public void onModalInteraction(@Nonnull ModalInteractionEvent event) 
 	{
-		
+		// TODO implement modal menus
 	}
 	
 	// Returns the 

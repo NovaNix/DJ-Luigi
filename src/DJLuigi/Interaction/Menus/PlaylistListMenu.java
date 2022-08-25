@@ -3,16 +3,14 @@ package DJLuigi.Interaction.Menus;
 import DJLuigi.Interaction.MenuContext;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-public class QueueMenu extends PagedMenu
+public class PlaylistListMenu extends PagedMenu
 {
 
-	public static final String MENU_QUEUE = "QueueMenu";
+	public static final String MENU_PLAYLIST_LIST = "PlaylistList";
 	
-	public static final int songsPerPage = 10;
-	
-	public QueueMenu()
+	public PlaylistListMenu()
 	{
-		super(MENU_QUEUE);
+		super(MENU_PLAYLIST_LIST);
 	}
 
 	@Override
