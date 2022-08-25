@@ -9,10 +9,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+// TODO Consider merging into command handler
 public class EventHandler extends ListenerAdapter 
 {
 	
@@ -20,23 +20,6 @@ public class EventHandler extends ListenerAdapter
 	{
 		CommandHandler.init();
 	}
-	
-//	@Override
-//	public void onMessageReceived(MessageReceivedEvent event) 
-//	{
-//		if (event.getAuthor().isBot()) { return; }
-//		
-//		Server host = DJ.Servers.get(event.getGuild().getId());
-//		
-//		String serverCommandPrefix = host.data.settings.commandPrefix;
-//		
-//		if (event.getMessage().getContentRaw().startsWith(serverCommandPrefix))
-//		{
-//			host.SetActiveTextChannel(event.getChannel());
-//			CommandHandler.processCommand(host, event);
-//		}
-//		
-//	}
 	
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
@@ -46,12 +29,6 @@ public class EventHandler extends ListenerAdapter
 		
 		CommandHandler.processCommand(host, event);
 	}
-	
-//	@Override
-//	public void onGuildVoiceJoin(GuildVoiceJoinEvent event)
-//	{
-//		
-//	}
 	
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event)
