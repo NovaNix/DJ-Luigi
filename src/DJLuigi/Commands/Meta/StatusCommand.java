@@ -9,6 +9,7 @@ import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 @CommandData
 (
@@ -31,7 +32,9 @@ public class StatusCommand extends Command
 			    .addField("Total Playlists", Integer.toString(PlaylistManager.getTotalPlaylistCount()), false)
 			    .build();
 		
-		event.replyEmbeds(e).queue();
+		event.replyEmbeds(e).addActionRow(
+				Button.link("https://github.com/NovaNix/DJ-Luigi", "GitHub")
+				).queue();
 	}
 
 }
