@@ -11,7 +11,6 @@ public class DJSettings
 {
 	
 	@JsonProperty("botToken") public String botToken = "";
-	@JsonProperty("defaultPrefix") public String defaultPrefix = "!";
 	
 	@JsonProperty("leaveOnQueueFinish") public boolean leaveOnQueueFinish = true;
 	
