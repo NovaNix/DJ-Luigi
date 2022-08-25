@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 	command = "loop", 
 	description = "Sets if the queue should be looped or not",
 	parameters = {
-		@Parameter(name = "looped", description = "The new looped status", type = OptionType.BOOLEAN)
+		@Parameter(name = "looped", description = "The new looped status", type = OptionType.BOOLEAN, required = false)
 	},
 	aliases = {"l"},
 	djOnly = true,
