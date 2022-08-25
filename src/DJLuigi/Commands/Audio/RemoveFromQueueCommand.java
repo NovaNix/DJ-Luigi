@@ -54,6 +54,17 @@ public class RemoveFromQueueCommand extends Command
 			
 		}
 	}
+	
+	// TODO look into adding a min and max range for the slash command
+	
+//	@Override
+//	protected void setSlashCommandParameters(SlashCommandData data)
+//	{
+//		OptionData indexOption = new OptionData(OptionType.INTEGER, "index", "The index of the song to remove.", true);
+//		indexOption.
+//		
+//		data.addOptions(indexOption);
+//	}
 
 	
 	
