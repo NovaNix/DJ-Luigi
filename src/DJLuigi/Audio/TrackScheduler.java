@@ -7,10 +7,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
 import DJLuigi.DJ;
-import DJLuigi.Interaction.List.ReactionListable;
 import DJLuigi.Server.Server;
 
-public class TrackScheduler extends AudioEventAdapter implements ReactionListable
+public class TrackScheduler extends AudioEventAdapter
 {
 	private Server hostServer;
 	private Queue queue;
@@ -101,32 +100,6 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		// a new track
 		hostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
 		queue.skip();
-	}
-
-	@Override
-	public String getValue(int index) 
-	{	
-		Song song = queue.songs.get(index);
-		
-		return (index + 1) + ". [**" + song.name + "**](" + song.uri + ")";
-	}
-
-	@Override
-	public int size() 
-	{
-		return queue.size();
-	}
-
-	@Override
-	public int itemsPerPage() 
-	{
-		return 10;
-	}
-
-	@Override
-	public String getName() 
-	{	
-		return "Queue" + (queue.looped ? " (Looped)" : "");
 	}
 	
 }

@@ -16,7 +16,7 @@ public abstract class PagedMenu extends Menu
 	
 	public static Emoji forwardEmoji = Emoji.fromUnicode("➡️");
 	public static Emoji refreshEmoji = Emoji.fromUnicode("🔄");
-	public static Emoji backEmoji = Emoji.fromUnicode("⬅️");
+	public static Emoji backEmoji = Emoji.fromUnicode("⬅️"); 
 	
 	protected PagedMenu(String id)
 	{
@@ -53,7 +53,7 @@ public abstract class PagedMenu extends Menu
 			backButton = backButton.asDisabled();
 		}
 		
-		if (page >= getPageCount(context))
+		if (page >= getPageCount(context) || getPageCount(context) == 1)
 		{
 			forwardButton = forwardButton.asDisabled();
 		}

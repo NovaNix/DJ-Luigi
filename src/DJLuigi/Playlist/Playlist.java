@@ -4,25 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
 import DJLuigi.Audio.Song;
 import DJLuigi.IO.DirectoryManager;
-import DJLuigi.Interaction.List.ReactionListable;
-import DJLuigi.Server.Server;
-import DJLuigi.Server.ServerSettings;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Member;
 
-public class Playlist implements ReactionListable
+public class Playlist
 {
 	
 	@JsonProperty("name") public String name;
@@ -98,6 +92,11 @@ public class Playlist implements ReactionListable
 		
 	}
 	
+	public String getCreatorName()
+	{
+		return DJ.jda.getUserById(creatorID).getName();
+	}
+	
 	// Returns if the specified member can edit the playlist
 	public boolean memberCanEdit(Member m)
 	{
@@ -133,6 +132,11 @@ public class Playlist implements ReactionListable
 		return false;
 	}
 	
+	public int size()
+	{
+		return songs.size();
+	}
+	
 	private void SavePlaylist() throws JsonGenerationException, JsonMappingException, IOException
 	{
 		DirectoryManager.jsonMapper.writeValue(new File(DirectoryManager.getUserPlaylistDirectory(creatorID), name + ".json"), this);
@@ -162,32 +166,6 @@ public class Playlist implements ReactionListable
 		File playlistFile = new File(DirectoryManager.getUserPlaylistDirectory(creatorID), name + ".json");
 		
 		return playlistFile.delete();
-	}
-
-	@Override
-	public String getName() 
-	{
-		return name;
-	}
-
-	@Override
-	public String getValue(int index) 
-	{
-		Song entry = songs.get(index);
-		
-		return (index + 1) + ". [**" + entry.name + "**](" + entry.uri + ")";
-	}
-
-	@Override
-	public int size() 
-	{
-		return songs.size();
-	}
-
-	@Override
-	public int itemsPerPage() 
-	{
-		return 10;
 	}
 	
 }

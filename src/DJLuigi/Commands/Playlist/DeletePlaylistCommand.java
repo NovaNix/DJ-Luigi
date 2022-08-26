@@ -8,7 +8,6 @@ import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.IO.BotSetting;
-import DJLuigi.Interaction.ReactionConfirmation;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;

@@ -1,7 +1,6 @@
 package DJLuigi;
 
 import DJLuigi.Commands.CommandHandler;
-import DJLuigi.Interaction.ReactionMenuManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.AudioChannel;
@@ -65,11 +64,5 @@ public class EventHandler extends ListenerAdapter
 		}
 		
     }
-	
-	@Override
-	public void onMessageReactionAdd(MessageReactionAddEvent event)
-	{
-		ReactionMenuManager.onReactionEvent(event);
-	}
 	
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.annotation.Nonnull;
 
 import DJLuigi.DJ;
+import DJLuigi.Interaction.Menus.PlaylistListMenu;
 import DJLuigi.Interaction.Menus.QueueMenu;
 import DJLuigi.Interaction.Menus.TestListMenu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -27,6 +28,8 @@ public class MenuHandler extends ListenerAdapter
 		System.out.println("Loading menus");
 		
 		loadMenu(new QueueMenu());
+		
+		loadMenu(new PlaylistListMenu());
 		
 		// Load debug mode exclusive menus
 		if (DJ.settings.debugMode)
