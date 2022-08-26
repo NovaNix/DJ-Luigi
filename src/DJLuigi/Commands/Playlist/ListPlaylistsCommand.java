@@ -26,7 +26,7 @@ public class ListPlaylistsCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		MenuHandler.createMenu(PlaylistListMenu.MENU_PLAYLIST_LIST, event);
+		MenuHandler.createMenu(PlaylistListMenu.class, event);
 		
 //		event.deferReply().queue(); // Tell the user that we know that they sent the message 
 //		

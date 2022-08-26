@@ -40,14 +40,14 @@ public class MenuHandler extends ListenerAdapter
 		System.out.println("Loaded " + menus.size() + " menus");
 	}
 	
-	public static void createMenu(String ID, SlashCommandInteractionEvent event)
+	public static void createMenu(Class<? extends Menu> menuClass, SlashCommandInteractionEvent event)
 	{
-		Menu menu = menuMap.get(ID);
+		Menu menu = menuMap.get(menuClass.getSimpleName());
 		
 		if (menu == null)
 		{
 			event.reply("Something went wrong! Please contact a developer!").queue();
-			System.err.println("Failed to find menu \"" + ID + "\"");
+			System.err.println("Failed to find menu \"" + menuClass.getSimpleName() + "\"");
 			return;
 		}
 		

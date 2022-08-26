@@ -17,11 +17,6 @@ public abstract class PagedMenu extends Menu
 	public static Emoji forwardEmoji = Emoji.fromUnicode("➡️");
 	public static Emoji refreshEmoji = Emoji.fromUnicode("🔄");
 	public static Emoji backEmoji = Emoji.fromUnicode("⬅️"); 
-	
-	protected PagedMenu(String id)
-	{
-		super(id);
-	}
 
 	@Override
 	protected void generate(SlashCommandInteractionEvent event)

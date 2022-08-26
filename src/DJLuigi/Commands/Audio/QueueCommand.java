@@ -24,7 +24,7 @@ public class QueueCommand extends Command
 		
 		if (S.queue.size() > 0)
 		{
-			MenuHandler.createMenu(QueueMenu.MENU_QUEUE, event);
+			MenuHandler.createMenu(QueueMenu.class, event);
 		}
 		
 		else

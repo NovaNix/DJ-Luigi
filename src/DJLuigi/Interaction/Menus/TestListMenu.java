@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public class TestListMenu extends PagedMenu
 {
-	public static final String MENU_TEST_LIST = "TestListMenu";
 	
 	private static final int itemsPerPage = 10;
 	
@@ -17,7 +16,7 @@ public class TestListMenu extends PagedMenu
 	
 	public TestListMenu()
 	{
-		super(MENU_TEST_LIST);
+		
 	}
 
 	@Override

@@ -14,11 +14,9 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 public abstract class Menu
 {
 	
-	private final String id;
-	
-	protected Menu(String id)
+	protected Menu()
 	{
-		this.id = id;
+
 	}
 	
 	// Responds to the SlashCommandInteractionEvent with a menu
@@ -28,11 +26,11 @@ public abstract class Menu
 	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {};
 	public void onModalInteraction(@Nonnull ModalInteractionEvent event) {};
 	
-	// Returns the unique id of the Menu
+	// Returns the unique id of the Menu (Just the class name)
 	// This is used to forward the interaction events to the right object
 	public String getMenuID()
 	{
-		return id;
+		return this.getClass().getSimpleName();
 	}
 	
 	// Generates a parsable string that stores the parent menu, the interacted component, and additional state info for use in a component's custom id
