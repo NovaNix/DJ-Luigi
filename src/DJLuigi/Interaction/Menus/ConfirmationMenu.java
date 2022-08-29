@@ -28,5 +28,7 @@ public abstract class ConfirmationMenu extends Menu
 	{
 		
 	}
+	
+	protected abstract void onConfirm(ModalInteractionEvent event);
 
 }
