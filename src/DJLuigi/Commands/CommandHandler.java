@@ -2,6 +2,8 @@ package DJLuigi.Commands;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import DJLuigi.DJ;
 import DJLuigi.Commands.Audio.ClearQueueCommand;
 import DJLuigi.Commands.Audio.CurrentSongCommand;
@@ -41,11 +43,9 @@ public class CommandHandler
 {
 	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
+	public static HashMap<CommandCategory, List<Command>> commandsByCategories = new HashMap<CommandCategory, List<Command>>();
 	// TODO consider removing aliases as slash commands no longer support them
 //	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
-
-//	private static Pattern commandInfoFinder = Pattern.compile("(\\w+)\\s*(.*)", Pattern.CASE_INSENSITIVE);
-//	private static Pattern commandParameterFinder = Pattern.compile("(\\S+)");
 	
 	// Loads all of the commands and prepares the command handler
 	public static void init()
@@ -116,10 +116,15 @@ public class CommandHandler
 	{
 		commands.put(c.getCommandMessage(), c);
 		
-//		for (String alias : c.getAliases())
-//		{
-//			aliasCommands.put(alias, c);
-//		}
+		List<Command> categoryCommandsList = commandsByCategories.get(c.getCategory());
+		
+		if (categoryCommandsList == null)
+		{
+			categoryCommandsList = new ArrayList<Command>();
+			commandsByCategories.put(c.getCategory(), categoryCommandsList);
+		}
+		
+		categoryCommandsList.add(c);
 	}
 	
 	public static void initSlashCommands()
@@ -166,6 +171,12 @@ public class CommandHandler
 	public static Command getCommand(String name)
 	{
 		return commands.get(name);
+	}
+	
+	// Returns a list of all of the commands with the specific category
+	public static List<Command> getCommands(CommandCategory category)
+	{
+		return commandsByCategories.get(category);
 	}
 	
 	public static void processCommand(Server server, SlashCommandInteractionEvent event)

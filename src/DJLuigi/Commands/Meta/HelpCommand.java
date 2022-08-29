@@ -9,6 +9,8 @@ import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Commands.Parameter;
+import DJLuigi.Interaction.MenuHandler;
+import DJLuigi.Interaction.Menus.HelpMenu;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -27,28 +29,12 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 )
 public class HelpCommand extends Command
 {
-	// A comparator that handles sorting commands
-	private static Comparator<Command> sortCommands = (Command c1, Command c2) -> {
-		// Compare the primary order of the command type
-		int order = c1.getCategory().order - c2.getCategory().order;
-
-		// If the commands are of the same category, sort them by their sort order
-		if (order == 0)
-		{
-			return c1.getSortOrder() - c2.getSortOrder();
-		}
-
-		else
-		{
-			return order;
-		}
-	};
 	
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		// Tell the user that it might take a second
-		event.deferReply().queue();
+		//event.deferReply().queue();
 		
 		if (event.getOption("command") == null)
 		{
@@ -63,48 +49,50 @@ public class HelpCommand extends Command
 	}
 	
 	// Sends a list of all of the commands the user can see
-	// TODO Turn the list sent into an embed that can be navigated using interactables
 	private static void sendHelpMenu(Server s, SlashCommandInteractionEvent event)
 	{
-		Member user = event.getMember();
 		
-		StringBuilder commandList = new StringBuilder();
-	
-		commandList.append("Commands:\n");
-		commandList.append("```YML\n");
-					
-		// Create a list of the commands the user can use
+		MenuHandler.createMenu(HelpMenu.class, event);
 		
-		ArrayList<Command> commands = new ArrayList<Command>();
-					
-		for (Command c : CommandHandler.commands.values())
-		{
-			// TODO check if the user can use the command
-			commands.add(c);
-		}
-					
-		// Sort the commands so they are in a more readable order
-		commands.sort(sortCommands);
-
-		// Generate the help menu
-		
-		String currentCategory = "";
-
-		for (Command c : commands)
-		{
-			if (currentCategory != c.getCategory().name())
-			{
-				currentCategory = c.getCategory().name();
-				commandList.append("\n\t" + currentCategory + "\n");
-			}
-
-			commandList.append(c.getCommandMessage() + ": " + c.getDescription());
-			commandList.append("\n");
-		}
-
-		commandList.append("```");
-
-		event.getHook().sendMessage(commandList.toString()).queue();
+//		Member user = event.getMember();
+//		
+//		StringBuilder commandList = new StringBuilder();
+//	
+//		commandList.append("Commands:\n");
+//		commandList.append("```YML\n");
+//					
+//		// Create a list of the commands the user can use
+//		
+//		ArrayList<Command> commands = new ArrayList<Command>();
+//					
+//		for (Command c : CommandHandler.commands.values())
+//		{
+//			// TODO check if the user can use the command
+//			commands.add(c);
+//		}
+//					
+//		// Sort the commands so they are in a more readable order
+//		commands.sort(sortCommands);
+//
+//		// Generate the help menu
+//		
+//		String currentCategory = "";
+//
+//		for (Command c : commands)
+//		{
+//			if (currentCategory != c.getCategory().name())
+//			{
+//				currentCategory = c.getCategory().name();
+//				commandList.append("\n\t" + currentCategory + "\n");
+//			}
+//
+//			commandList.append(c.getCommandMessage() + ": " + c.getDescription());
+//			commandList.append("\n");
+//		}
+//
+//		commandList.append("```");
+//
+//		event.getHook().sendMessage(commandList.toString()).queue();
 	}
 
 	private static void sendCommandMenu(Server s, SlashCommandInteractionEvent event, String commandName)
@@ -184,7 +172,9 @@ public class HelpCommand extends Command
 		embed.addField("Parameters", commandParameters.toString(), false);
 		embed.setColor(DJ.getPrimaryColor());
 
-		event.getHook().sendMessageEmbeds(embed.build()).queue();
+		event.replyEmbeds(embed.build()).queue();
+		
+		//event.getHook().sendMessageEmbeds(embed.build()).queue();
 
 	}
 
