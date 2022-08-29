@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 (
 	command = "status", 
 	description = "Tells information about the bot",
+	global = true,
 	aliases = {"about", "info"},
 	category = CommandCategory.Other
 )

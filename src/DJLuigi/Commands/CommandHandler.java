@@ -116,6 +116,8 @@ public class CommandHandler
 	{
 		commands.put(c.getCommandMessage(), c);
 		
+		// Add the command to the category list
+		
 		List<Command> categoryCommandsList = commandsByCategories.get(c.getCategory());
 		
 		if (categoryCommandsList == null)
@@ -130,6 +132,24 @@ public class CommandHandler
 	public static void initSlashCommands()
 	{
 		System.out.println("Loading slash commands...");
+		
+		// Load global commands
+		
+		ArrayList<SlashCommandData> globalCommands = new ArrayList<SlashCommandData>();
+		
+		for (Command c : commands.values())
+		{
+			if (c.isGlobal())
+			{
+				globalCommands.add(c.generateSlashCommand());
+			}
+		}
+		
+		DJ.jda.updateCommands().addCommands(globalCommands).queue();
+		
+		System.out.println("Loaded " + globalCommands.size() + " global commands");
+		
+		// Load local commands
 		
 		for (Server s : DJ.Servers.values())
 		{
@@ -149,18 +169,28 @@ public class CommandHandler
 		
 		ArrayList<SlashCommandData> loadedCommands = new ArrayList<SlashCommandData>();
 		
+		int globalCommands = 0; // The number of global commands to take out of the total loaded commands cound
+		
 		for (Command c : commands.values())
 		{
-			try {
-				loadedCommands.add(c.generateSlashCommand());			
-			} catch (IllegalArgumentException e) 
+			if (!c.isGlobal())
 			{
-				System.err.println("Failed to generate command \"" + c.getCommandMessage() + "\"");
-				e.printStackTrace();
+				try {
+					loadedCommands.add(c.generateSlashCommand());			
+				} catch (IllegalArgumentException e) 
+				{
+					System.err.println("Failed to generate command \"" + c.getCommandMessage() + "\"");
+					e.printStackTrace();
+				}
+			}
+			
+			else
+			{
+				globalCommands++;
 			}
 		}
 		
-		System.out.println(String.format("Generated %d/%d commands", loadedCommands.size(), commands.size()));
+		System.out.println(String.format("Generated %d/%d commands", loadedCommands.size(), commands.size() - globalCommands));
 		
 		guild.updateCommands().addCommands(loadedCommands).queue();
 		

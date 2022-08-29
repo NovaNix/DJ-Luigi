@@ -34,6 +34,11 @@ public abstract class Command
 		return data.description();
 	}
 	
+	public boolean isGlobal()
+	{
+		return data.global();
+	}
+	
 	public boolean isDJOnly()
 	{
 		return data.djOnly();
