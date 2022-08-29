@@ -48,7 +48,7 @@ public abstract class PagedMenu extends Menu
 			backButton = backButton.asDisabled();
 		}
 		
-		if (page >= getPageCount(context) || getPageCount(context) == 1)
+		if (page + 1 >= getPageCount(context) || getPageCount(context) == 1)
 		{
 			forwardButton = forwardButton.asDisabled();
 		}
