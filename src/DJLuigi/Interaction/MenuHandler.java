@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import DJLuigi.DJ;
 import DJLuigi.Interaction.Menus.HelpMenu;
 import DJLuigi.Interaction.Menus.PlaylistListMenu;
+import DJLuigi.Interaction.Menus.PlaylistSongsMenu;
 import DJLuigi.Interaction.Menus.QueueMenu;
 import DJLuigi.Interaction.Menus.TestListMenu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -32,7 +33,7 @@ public class MenuHandler extends ListenerAdapter
 		loadMenu(new HelpMenu());
 		
 		loadMenu(new PlaylistListMenu());
-		
+		loadMenu(new PlaylistSongsMenu());
 		
 		// Load debug mode exclusive menus
 		if (DJ.settings.debugMode)
@@ -43,7 +44,7 @@ public class MenuHandler extends ListenerAdapter
 		System.out.println("Loaded " + menus.size() + " menus");
 	}
 	
-	public static void createMenu(Class<? extends Menu> menuClass, SlashCommandInteractionEvent event)
+	public static void createMenu(Class<? extends Menu> menuClass, SlashCommandInteractionEvent event, String... state)
 	{
 		Menu menu = menuMap.get(menuClass.getSimpleName());
 		
@@ -54,7 +55,7 @@ public class MenuHandler extends ListenerAdapter
 			return;
 		}
 		
-		menu.generate(event);
+		menu.generate(event, state);
 	}
 	
 	private void loadMenu(Menu menu)
@@ -77,6 +78,8 @@ public class MenuHandler extends ListenerAdapter
 	public void onButtonInteraction(ButtonInteractionEvent event) 
 	{
 		Menu menu = findEventMenu(event);
+	
+		System.out.println("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
 		
 		menu.onButtonInteraction(event);
 	}
@@ -86,6 +89,8 @@ public class MenuHandler extends ListenerAdapter
 	{
 		Menu menu = findEventMenu(event);
 		
+		System.out.println("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
+		
 		menu.onSelectMenuInteraction(event);
 	}
 	
@@ -93,6 +98,8 @@ public class MenuHandler extends ListenerAdapter
 	public void onModalInteraction(@Nonnull ModalInteractionEvent event) 
 	{
 		// TODO implement modal menus
+		//System.out.println("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
+		
 	}
 	
 	// Returns the 

@@ -15,6 +15,7 @@ import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Audio.ShuffleCommand;
+import DJLuigi.Commands.Debugging.HexTestCommand;
 import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
 import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
 import DJLuigi.Commands.Debugging.TestConfirmCommand;
@@ -24,8 +25,6 @@ import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
 import DJLuigi.Commands.Meta.StatusCommand;
-import DJLuigi.Commands.Playlist.CreatePlaylistCommand;
-import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
 import DJLuigi.Commands.Playlist.PlaylistCommand;
@@ -75,13 +74,9 @@ public class CommandHandler
 		
 		loadCommand(new PlaylistCommand());
 		
-		loadCommand(new CreatePlaylistCommand());
-		
 		loadCommand(new ListPlaylistsCommand());
-		loadCommand(new ListPlaylistSongsCommand());
 		
 		loadCommand(new PlayPlaylistCommand());
-		
 		loadCommand(new ReloadPlaylistsCommand());
 		
 		// Misc Commands
@@ -100,6 +95,7 @@ public class CommandHandler
 			loadCommand(new TestMenuListCommand());
 			loadCommand(new QueueAsJSONCommand());
 			loadCommand(new PlaylistAsJSONCommand());
+			loadCommand(new HexTestCommand());
 		}
 		
 		System.out.println("Loaded " + commands.size() + " Commands!");

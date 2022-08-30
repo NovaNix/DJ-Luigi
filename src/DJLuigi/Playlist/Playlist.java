@@ -22,7 +22,8 @@ public class Playlist
 	
 	@JsonProperty("name") public String name;
 	@JsonProperty("displayName") public String displayName;
-	@JsonProperty("id") public String id; // A 4 digit hex code that is randomly generated for each playlist. This is used to prevent duplicate names from causing issues
+	@JsonProperty("description") public String description;
+	@JsonProperty("id") public String id; // A 4 digit hex code that is appended to playlists with the same name
 	@JsonProperty("creatorID") public String creatorID;
 	
 	@JsonProperty("editPermissions") public int editPermissions = PlaylistEditPermissions.EDIT_OWNER | PlaylistEditPermissions.EDIT_EDITORS | PlaylistEditPermissions.EDIT_DJ;
@@ -37,10 +38,12 @@ public class Playlist
 	@JsonProperty("deleted") public boolean deleted = false;
 	
 	
-	public Playlist(String name, String creatorID, String createdServer) throws JsonGenerationException, JsonMappingException, IOException
+	public Playlist(String name, String description, String creatorID, String createdServer) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		this.name = name.toLowerCase();
 		this.displayName = name;
+		this.description = description;
+		this.id = PlaylistManager.getUniquePlaylistId(name);
 		this.creatorID = creatorID;
 		this.allowedServers.add(createdServer);
 		
@@ -59,6 +62,11 @@ public class Playlist
 		songs.add(song);
 		
 		SavePlaylist();
+	}
+	
+	public Song getSong(int index)
+	{
+		return songs.get(index);
 	}
 	
 	@SuppressWarnings("unlikely-arg-type")
@@ -112,6 +120,12 @@ public class Playlist
 			return allowedServers.contains(serverID);
 		}
 		
+	}
+	
+	// Returns the name of the playlist combined with it's name unique ID
+	public String getUniqueName()
+	{
+		return name + "#" + id;
 	}
 	
 	public String getCreatorName()

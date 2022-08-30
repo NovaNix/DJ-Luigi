@@ -12,15 +12,35 @@ public class MenuContext
 	
 	public final Server server;
 	public final String user;
-//	public final String messageID;
 	public final String channelID;
+	
+	public final String[] stateInfo; // An array of strings that are used to store state between interactions
+	
+	public MenuContext(GenericComponentInteractionCreateEvent event, String[] state)
+	{
+		server = DJ.getServer(event.getGuild().getId());
+		user = event.getMember().getId();
+		channelID = event.getChannel().getId();
+		
+		stateInfo = state;
+	}
+	
+	public MenuContext(SlashCommandInteractionEvent event, String[] state)
+	{
+		server = DJ.getServer(event.getGuild().getId());
+		user = event.getMember().getId();
+		channelID = event.getChannel().getId();
+		
+		stateInfo = state;
+	}
 	
 	public MenuContext(GenericComponentInteractionCreateEvent event)
 	{
 		server = DJ.getServer(event.getGuild().getId());
 		user = event.getMember().getId();
-//		messageID = event.getMessageId();
 		channelID = event.getChannel().getId();
+		
+		stateInfo = new String[] {};
 	}
 	
 	public MenuContext(SlashCommandInteractionEvent event)
@@ -28,6 +48,8 @@ public class MenuContext
 		server = DJ.getServer(event.getGuild().getId());
 		user = event.getMember().getId();
 		channelID = event.getChannel().getId();
+		
+		stateInfo = new String[] {};
 	}
 	
 }

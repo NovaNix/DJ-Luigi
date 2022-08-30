@@ -21,7 +21,7 @@ public abstract class ConfirmationMenu extends Menu
 	}
 
 	@Override
-	protected void generate(SlashCommandInteractionEvent event)
+	public void generate(SlashCommandInteractionEvent event, String... state)
 	{
 		//Modal modal = Modal.create("test", "Confirmation").
 		

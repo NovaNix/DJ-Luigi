@@ -35,7 +35,9 @@ public class PlaylistListMenu extends PagedMenu
 				break;
 			}
 			
-			description.append((i + 1) + (playlistsPerPage * page) + ". " + "**" + playlists.get(i * playlistsPerPage).name + ",** " + playlists.get(i).getCreatorName());
+			Playlist p = playlists.get(i + (page * playlistsPerPage));
+			
+			description.append((i + 1) + (playlistsPerPage * page) + ". " + "**" + p.displayName + "**#" + p.id + ", " + p.getCreatorName());
 			description.append("\n");
 			shownPlaylists++;
 		}

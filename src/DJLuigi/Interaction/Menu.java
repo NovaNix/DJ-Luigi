@@ -20,7 +20,7 @@ public abstract class Menu
 	}
 	
 	// Responds to the SlashCommandInteractionEvent with a menu
-	protected abstract void generate(SlashCommandInteractionEvent event);
+	public abstract void generate(SlashCommandInteractionEvent event, String... state);
 	
 	public void onButtonInteraction(ButtonInteractionEvent event) {};
 	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {};
@@ -44,13 +44,40 @@ public abstract class Menu
 		builder.append(componentName);
 		
 		for (int i = 0; i < stateInfo.length; i++)
-		{
+		{	
+			if (stateInfo[i] == null)
+			{
+				continue;
+			}
+			
 			builder.append("/");
 			builder.append(stateInfo[i].toString());
 		}
 		
 		return builder.toString();
 											
+	}
+	
+	protected String generateStateString(String... state)
+	{
+		if (state.length == 0)
+		{
+			return null;
+		}
+		
+		StringBuilder stateString = new StringBuilder();
+		
+		for (int i = 0; i < state.length; i++)
+		{
+			if (i != 0)
+			{
+				stateString.append("/");
+			}
+			
+			stateString.append(state[i]);
+		}
+		
+		return stateString.toString();
 	}
 	
 }

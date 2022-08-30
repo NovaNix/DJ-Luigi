@@ -2,6 +2,7 @@ package DJLuigi.Interaction.Menus;
 
 import DJLuigi.DJ;
 import DJLuigi.Audio.Queue;
+import DJLuigi.Audio.Song;
 import DJLuigi.Interaction.MenuContext;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -32,7 +33,9 @@ public class QueueMenu extends PagedMenu
 				break;
 			}
 			
-			description.append((i + 1) + (songsPerPage * page) + ". " + queue.get(i * songsPerPage).getQueueEntryString());
+			Song song = queue.get(i + (page * songsPerPage));
+			
+			description.append((i + 1) + (songsPerPage * page) + ". " + song.getQueueEntryString());
 			description.append("\n");
 			shownSongs++;
 		}

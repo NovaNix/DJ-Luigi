@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import DJLuigi.IO.DirectoryManager;
 import DJLuigi.Server.Server;
+import DJLuigi.utils.commandUtils;
 
 public class PlaylistManager 
 {
@@ -14,6 +15,7 @@ public class PlaylistManager
 	public static ArrayList<Playlist> playlists;
 	
 	public static HashMap<String, Playlist> playlistMap;
+	public static HashMap<String, ArrayList<Playlist>> playlistByNameMap = new HashMap<String, ArrayList<Playlist>>();
 	
 	public static void init()
 	{
@@ -80,23 +82,43 @@ public class PlaylistManager
 	
 	public static void addPlaylist(Playlist p)
 	{
-		playlistMap.put(p.name, p);
+		playlistMap.put(p.getUniqueName(), p);
+		
 		playlists.add(p);
+		
+		if (playlistByNameMap.get(p.name) == null)
+		{
+			playlistByNameMap.put(p.name, new ArrayList<Playlist>());
+		}
+		
+		playlistByNameMap.get(p.name).add(p);
 	}
 	
 	// Removes the specified playlist from the playlist list
 	// Do not confuse with deletePlaylist()
 	public static void removePlaylist(String name)
 	{	
-		Playlist removing = getPlaylist(name);
+		Playlist removing = getPlaylist(name.toLowerCase());
 		
-		playlistMap.remove(name);
+		playlistByNameMap.get(removing.name).remove(removing);
+		
+		playlistMap.remove(removing.getUniqueName());
 		playlists.remove(removing);
 	}
 	
 	public static Playlist getPlaylist(String name)
 	{
-		return playlistMap.get(name);
+		Playlist p = playlistMap.get(name.toLowerCase());
+		
+		if (p == null)
+		{
+			if (playlistByNameMap.get(name.toLowerCase()).size() == 1)
+			{
+				p = playlistByNameMap.get(name.toLowerCase()).get(0);
+			}
+		}
+		
+		return p;
 	}
 	
 	// Pseudo deletes the playlist
@@ -123,9 +145,24 @@ public class PlaylistManager
 		}
 	}
 	
+	// Returns a unique 4 digit hexidecimal playlist id
+	// TODO optimize for when there are a lot of playlists
+	public static String getUniquePlaylistId(String name)
+	{
+		for (int i = 0; ; i++)
+		{
+			String hexCode = commandUtils.numberToHex(i);
+			
+			if (!hasPlaylist(name + "#" + hexCode))
+			{
+				return hexCode;
+			}
+		}
+	}
+	
 	public static boolean hasPlaylist(String name)
 	{
-		return playlistMap.containsKey(name);
+		return playlistMap.containsKey(name.toLowerCase()) || playlistByNameMap.get(name.toLowerCase()) != null;
 	}
 	
 	public static int getTotalPlaylistCount()

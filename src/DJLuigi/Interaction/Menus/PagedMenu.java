@@ -19,15 +19,17 @@ public abstract class PagedMenu extends Menu
 	public static Emoji backEmoji = Emoji.fromUnicode("⬅️"); 
 
 	@Override
-	protected void generate(SlashCommandInteractionEvent event)
+	public void generate(SlashCommandInteractionEvent event, String... state)
 	{
-		generate(event, 0);
+		generate(event, 0, state);
 	}
 	
 	// Generates the element at a specific page
-	protected void generate(SlashCommandInteractionEvent event, int page)
+	protected void generate(SlashCommandInteractionEvent event, int page, String... state)
 	{
-		MenuContext context = new MenuContext(event);
+		System.out.println("Creating paged menu");
+		
+		MenuContext context = new MenuContext(event, state);
 		
 		MessageEmbed pageMessage = getPage(page, context);
 		
@@ -37,9 +39,13 @@ public abstract class PagedMenu extends Menu
 	// Generates the buttons for a page
 	protected ItemComponent[] generateButtons(MenuContext context, int page)
 	{
-		Button backButton = Button.primary(generateComponentID("back", page - 1), backEmoji);
-		Button refreshButton = Button.primary(generateComponentID("refresh", page), refreshEmoji);
-		Button forwardButton = Button.primary(generateComponentID("forward", page + 1), forwardEmoji);
+		Button backButton = Button.primary(generateComponentID("back", page - 1, generateStateString(context.stateInfo)), backEmoji);
+		Button refreshButton = Button.primary(generateComponentID("refresh", page, generateStateString(context.stateInfo)), refreshEmoji);
+		Button forwardButton = Button.primary(generateComponentID("forward", page + 1, generateStateString(context.stateInfo)), forwardEmoji);
+		
+		System.out.println("Button id: " + backButton.getId());
+		System.out.println("Button id: " + refreshButton.getId());
+		System.out.println("Button id: " + forwardButton.getId());
 		
 		// Handle the disabled state of buttons
 		
@@ -67,7 +73,14 @@ public abstract class PagedMenu extends Menu
 		String component = path[1]; // The component that was clicked
 		int page = Integer.parseInt(path[2]); // The page to show
 		
-		MenuContext context = new MenuContext(event);
+		String[] stateInfo = new String[path.length - 3];
+		
+		for (int i = 3; i < path.length; i++)
+		{
+			stateInfo[i - 3] = path[i];
+		}
+		
+		MenuContext context = new MenuContext(event, stateInfo);
 		
 		// Prevent getting a page that no longer exists (the maximum pages might have changed since the last time the element was updated, leaving the new page out of bounds)
 		

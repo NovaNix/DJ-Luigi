@@ -12,6 +12,8 @@ import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.Subcommand;
+import DJLuigi.Interaction.MenuHandler;
+import DJLuigi.Interaction.Menus.PlaylistSongsMenu;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadTrackHandler;
@@ -81,8 +83,8 @@ public class PlaylistCommand extends Command
 	protected void generateSubcommands()
 	{
 		addSubcommand(this::createPlaylist, "create", "Creates a new playlist",
-											new OptionData(OptionType.STRING, "name", "The name of the new playlist"),
-											new OptionData(OptionType.STRING, "description", "The description of the playlist"));
+											new OptionData(OptionType.STRING, "name", "The name of the new playlist", true),
+											new OptionData(OptionType.STRING, "description", "The description of the playlist", true));
 		
 		addSubcommand(this::deletePlaylist, "delete", "Deletes a playlist",
 											new OptionData(OptionType.STRING, "playlist", "The name of the playlist to delete", true));
@@ -130,16 +132,31 @@ public class PlaylistCommand extends Command
 	// Creates a new playlist. If name is not defined then it opens up a modal to create it 
 	protected void createPlaylist(Server S, SlashCommandInteractionEvent event)
 	{
-		event.reply("This command is broken right now, sorry!").queue();
 		
 		if (event.getOption("name") == null)
 		{
 			// Respond with modal
+			// for now this is disabled by requiring parameters
+			// TODO implement modal input
 		}
 		
 		else
 		{
 			// Create playlist now
+			String name = event.getOption("name").getAsString();
+			String description = event.getOption("description").getAsString();
+			
+			try
+			{
+				Playlist created = new Playlist(name, description, event.getUser().getId(), S.guildID);
+				PlaylistManager.addPlaylist(created);
+				event.reply("Created playlist `" + created.getUniqueName() + "`").queue();
+			} catch (IOException e)
+			{
+				event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
+				e.printStackTrace();
+			}
+
 		}
 	}
 
@@ -217,7 +234,7 @@ public class PlaylistCommand extends Command
 				p.addSong(song);
 				event.reply("Added song: `" + song.name + "` to playlist " + p.name).queue();
 			} catch (IOException e) {
-				event.reply("Something went wrong!").queue();
+				event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
 				e.printStackTrace();
 				return;
 			}
@@ -290,8 +307,16 @@ public class PlaylistCommand extends Command
 	// Lists the songs in the playlist
 	protected void listSongs(Server S, SlashCommandInteractionEvent event)
 	{
-		event.reply("Ran list songs").queue();
+		//event.reply("Ran list songs").queue();
 		String playlistName = event.getOption("playlist").getAsString();
+		
+		if (!PlaylistManager.hasPlaylist(playlistName))
+		{
+			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
+			return;
+		}
+		
+		MenuHandler.createMenu(PlaylistSongsMenu.class, event, playlistName);
 	}
 	
 	// playlist/info
@@ -311,7 +336,7 @@ public class PlaylistCommand extends Command
 		User user = DJ.jda.getUserById(p.creatorID);
 			
 		MessageEmbed embed = new EmbedBuilder()
-				.setTitle(p.name)
+				.setTitle(p.displayName)
 				.setColor(DJ.getPrimaryColor())
 				.setFooter("Owner: " + user.getName() + ", " + p.editors.size() + " editors", user.getAvatarUrl())
 				.setThumbnail("https://i.redd.it/b2pilioyu7u21.jpg")
