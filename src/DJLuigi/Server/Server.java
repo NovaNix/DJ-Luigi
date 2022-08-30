@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import DJLuigi.DJ;
 import DJLuigi.Audio.AudioPlayerSendHandler;
-import DJLuigi.Audio.LoadResultHandler;
 import DJLuigi.Audio.Queue;
 import DJLuigi.Audio.TrackScheduler;
 import DJLuigi.IO.ServerData;
@@ -22,7 +21,6 @@ public class Server
 	
 	public AudioPlayer player;
 	public TrackScheduler trackScheduler;
-	public LoadResultHandler resultHandler;
 	
 	public Queue queue;
 	
@@ -44,8 +42,6 @@ public class Server
 		
 		trackScheduler = new TrackScheduler(this);
 		player.addListener(trackScheduler);
-		
-		resultHandler = new LoadResultHandler(this);
 	}
 	
 	// Sends a message to the current active text channel. 
