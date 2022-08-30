@@ -1,6 +1,7 @@
 package DJLuigi.Interaction.Menus;
 
 import DJLuigi.DJ;
+import DJLuigi.Audio.Song;
 import DJLuigi.Interaction.MenuContext;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
@@ -49,7 +50,9 @@ public class PlaylistSongsMenu extends PagedMenu
 				break;
 			}
 			
-			description.append((i + 1) + (songsPerPage * page) + ". " + p.getSong(i * songsPerPage).getQueueEntryString());
+			Song song = p.getSong(i + (page * songsPerPage));
+			
+			description.append((i + 1) + (songsPerPage * page) + ". " + song.getQueueEntryString());
 			description.append("\n");
 			shownSongs++;
 		}
