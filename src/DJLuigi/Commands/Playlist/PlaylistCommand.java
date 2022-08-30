@@ -251,9 +251,7 @@ public class PlaylistCommand extends Command
 				return;
 			}
 
-			// TODO edit the messages in PlaylistLoadTrackHandler to output to the hook
-			DJ.playerManager.loadItem(song, new PlaylistLoadTrackHandler(S, p));
-			event.reply("Adding song...").queue();
+			DJ.playerManager.loadItem(song, new PlaylistLoadTrackHandler(S, p, event));
 		}
 	}
 	

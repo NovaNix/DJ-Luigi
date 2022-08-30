@@ -10,17 +10,20 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import DJLuigi.Audio.Song;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 {
 
 	private Server HostServer;
 	private Playlist p;
+	private SlashCommandInteractionEvent event;
 	
-	public PlaylistLoadTrackHandler(Server HostServer, Playlist p)
+	public PlaylistLoadTrackHandler(Server HostServer, Playlist p, SlashCommandInteractionEvent event)
 	{
 		this.HostServer = HostServer;
 		this.p = p;
+		this.event = event;
 	}
 	
 	@Override
@@ -28,10 +31,9 @@ public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 	{
 		try {
 			p.addSong(new Song(track));
-			HostServer.SendMessage("Added " + track.getInfo().title + " to playlist " + p.name);
+			event.getHook().sendMessage("Added `" + track.getInfo().title + "` to playlist `" + p.displayName + "`").queue();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			HostServer.SendMessage("Something went wrong!");
+			event.getHook().sendMessage("Something went wrong! Please notify a developer!").queue();
 			e.printStackTrace();
 		}
 	}
@@ -39,32 +41,33 @@ public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 	@Override
 	public void playlistLoaded(AudioPlaylist playlist) 
 	{
-	
+		int failedSongCount = 0;
+		
 		for (AudioTrack track : playlist.getTracks()) 
 		{
 			try {
 				p.addSong(new Song(track));
 			} catch (IOException e) {
-				HostServer.SendMessage("Something went wrong adding song " + track.getInfo().title);
+				HostServer.SendMessage("Something went wrong adding song `" + track.getInfo().title + "` to the playlist `" + p.displayName + "`");
+				failedSongCount++;
 				e.printStackTrace();
 			}
 		}
 			
-		HostServer.SendMessage("Added " + playlist.getTracks().size() + " Songs to playlist " + p.name);
+		event.getHook().sendMessage("Added " + (playlist.getTracks().size() - failedSongCount) + " songs to playlist `" + p.displayName + "`").queue();
 		
 	}
 
 	@Override
 	public void noMatches() 
 	{
-		HostServer.SendMessage("Hmm, I couldnt find that...");
-		
+		event.getHook().sendMessage("Hmm, I couldnt find that...").queue();
 	}
 
 	@Override
 	public void loadFailed(FriendlyException exception) 
 	{
-		HostServer.SendMessage("Failed to load song: " + exception.getMessage());
+		event.getHook().sendMessage("Failed to load song: `" + exception.getMessage() + "`").queue();
 	}
 
 	
