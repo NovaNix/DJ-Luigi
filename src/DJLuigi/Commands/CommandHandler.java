@@ -24,15 +24,12 @@ import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
 import DJLuigi.Commands.Meta.StatusCommand;
-import DJLuigi.Commands.Playlist.AddSongCommand;
 import DJLuigi.Commands.Playlist.CreatePlaylistCommand;
-import DJLuigi.Commands.Playlist.DeletePlaylistCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
-import DJLuigi.Commands.Playlist.PlaylistInfoCommand;
+import DJLuigi.Commands.Playlist.PlaylistCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
-import DJLuigi.Commands.Playlist.RemoveSongCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Guild;
@@ -76,11 +73,9 @@ public class CommandHandler
 		
 		// Playlist Commands
 		
-		loadCommand(new CreatePlaylistCommand());
-		loadCommand(new DeletePlaylistCommand());
+		loadCommand(new PlaylistCommand());
 		
-		loadCommand(new AddSongCommand());
-		loadCommand(new RemoveSongCommand());
+		loadCommand(new CreatePlaylistCommand());
 		
 		loadCommand(new ListPlaylistsCommand());
 		loadCommand(new ListPlaylistSongsCommand());
@@ -88,7 +83,6 @@ public class CommandHandler
 		loadCommand(new PlayPlaylistCommand());
 		
 		loadCommand(new ReloadPlaylistsCommand());
-		loadCommand(new PlaylistInfoCommand());
 		
 		// Misc Commands
 		

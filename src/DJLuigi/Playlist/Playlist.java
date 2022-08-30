@@ -15,14 +15,17 @@ import DJLuigi.Audio.Song;
 import DJLuigi.IO.DirectoryManager;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 public class Playlist
 {
 	
 	@JsonProperty("name") public String name;
+	@JsonProperty("displayName") public String displayName;
+	@JsonProperty("id") public String id; // A 4 digit hex code that is randomly generated for each playlist. This is used to prevent duplicate names from causing issues
 	@JsonProperty("creatorID") public String creatorID;
 	
-	@JsonProperty("editPermissions") public int editPermissions = PlaylistEditPermissions.EDIT_EVERYONE;
+	@JsonProperty("editPermissions") public int editPermissions = PlaylistEditPermissions.EDIT_OWNER | PlaylistEditPermissions.EDIT_EDITORS | PlaylistEditPermissions.EDIT_DJ;
 	
 	@JsonProperty("isPublic") public boolean isPublic = false;
 	@JsonProperty("allowedServers") public ArrayList<String> allowedServers = new ArrayList<String>();
@@ -36,7 +39,8 @@ public class Playlist
 	
 	public Playlist(String name, String creatorID, String createdServer) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		this.name = name;
+		this.name = name.toLowerCase();
+		this.displayName = name;
 		this.creatorID = creatorID;
 		this.allowedServers.add(createdServer);
 		
@@ -58,24 +62,42 @@ public class Playlist
 	}
 	
 	@SuppressWarnings("unlikely-arg-type")
-	public boolean removeSong(String song)
+	public boolean removeSong(String song) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		return songs.remove(song);
+		boolean isRemoved = songs.remove(song);
+		
+		if (isRemoved)
+		{
+			SavePlaylist();
+		}
+		
+		return isRemoved;
 	}
 	
-	public Song removeSong(int songIndex)
+	public Song removeSong(int songIndex) throws JsonGenerationException, JsonMappingException, IOException
 	{
-		return songs.remove(songIndex);
+		Song removedSong = songs.remove(songIndex);
+		
+		if (removedSong != null)
+		{
+			SavePlaylist();
+		}
+		
+		return removedSong;
 	}
 	
-	public void addAllowedServer(String serverID)
+	public void addAllowedServer(String serverID) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		allowedServers.add(serverID);
+		
+		SavePlaylist();
 	}
 	
-	public void removeAllowedServer(String serverID)
+	public void removeAllowedServer(String serverID) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		allowedServers.remove(serverID);
+		
+		SavePlaylist();
 	}
 	
 	public boolean isAllowedServer(String serverID)
@@ -95,6 +117,25 @@ public class Playlist
 	public String getCreatorName()
 	{
 		return DJ.jda.getUserById(creatorID).getName();
+	}
+	
+	public void addEditor(User u) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		editors.add(u.getId());
+		
+		SavePlaylist();
+	}
+	
+	public boolean isEditor(User u)
+	{
+		return editors.contains(u.getId());
+	}
+	
+	public void removeEditor(User u) throws JsonGenerationException, JsonMappingException, IOException
+	{
+		editors.remove(u.getId());
+		
+		SavePlaylist();
 	}
 	
 	// Returns if the specified member can edit the playlist
