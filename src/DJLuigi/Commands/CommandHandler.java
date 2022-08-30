@@ -12,7 +12,7 @@ import DJLuigi.Commands.Audio.LoopCommand;
 import DJLuigi.Commands.Audio.PauseCommand;
 import DJLuigi.Commands.Audio.PlayCommand;
 import DJLuigi.Commands.Audio.QueueCommand;
-import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
+import DJLuigi.Commands.Audio.RemoveCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Audio.ShuffleCommand;
 import DJLuigi.Commands.Debugging.HexTestCommand;
@@ -64,7 +64,7 @@ public class CommandHandler
 		loadCommand(new QueueCommand());
 		loadCommand(new ClearQueueCommand());
 		
-		loadCommand(new RemoveFromQueueCommand());
+		loadCommand(new RemoveCommand());
 		
 		loadCommand(new LoopCommand());
 		
