@@ -165,6 +165,18 @@ public class PlaylistManager
 		return playlistMap.containsKey(name.toLowerCase()) || playlistByNameMap.get(name.toLowerCase()) != null;
 	}
 	
+	public static boolean hasDuplicatePlaylistName(String name)
+	{
+		ArrayList<Playlist> playlists = playlistByNameMap.get(name.toLowerCase());
+		
+		if (playlists == null)
+		{
+			return false;
+		}
+		
+		return playlists.size() > 1;
+	}
+	
 	public static int getTotalPlaylistCount()
 	{
 		return playlists.size();

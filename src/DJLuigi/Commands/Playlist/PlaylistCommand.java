@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import DJLuigi.DJ;
@@ -16,10 +18,12 @@ import DJLuigi.Interaction.PagedMenus.EditorListMenu;
 import DJLuigi.Interaction.PagedMenus.PlaylistSongsMenu;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
+import DJLuigi.Playlist.Exceptions.PlaylistAccessException;
 import DJLuigi.Playlist.Loading.PlaylistLoadTrackHandler;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -124,12 +128,51 @@ public class PlaylistCommand extends Command
 	{
 		String path = event.getCommandPath().replaceFirst(getCommandMessage() + "/", "");
 		
-		subcommands.get(path).executeCommand(S, event);
+		try
+		{
+			subcommands.get(path).executeCommand(S, event);
+		} 
+		
+		catch (IOException e) // Error occurred while saving 
+		{
+			event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
+			e.printStackTrace();
+		}
+		
+		catch (PlaylistAccessException e)
+		{
+			event.reply("An error occurred while executing the command!\n" + e.getMessage()).queue();
+			// Dont print the stacktrace because PlaylistAccessExceptions are caused by user error
+		}
 	}
+	
+	// Utility functions for making subcommand code cleaner
+	
+	// Gets the playlist with the same name
+	// Throws a PlaylistAccessException if there is no playlist with that name or there are multiple playlists with that name
+	private Playlist getPlaylist(String name) throws PlaylistAccessException
+	{
+		if (!PlaylistManager.hasPlaylist(name))
+			throw new PlaylistAccessException("Unknown playlist: \"" + name + "\"", PlaylistAccessException.Type.UnknownPlaylist);
+		
+		if (PlaylistManager.hasDuplicatePlaylistName(name))
+			throw new PlaylistAccessException("There are multiple playlists with the same `" + name + "`, please include the playlist tag with the name!", PlaylistAccessException.Type.DuplicatePlaylistNames);
+		
+		return PlaylistManager.getPlaylist(name);
+	}
+	
+	// Ensures that whoever is executing the command has the ability to modify the playlist
+	private void assertCanEdit(Playlist p, Member m) throws PlaylistAccessException
+	{
+		if (!p.memberCanEdit(m))
+			throw new PlaylistAccessException("You don't have permission to edit this playlist!", PlaylistAccessException.Type.MissingPermissions);
+	}
+	
+	// Subcommand functions
 	
 	// playlist/create [name] [description]
 	// Creates a new playlist. If name is not defined then it opens up a modal to create it 
-	protected void createPlaylist(Server S, SlashCommandInteractionEvent event)
+	protected void createPlaylist(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		
 		if (event.getOption("name") == null)
@@ -151,77 +194,38 @@ public class PlaylistCommand extends Command
 				return;
 			}
 			
-			try
-			{
-				Playlist created = new Playlist(name, description, event.getUser().getId(), S.guildID);
-				PlaylistManager.addPlaylist(created);
-				event.reply("Created playlist `" + created.getUniqueName() + "`").queue();
-			} catch (IOException e)
-			{
-				event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
-				e.printStackTrace();
-			}
-
+			Playlist created = new Playlist(name, description, event.getUser().getId(), S.guildID);
+			PlaylistManager.addPlaylist(created);
+			event.reply("Created playlist `" + created.getUniqueName() + "`").queue();
 		}
 	}
 
 	// playlist/delete <playlist>
 	// Deletes the specified playlist
 	// TODO add confirmation
-	protected void deletePlaylist(Server S, SlashCommandInteractionEvent event)
+	protected void deletePlaylist(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
-		
-		if (PlaylistManager.hasPlaylist(playlistName)) 
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
+		assertCanEdit(p, event.getMember());
+
+		if (PlaylistManager.deletePlaylist(p.name)) 
 		{
-			Playlist p = PlaylistManager.getPlaylist(playlistName);
-
-			if (!p.memberCanEdit(event.getMember()))
-			{
-				event.reply("You don't have permission to edit this playlist!").queue();
-				return;
-			}
-
-			if (PlaylistManager.deletePlaylist(playlistName)) 
-			{
-				event.reply("Successfully deleted the playlist!").queue();
-			}
-
-			else 
-			{
-				event.reply("Something went wrong...").queue();
-			}
-			
-//			new ReactionConfirmation("Do you really want to delete playlist " + Parameters.get(0) + "? There's no going back...", event,
-//												() -> deletePlaylist(S, Parameters.get(0)),
-//												() -> S.SendMessage("Aborded Deletion."));
+			event.reply("Successfully deleted the playlist!").queue();
 		}
 
 		else 
 		{
-			event.reply("Cannot find playlist \"" + playlistName + "\"").queue();
+			event.reply("Something went wrong...").queue();
 		}
+
 	}
 	
 	// playlist/add <playlist> <song>
 	// Adds a song to the specified playlist
-	protected void addSong(Server S, SlashCommandInteractionEvent event)
+	protected void addSong(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
-		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-
-		Playlist p = PlaylistManager.getPlaylist(playlistName);
-
-		if (!p.memberCanEdit(event.getMember()))
-		{
-			event.reply("You don't have permission to edit this playlist!").queue();
-			return;
-		}
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
+		assertCanEdit(p, event.getMember());
 
 		if (event.getOption("song") == null) // Add current song
 		{	
@@ -235,15 +239,8 @@ public class PlaylistCommand extends Command
 
 			Song song = new Song(currentSong);
 
-			try {
-				p.addSong(song);
-				event.reply("Added song: `" + song.name + "` to playlist " + p.name).queue();
-			} catch (IOException e) {
-				event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
-				e.printStackTrace();
-				return;
-			}
-
+			p.addSong(song);
+			event.reply("Added song: `" + song.name + "` to playlist " + p.name).queue();
 		}
 
 		else // Add specified song
@@ -263,18 +260,12 @@ public class PlaylistCommand extends Command
 	// playlist/remove <playlist> <song>
 	// Removes a song from the specified playlist
 	// If the song is a number, it removes that index from the playlist. Otherwise it searches the playlist for a song with the name specified
-	protected void removeSong(Server S, SlashCommandInteractionEvent event)
+	protected void removeSong(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		int songIndex = event.getOption("song").getAsInt() - 1;
 		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-
-		Playlist p = PlaylistManager.getPlaylist(playlistName);
+		assertCanEdit(p, event.getMember());
 		
 		if (songIndex == -1)
 		{
@@ -294,47 +285,25 @@ public class PlaylistCommand extends Command
 			return;
 		}
 		
-		try
-		{
-			Song removed = p.removeSong(songIndex);
-			event.reply("Removed song " + removed.name + " from the playlist.").queue();
-		} catch (IOException e)
-		{
-			event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
-			e.printStackTrace();
-		}
-		
+		Song removed = p.removeSong(songIndex);
+		event.reply("Removed song " + removed.name + " from the playlist.").queue();
+
 	}
 	
 	// playlist/songs <playlist>
 	// Lists the songs in the playlist
-	protected void listSongs(Server S, SlashCommandInteractionEvent event)
+	protected void listSongs(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
-		//event.reply("Ran list songs").queue();
-		String playlistName = event.getOption("playlist").getAsString();
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-		
-		MenuHandler.createMenu(PlaylistSongsMenu.class, event, playlistName);
+		MenuHandler.createMenu(PlaylistSongsMenu.class, event, p.name);
 	}
 	
 	// playlist/info
 	// Tells info about a playlist
-	protected void playlistInfo(Server S, SlashCommandInteractionEvent event)
+	protected void playlistInfo(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
-		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-			
-		Playlist p = PlaylistManager.getPlaylist(playlistName);
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 			
 		User user = DJ.jda.retrieveUserById(p.creatorID).complete();
 			
@@ -352,24 +321,12 @@ public class PlaylistCommand extends Command
 	}
 	
 	// playlist/editors/add
-	protected void addEditor(Server S, SlashCommandInteractionEvent event)
+	protected void addEditor(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		User newEditor = event.getOption("editor").getAsUser();
 		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-		
-		Playlist p = PlaylistManager.getPlaylist(playlistName);
-		
-		if (!p.memberCanEdit(event.getMember())) 
-		{
-			event.reply("You do not have permission to edit this playlist!").queue();
-			return;
-		}
+		assertCanEdit(p, event.getMember());
 		
 		if (p.isEditor(newEditor))
 		{
@@ -377,36 +334,17 @@ public class PlaylistCommand extends Command
 			return;
 		}
 		
-		try {
-			p.addEditor(newEditor);
-			event.reply("Added " + newEditor.getAsMention() + " as an editor").queue();
-		} catch (IOException e)
-		{
-			event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
-			e.printStackTrace();
-		} 
-		
+		p.addEditor(newEditor);
+		event.reply("Added " + newEditor.getAsMention() + " as an editor").queue();	
 	}
 	
 	// playlist/editors/remove
-	protected void removeEditor(Server S, SlashCommandInteractionEvent event)
+	protected void removeEditor(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		User removedEditor = event.getOption("editor").getAsUser();
 		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-		
-		Playlist p = PlaylistManager.getPlaylist(playlistName);
-		
-		if (!p.memberCanEdit(event.getMember())) 
-		{
-			event.reply("You do not have permission to edit this playlist!").queue();
-			return;
-		}
+		assertCanEdit(p, event.getMember());
 		
 		if (!p.isEditor(removedEditor))
 		{
@@ -414,35 +352,25 @@ public class PlaylistCommand extends Command
 			return;
 		}
 		
-		try {
-			p.removeEditor(removedEditor);
-			event.reply("Removed " + removedEditor.getAsMention() + " from being an editor").queue();
-		} catch (IOException e)
-		{
-			event.reply("Something went wrong while saving the playlist! Please contact a developer!").queue();
-			e.printStackTrace();
-		} 
+		p.removeEditor(removedEditor);
+		event.reply("Removed " + removedEditor.getAsMention() + " from being an editor").queue();
+
 	}
 	
 	// playlist/editors/list
-	protected void listEditors(Server S, SlashCommandInteractionEvent event)
+	protected void listEditors(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
-		String playlistName = event.getOption("playlist").getAsString();
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		
-		if (!PlaylistManager.hasPlaylist(playlistName))
-		{
-			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
-			return;
-		}
-		
-		MenuHandler.createMenu(EditorListMenu.class, event, playlistName);
+		MenuHandler.createMenu(EditorListMenu.class, event, p.name);
 	}
 	
-	// playlist/settings
 	
-	private static interface Subcommand
+	// A subcommand of the playlist command
+	// The subcommands can throw IOException and PlaylistAccessException to push error handling code out of the subcommand, making it easier to standardize responses and make the subcommand code smaller
+	private static interface Subcommand 
 	{
-		public void executeCommand(Server S, SlashCommandInteractionEvent event);
+		public void executeCommand(Server S, SlashCommandInteractionEvent event) throws IOException, PlaylistAccessException;
 	}
 	
 }
