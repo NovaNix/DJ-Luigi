@@ -11,7 +11,6 @@ import DJLuigi.Audio.Song;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
-import DJLuigi.Commands.Subcommand;
 import DJLuigi.Interaction.MenuHandler;
 import DJLuigi.Interaction.Menus.PlaylistSongsMenu;
 import DJLuigi.Playlist.Playlist;
@@ -425,5 +424,10 @@ public class PlaylistCommand extends Command
 	}
 	
 	// playlist/settings
+	
+	private static interface Subcommand
+	{
+		public void executeCommand(Server S, SlashCommandInteractionEvent event);
+	}
 	
 }
