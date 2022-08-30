@@ -253,6 +253,8 @@ public class PlaylistCommand extends Command
 				return;
 			}
 
+			event.deferReply().queue();
+			
 			DJ.playerManager.loadItem(song, new PlaylistLoadTrackHandler(S, p, event));
 		}
 	}
@@ -314,7 +316,7 @@ public class PlaylistCommand extends Command
 				.setThumbnail("https://i.redd.it/b2pilioyu7u21.jpg")
 				.addField("Songs", p.songs.size() + " Songs", false)
 				.addField("Is Public", "" + p.isPublic, false)
-				.addField("Edit Status", p.editPermissions + " (will be replaced with more readable value later)", false)
+				.addField("Edit Status", Integer.toBinaryString(p.editPermissions) + " (will be replaced with more readable value later)", false)
 				.build();
 			
 		event.replyEmbeds(embed).queue();
