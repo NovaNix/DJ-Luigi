@@ -6,11 +6,12 @@ import java.util.HashMap;
 import javax.annotation.Nonnull;
 
 import DJLuigi.DJ;
-import DJLuigi.Interaction.Menus.HelpMenu;
-import DJLuigi.Interaction.Menus.PlaylistListMenu;
-import DJLuigi.Interaction.Menus.PlaylistSongsMenu;
-import DJLuigi.Interaction.Menus.QueueMenu;
-import DJLuigi.Interaction.Menus.TestListMenu;
+import DJLuigi.Interaction.PagedMenus.EditorListMenu;
+import DJLuigi.Interaction.PagedMenus.HelpMenu;
+import DJLuigi.Interaction.PagedMenus.PlaylistListMenu;
+import DJLuigi.Interaction.PagedMenus.PlaylistSongsMenu;
+import DJLuigi.Interaction.PagedMenus.QueueMenu;
+import DJLuigi.Interaction.PagedMenus.TestListMenu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -34,6 +35,7 @@ public class MenuHandler extends ListenerAdapter
 		
 		loadMenu(new PlaylistListMenu());
 		loadMenu(new PlaylistSongsMenu());
+		loadMenu(new EditorListMenu());
 		
 		// Load debug mode exclusive menus
 		if (DJ.settings.debugMode)

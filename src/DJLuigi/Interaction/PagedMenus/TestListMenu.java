@@ -1,4 +1,4 @@
-package DJLuigi.Interaction.Menus;
+package DJLuigi.Interaction.PagedMenus;
 
 import java.util.Random;
 

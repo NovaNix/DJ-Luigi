@@ -12,7 +12,8 @@ import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Interaction.MenuHandler;
-import DJLuigi.Interaction.Menus.PlaylistSongsMenu;
+import DJLuigi.Interaction.PagedMenus.EditorListMenu;
+import DJLuigi.Interaction.PagedMenus.PlaylistSongsMenu;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadTrackHandler;
@@ -329,7 +330,7 @@ public class PlaylistCommand extends Command
 			
 		Playlist p = PlaylistManager.getPlaylist(playlistName);
 			
-		User user = DJ.jda.getUserById(p.creatorID);
+		User user = DJ.jda.retrieveUserById(p.creatorID).complete();
 			
 		MessageEmbed embed = new EmbedBuilder()
 				.setTitle(p.displayName)
@@ -420,7 +421,15 @@ public class PlaylistCommand extends Command
 	// playlist/editors/list
 	protected void listEditors(Server S, SlashCommandInteractionEvent event)
 	{
-		event.reply("Ran list editor").queue();
+		String playlistName = event.getOption("playlist").getAsString();
+		
+		if (!PlaylistManager.hasPlaylist(playlistName))
+		{
+			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
+			return;
+		}
+		
+		MenuHandler.createMenu(EditorListMenu.class, event, playlistName);
 	}
 	
 	// playlist/settings

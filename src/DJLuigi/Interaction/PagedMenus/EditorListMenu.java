@@ -1,19 +1,19 @@
-package DJLuigi.Interaction.Menus;
+package DJLuigi.Interaction.PagedMenus;
 
 import DJLuigi.DJ;
-import DJLuigi.Audio.Song;
 import DJLuigi.Interaction.MenuContext;
 import DJLuigi.Playlist.Playlist;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
-public class PlaylistSongsMenu extends PagedMenu
+public class EditorListMenu extends PagedMenu
 {
 
-	public static final int songsPerPage = 10;
-	
+	public static int editorsPerPage = 15;
+
 	@Override
 	protected MessageEmbed getPage(int page, MenuContext context)
 	{
@@ -41,27 +41,29 @@ public class PlaylistSongsMenu extends PagedMenu
 		
 		StringBuilder description = new StringBuilder();
 		
-		int shownSongs = 0;
+		int shownEditors = 0;
 		
-		for (int i = 0; i < songsPerPage; i++)
+		for (int i = 0; i < editorsPerPage; i++)
 		{
-			if (i + (page * songsPerPage) >= p.size())
+			if (i + (page * editorsPerPage) >= p.editors.size())
 			{
 				break;
 			}
 			
-			Song song = p.getSong(i + (page * songsPerPage));
+			String editorId = p.editors.get(i + (page * editorsPerPage));
 			
-			description.append((i + 1) + (songsPerPage * page) + ". " + song.getQueueEntryString());
+			User editor = DJ.jda.retrieveUserById(editorId).complete();
+			
+			description.append((i + 1) + (editorsPerPage * page) + ". " + editor.getAsMention());
 			description.append("\n");
-			shownSongs++;
+			shownEditors++;
 		}
 		
 		MessageEmbed embed = new EmbedBuilder()
-				.setTitle(p.displayName)
+				.setTitle(p.displayName + " Editors")
 				.setDescription(description.toString())
 				.setColor(DJ.getPrimaryColor())
-				.setFooter(String.format("Page %d of %d. (Showing %d songs out of %d)", (page + 1), getPageCount(context), shownSongs, p.size()), null)
+				.setFooter(String.format("Page %d of %d. (Showing %d editors out of %d)", (page + 1), getPageCount(context), shownEditors, p.editors.size()), null)
 				.build();
 		
 		return embed;
@@ -78,7 +80,7 @@ public class PlaylistSongsMenu extends PagedMenu
 		String playlistName = context.stateInfo[0];
 		Playlist p = PlaylistManager.getPlaylist(playlistName);
 		
-		return calculatePageCount(songsPerPage, p.size());
+		return calculatePageCount(editorsPerPage, p.editors.size());
 	}
-
+	
 }

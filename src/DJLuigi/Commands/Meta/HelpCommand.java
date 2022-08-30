@@ -7,7 +7,7 @@ import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.CommandHandler;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Interaction.MenuHandler;
-import DJLuigi.Interaction.Menus.HelpMenu;
+import DJLuigi.Interaction.PagedMenus.HelpMenu;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
