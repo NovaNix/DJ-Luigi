@@ -30,6 +30,26 @@ public class commandUtils
         }
     }
 	
+	// Returns the number as a hexidecimal string
+	public static String numberToHex(long number)
+	{
+		StringBuilder hexCode = new StringBuilder();
+		
+		long num = number;
+		
+		String hexValues = "0123456789abcdef";
+		
+		do
+		{
+			long remainder = num % 16;
+			num /= 16;
+			
+			hexCode.append(hexValues.charAt((int) remainder));
+		} while (num != 0);
+		
+		return hexCode.reverse().toString();
+	}
+	
 	public static String parametersToString(ArrayList<String> parameters)
 	{
 		StringBuilder combined = new StringBuilder();
