@@ -20,6 +20,8 @@ public class DJSettings
 	@JsonProperty("botColor") public int botColor = 15060541;
 	@JsonProperty("botIcon") public String botIcon = "https://github.com/NovaNix/DJ-Luigi/blob/main/DJ%20Luigi.jpg?raw=true";
 	
+	@JsonProperty("botStatus") public String botStatus = "Epic Tunes!";
+	
 	@JsonProperty("debugMode") public boolean debugMode = false;
 	
 	@JsonProperty("sendJoinMessage") public boolean sendJoinMessage = false;

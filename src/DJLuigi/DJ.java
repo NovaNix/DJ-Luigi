@@ -69,7 +69,7 @@ public class DJ
             .addEventListeners(
             		new EventHandler(),
             		new MenuHandler())
-            .setActivity(Activity.playing("Epic Tunes!"))
+            .setActivity(Activity.playing(settings.botStatus))
             .build();
 
         playerManager = new DefaultAudioPlayerManager();
