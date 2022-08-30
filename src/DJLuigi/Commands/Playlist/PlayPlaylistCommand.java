@@ -71,12 +71,6 @@ public class PlayPlaylistCommand extends Command
 		
 		Playlist p = PlaylistManager.getPlaylist(playlistName);
 		
-//		if (!p.memberCanEdit(event.getMember()))
-//		{
-//			S.SendMessage("You can't access this playlist!");
-//			return;
-//		}
-		
 		ArrayList<Song> songs = p.songs;
 		
 		for (int i = 0; i < songs.size(); i++)
@@ -84,7 +78,7 @@ public class PlayPlaylistCommand extends Command
 			DJ.playerManager.loadItem(songs.get(i).uri, new PlaylistLoadHandler(S));
 		}
 		
-		event.reply("Loaded " + songs.size() + " songs from playlist " + p.name).queue();
+		event.reply("Loaded `" + songs.size() + "` songs from playlist `" + p.displayName + "`").queue();
 		
 	}
 
