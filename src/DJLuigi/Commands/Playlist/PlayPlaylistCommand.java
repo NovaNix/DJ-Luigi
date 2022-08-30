@@ -15,7 +15,6 @@ import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
@@ -34,9 +33,7 @@ public class PlayPlaylistCommand extends Command
 	@Override
 	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		event.reply("Sorry, this command is broken right now. Come back later").queue();
-		
-		// TODO add dropdown if multiple playlists share the same name
+		// TODO consider add dropdown if multiple playlists share the same name
 		
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
