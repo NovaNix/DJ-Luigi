@@ -1,8 +1,5 @@
 package DJLuigi.Commands.Meta;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-
 import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
@@ -13,7 +10,6 @@ import DJLuigi.Interaction.MenuHandler;
 import DJLuigi.Interaction.Menus.HelpMenu;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -38,7 +34,7 @@ public class HelpCommand extends Command
 		
 		if (event.getOption("command") == null)
 		{
-			sendHelpMenu(S, event);
+			MenuHandler.createMenu(HelpMenu.class, event);
 		}
 		
 		else
@@ -46,53 +42,6 @@ public class HelpCommand extends Command
 			sendCommandMenu(S, event, event.getOption("command").getAsString());
 		}
 			
-	}
-	
-	// Sends a list of all of the commands the user can see
-	private static void sendHelpMenu(Server s, SlashCommandInteractionEvent event)
-	{
-		
-		MenuHandler.createMenu(HelpMenu.class, event);
-		
-//		Member user = event.getMember();
-//		
-//		StringBuilder commandList = new StringBuilder();
-//	
-//		commandList.append("Commands:\n");
-//		commandList.append("```YML\n");
-//					
-//		// Create a list of the commands the user can use
-//		
-//		ArrayList<Command> commands = new ArrayList<Command>();
-//					
-//		for (Command c : CommandHandler.commands.values())
-//		{
-//			// TODO check if the user can use the command
-//			commands.add(c);
-//		}
-//					
-//		// Sort the commands so they are in a more readable order
-//		commands.sort(sortCommands);
-//
-//		// Generate the help menu
-//		
-//		String currentCategory = "";
-//
-//		for (Command c : commands)
-//		{
-//			if (currentCategory != c.getCategory().name())
-//			{
-//				currentCategory = c.getCategory().name();
-//				commandList.append("\n\t" + currentCategory + "\n");
-//			}
-//
-//			commandList.append(c.getCommandMessage() + ": " + c.getDescription());
-//			commandList.append("\n");
-//		}
-//
-//		commandList.append("```");
-//
-//		event.getHook().sendMessage(commandList.toString()).queue();
 	}
 
 	private static void sendCommandMenu(Server s, SlashCommandInteractionEvent event, String commandName)
