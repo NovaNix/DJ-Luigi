@@ -137,7 +137,7 @@ public class Playlist
 	
 	public String getCreatorName()
 	{
-		return DJ.jda.getUserById(creatorID).getName();
+		return DJ.jda.retrieveUserById(creatorID).complete().getName();
 	}
 	
 	public void addEditor(User u) throws JsonGenerationException, JsonMappingException, IOException
@@ -162,36 +162,9 @@ public class Playlist
 	// Returns if the specified member can edit the playlist
 	public boolean memberCanEdit(Member m)
 	{
-		if ((editPermissions & PlaylistEditPermissions.EDIT_EVERYONE) > 0)
-		{
-			return true;
-		}
+		int userPermissionsBitmask = PlaylistEditPermissions.getUserPermissions(m, this);
 		
-		if ((editPermissions & PlaylistEditPermissions.EDIT_EDITORS) > 0)
-		{
-			if (editors.contains(m.getUser().getId()))
-			{
-				return true;
-			}
-		}
-		
-		if ((editPermissions & PlaylistEditPermissions.EDIT_OWNER) > 0)
-		{
-			if (m.getUser().getId() == creatorID)
-			{
-				return true;
-			}
-		}
-		
-		if ((editPermissions & PlaylistEditPermissions.EDIT_DJ) > 0)
-		{
-			if (commandUtils.isMemberDJ(m))
-			{
-				return true;
-			}
-		}
-		
-		return false;
+		return (userPermissionsBitmask & editPermissions) != 0;
 	}
 	
 	public int size()
