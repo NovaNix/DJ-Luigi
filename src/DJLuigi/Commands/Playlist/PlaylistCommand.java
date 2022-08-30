@@ -145,6 +145,12 @@ public class PlaylistCommand extends Command
 			String name = event.getOption("name").getAsString();
 			String description = event.getOption("description").getAsString();
 			
+			if (!Playlist.isValidName(name))
+			{
+				event.reply("Invalid playlist name! You cannot include the character \"/\"").queue();
+				return;
+			}
+			
 			try
 			{
 				Playlist created = new Playlist(name, description, event.getUser().getId(), S.guildID);

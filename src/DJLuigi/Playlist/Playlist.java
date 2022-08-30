@@ -37,7 +37,6 @@ public class Playlist
 	
 	@JsonProperty("deleted") public boolean deleted = false;
 	
-	
 	public Playlist(String name, String description, String creatorID, String createdServer) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		this.name = name.toLowerCase();
@@ -55,6 +54,14 @@ public class Playlist
 	public Playlist()
 	{
 		
+	}
+	
+	// Returns if a string is a valid playlist name. 
+	// A playlist name is invalid if it contains any of the following characters
+	// /
+	public static boolean isValidName(String name)
+	{
+		return !name.contains("/");
 	}
 	
 	public void addSong(Song song) throws JsonGenerationException, JsonMappingException, IOException
