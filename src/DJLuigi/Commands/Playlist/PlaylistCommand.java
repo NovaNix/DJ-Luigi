@@ -70,15 +70,20 @@ public class PlaylistCommand extends Command
 		SubcommandGroupData editorsCommand = new SubcommandGroupData("editors", "Edit playlist editors");
 		
 		var addEditor = new SubcommandData("add", "Add an editor")
-											.addOption(OptionType.STRING, "playlist", "The playlist to edit", true)
-											.addOption(OptionType.USER, "editor", "Who to make an editor", true);
-		var removeEditor = new SubcommandData("remove", "Remove an editor")
-											.addOption(OptionType.STRING, "playlist", "The playlist to edit", true)
-											.addOption(OptionType.USER, "editor", "Who to remove from being an editor", true);
-		var listEditors = new SubcommandData("list", "Lists the editors")
-											.addOption(OptionType.STRING, "playlist", "The playlist to list the editors for", true);
+				.addOption(OptionType.STRING, "playlist", "The playlist to edit", true)
+				.addOption(OptionType.USER, "editor", "Who to make an editor", true);
 		
-		editorsCommand.addSubcommands(addEditor, removeEditor, listEditors);
+		var removeEditor = new SubcommandData("remove", "Remove an editor")
+				.addOption(OptionType.STRING, "playlist", "The playlist to edit", true)
+				.addOption(OptionType.USER, "editor", "Who to remove from being an editor", true);
+		
+		var listEditors = new SubcommandData("list", "Lists the editors")
+				.addOption(OptionType.STRING, "playlist", "The playlist to list the editors for", true);
+
+		var clearEditors = new SubcommandData("clear", "Clears the editors")
+				.addOption(OptionType.STRING, "playlist", "The playlist to clear the editors of", true);
+
+		editorsCommand.addSubcommands(addEditor, removeEditor, listEditors, clearEditors);
 		
 		data.addSubcommandGroups(editorsCommand);
 	}
@@ -112,6 +117,7 @@ public class PlaylistCommand extends Command
 		subcommands.put("editors/add", this::addEditor);
 		subcommands.put("editors/remove", this::removeEditor);
 		subcommands.put("editors/list", this::listEditors);
+		subcommands.put("editors/clear", this::clearEditors);
 	}
 	
 	protected void addSubcommand(Subcommand command, String name, String description, OptionData... options)
@@ -392,6 +398,17 @@ public class PlaylistCommand extends Command
 		MenuHandler.createMenu(EditorListMenu.class, event, p.name);
 	}
 	
+	// playlist/editors/clear
+	protected void clearEditors(Server s, SlashCommandInteractionEvent event) throws PlaylistAccessException, JsonGenerationException, JsonMappingException, IOException
+	{
+		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
+		
+		assertIsOwner(p, event.getMember());
+		
+		p.clearEditors();
+		
+		event.reply("Cleared editors for playlist `" + p.displayName + "`").queue();
+	}
 	
 	// A subcommand of the playlist command
 	// The subcommands can throw IOException and PlaylistAccessException to push error handling code out of the subcommand, making it easier to standardize responses and make the subcommand code smaller

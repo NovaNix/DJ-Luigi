@@ -161,6 +161,13 @@ public class Playlist
 		SavePlaylist();
 	}
 	
+	public void clearEditors() throws JsonGenerationException, JsonMappingException, IOException
+	{
+		editors.clear();
+		
+		SavePlaylist();
+	}
+	
 	// Returns if the specified member can edit the playlist
 	public boolean memberCanEdit(Member m)
 	{
