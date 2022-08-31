@@ -168,6 +168,13 @@ public class PlaylistCommand extends Command
 			throw new PlaylistAccessException("You don't have permission to edit this playlist!", PlaylistAccessException.Type.MissingPermissions);
 	}
 	
+	// Ensures that whoever is executing the command is the owner of the playlist
+	private void assertIsOwner(Playlist p, Member m) throws PlaylistAccessException
+	{
+		if (!p.creatorID.equals(m.getId()))
+			throw new PlaylistAccessException("You must be the owner of the playlist to perform this action!", PlaylistAccessException.Type.MissingPermissions);
+	}
+	
 	// Subcommand functions
 	
 	// playlist/create [name] [description]
@@ -194,6 +201,24 @@ public class PlaylistCommand extends Command
 				return;
 			}
 			
+			if (name.length() > Playlist.NAME_MAX_CHARS)
+			{
+				event.reply("The playlist name is too long! Please pick a shorter name").queue();
+				return;
+			}
+			
+			if (description.length() > Playlist.MAX_DESCRIPTION_CHARS)
+			{
+				event.reply("The playlist description is too long! Please pick a shorter name").queue();
+				return;
+			}	
+			
+			if (!commandUtils.isValidFileName(name))
+			{
+				event.reply("Invalid playlist name! (Cannot include the characters '\"', '*', '<', '>', '?', '|')");
+				return;
+			}
+			
 			Playlist created = new Playlist(name, description, event.getUser().getId(), S.guildID);
 			PlaylistManager.addPlaylist(created);
 			event.reply("Created playlist `" + created.getUniqueName() + "`").queue();
@@ -206,7 +231,7 @@ public class PlaylistCommand extends Command
 	protected void deletePlaylist(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
-		assertCanEdit(p, event.getMember());
+		assertIsOwner(p, event.getMember());
 
 		if (PlaylistManager.deletePlaylist(p.name)) 
 		{
@@ -328,7 +353,7 @@ public class PlaylistCommand extends Command
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		User newEditor = event.getOption("editor").getAsUser();
 		
-		assertCanEdit(p, event.getMember());
+		assertIsOwner(p, event.getMember());
 		
 		if (p.isEditor(newEditor))
 		{
@@ -346,7 +371,7 @@ public class PlaylistCommand extends Command
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		User removedEditor = event.getOption("editor").getAsUser();
 		
-		assertCanEdit(p, event.getMember());
+		assertIsOwner(p, event.getMember());
 		
 		if (!p.isEditor(removedEditor))
 		{
