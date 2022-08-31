@@ -10,6 +10,8 @@ import DJLuigi.IO.DirectoryManager;
 public class DJSettings 
 {
 	
+	// TODO add command that saves the settings
+	
 	@JsonProperty("botToken") public String botToken = "";
 	
 	@JsonProperty("leaveOnQueueFinish") public boolean leaveOnQueueFinish = true;
