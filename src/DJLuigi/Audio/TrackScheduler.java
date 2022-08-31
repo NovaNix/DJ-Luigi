@@ -38,7 +38,8 @@ public class TrackScheduler extends AudioEventAdapter
 	public void onTrackStart(AudioPlayer player, AudioTrack track) 
 	{
 		// A track started playing
-		hostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
+		if (hostServer.data.settings.outputSongNameOnPlay)
+			hostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
 	}
 
 	@Override

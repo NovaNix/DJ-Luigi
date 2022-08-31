@@ -16,13 +16,17 @@ import DJLuigi.IO.DirectoryManager;
 // A container of all of the server settings that can be changed by server admins. 
 public class ServerSettings 
 {
-	// A lit of all of the setting annotations
+	// A list of all of the setting annotations
 	@JsonIgnore
 	private HashMap<String, Field> settings = new HashMap<String, Field>();
 	
 	@JsonProperty("djOnlyMode") 
 	@BotSetting(description = "Should only DJs be able to use commands")
 	public boolean djOnlyMode = false;
+	
+	@JsonProperty("outputSongNameOnPlay")
+	@BotSetting(description = "Should the bot say the name of the song when it plays")
+	public boolean outputSongNameOnPlay = true;
 	
 	public ServerSettings()
 	{		
