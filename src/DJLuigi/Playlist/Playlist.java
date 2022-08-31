@@ -13,12 +13,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import DJLuigi.DJ;
 import DJLuigi.Audio.Song;
 import DJLuigi.IO.DirectoryManager;
-import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 public class Playlist
 {
+	
+	public static final int NAME_MAX_CHARS = 50;
+	public static final int MAX_DESCRIPTION_CHARS = 100;
 	
 	@JsonProperty("name") public String name;
 	@JsonProperty("displayName") public String displayName;
@@ -55,7 +57,7 @@ public class Playlist
 	{
 		
 	}
-	
+
 	// Returns if a string is a valid playlist name. 
 	// A playlist name is invalid if it contains any of the following characters
 	// /
@@ -174,7 +176,7 @@ public class Playlist
 	
 	private void SavePlaylist() throws JsonGenerationException, JsonMappingException, IOException
 	{
-		DirectoryManager.jsonMapper.writeValue(new File(DirectoryManager.getUserPlaylistDirectory(creatorID), name + ".json"), this);
+		DirectoryManager.jsonMapper.writeValue(new File(DirectoryManager.getUserPlaylistDirectory(creatorID), getUniqueName() + ".json"), this);
 	}
 	
 	public static Playlist LoadPlaylist(File f) throws JsonParseException, JsonMappingException, IOException

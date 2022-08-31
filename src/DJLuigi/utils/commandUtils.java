@@ -2,6 +2,7 @@ package DJLuigi.utils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.dv8tion.jda.api.Permission;
@@ -78,6 +79,17 @@ public class commandUtils
 	public static boolean isMemberDJ(Member u)
 	{
 		return u.hasPermission(Permission.getPermissions(DJ_REQUIRED_PERMISSIONS));
+	}
+	
+	public static final Character[] INVALID_SPECIFIC_CHARS = {'"', '*', '<', '>', '?', '|', '\000'};
+	
+	public static boolean isValidFileName(String name)
+	{
+		if (name == null || name.isEmpty() || name.length() > 255) {
+	        return false;
+	    }
+	    return Arrays.stream(INVALID_SPECIFIC_CHARS)
+	      .noneMatch(ch -> name.contains(ch.toString()));
 	}
 	
 }
