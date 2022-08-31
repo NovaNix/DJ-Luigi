@@ -1,19 +1,18 @@
 package DJLuigi;
 
-import java.awt.Color;
-
 import DJLuigi.Commands.CommandHandler;
-import DJLuigi.Interaction.ReactionMenuManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+// TODO Consider merging into command handler
 public class EventHandler extends ListenerAdapter 
 {
 	
@@ -23,32 +22,25 @@ public class EventHandler extends ListenerAdapter
 	}
 	
 	@Override
-	public void onMessageReceived(MessageReceivedEvent event) 
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
-		if (event.getAuthor().isBot()) { return; }
-		
 		Server host = DJ.Servers.get(event.getGuild().getId());
+		host.SetActiveTextChannel(event.getChannel());
 		
-		String serverCommandPrefix = host.data.settings.commandPrefix;
-		
-		if (event.getMessage().getContentRaw().startsWith(serverCommandPrefix))
-		{
-			host.SetActiveTextChannel(event.getChannel());
-			CommandHandler.processCommand(host, event);
-		}
-		
+		CommandHandler.processCommand(host, event);
 	}
 	
-//	@Override
-//	public void onGuildVoiceJoin(GuildVoiceJoinEvent event)
-//	{
-//		
-//	}
+	// TODO implement auto complete support
+	@Override
+	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event)
+	{
+		
+	}
 	
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event)
 	{
-		VoiceChannel left = event.getChannelLeft();
+		AudioChannel left = event.getChannelLeft();
 		
 		Server host = DJ.Servers.get(left.getGuild().getId());
 		
@@ -58,7 +50,6 @@ public class EventHandler extends ListenerAdapter
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
     public void onGuildJoin(GuildJoinEvent event)
     {
@@ -67,25 +58,19 @@ public class EventHandler extends ListenerAdapter
 			MessageEmbed sendMessage = new EmbedBuilder()
 				    .setTitle("WHATS UP MOTHERFUCKERS")
 				    .setDescription("I'm DJ Luigi, and im here to swag. Since Rythm is shutting down, I'm taking over! Here are a few things about myself:")
-				    .setColor(new Color(15060541))
+				    .setColor(DJ.getPrimaryColor())
 				    .setThumbnail("https://i.redd.it/b2pilioyu7u21.jpg")
-				    .setImage("https://i.pinimg.com/originals/61/a8/88/61a8880068b6275c91ba2408cd1718a7.png")
+				    .setImage(DJ.settings.botIcon)
 				    .addField("I'm better than Mario", "He's a red idiot who should belong in prison. I'm am epic DJ.", false)
 				    .addField("I'm the best!", "Prove me wrong, I bet you cant.", false)
 				    .addField("I'm honing my skills!", "I'm still improving, because I'm always on that grind. I should be ready to DJ for you by Friday!", false)
 				    .build();
 					
-					event.getGuild().getSystemChannel().sendMessage(sendMessage).queue();
+					event.getGuild().getSystemChannel().sendMessageEmbeds(sendMessage).queue();
 					
 					DJ.Servers.put(event.getGuild().getId(), new Server(event.getGuild().getId()));
 		}
 		
     }
-	
-	@Override
-	public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event)
-	{
-		ReactionMenuManager.onReactionEvent(event);
-	}
 	
 }

@@ -3,60 +3,82 @@ package DJLuigi.Commands.Playlist;
 import java.util.ArrayList;
 
 import DJLuigi.DJ;
+import DJLuigi.Audio.Song;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Commands.Parameter;
 import DJLuigi.Playlist.Playlist;
-import DJLuigi.Playlist.PlaylistEntry;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Playlist.Loading.PlaylistLoadHandler;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
 (
 	command = "playplaylist", 
 	description = "Adds a playlist to the queue",
+	parameters = {
+		@Parameter(name = "playlist", description = "The playlist that should be played", type = OptionType.STRING, required = true)
+	},
 	aliases = {"pp", "pplaylist"},
 	category = CommandCategory.Playlist
 )
-public class PlayPlaylistCommand implements Command
+public class PlayPlaylistCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
+		// TODO consider add dropdown if multiple playlists share the same name
 		
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
-		if (!self.getVoiceState().inVoiceChannel())
-		{
-			S.JoinChannel(event.getMember().getVoiceState().getChannel());
-		}
+		AudioChannel currentChannel = self.getVoiceState().getChannel();
+		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
 		
-		if (!PlaylistManager.hasPlaylist(Parameters.get(0)))
+		String playlistName = event.getOption("playlist").getAsString();
+		
+		if (!PlaylistManager.hasPlaylist(playlistName))
 		{
-			S.SendMessage("Unknown playlist: \"" + Parameters.get(0) + "\"");
+			event.reply("Unknown playlist: \"" + playlistName + "\"").queue();
 			return;
 		}
 		
-		Playlist p = PlaylistManager.getPlaylist(Parameters.get(0));
-		
-		if (!p.memberCanEdit(event.getMember()))
+		if (currentChannel == null)
 		{
-			S.SendMessage("You can't access this playlist!");
-			return;
+			if (userChannel != null)
+			{
+				S.JoinChannel(userChannel);
+				currentChannel = userChannel;
+			}
+			
+			else
+			{
+				event.reply("You must be in a voice channel for me to join!").queue();
+				return;
+			}
 		}
 		
-		ArrayList<PlaylistEntry> songs = p.songs;
+		else if (!currentChannel.equals(userChannel))
+		{
+			S.JoinChannel(userChannel);
+			currentChannel = userChannel;
+		}
+		
+		Playlist p = PlaylistManager.getPlaylist(playlistName);
+		
+		ArrayList<Song> songs = p.songs;
 		
 		for (int i = 0; i < songs.size(); i++)
 		{
 			DJ.playerManager.loadItem(songs.get(i).uri, new PlaylistLoadHandler(S));
 		}
 		
-		S.SendMessage("Loaded " + songs.size() + " songs from playlist " + p.name);
+		event.reply("Loaded `" + songs.size() + "` songs from playlist `" + p.displayName + "`").queue();
 		
 	}
 

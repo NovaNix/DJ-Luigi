@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -16,8 +18,16 @@ import DJLuigi.utils.directoryUtils;
 public class DirectoryManager 
 {
 
-	public static ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory()).enable(SerializationFeature.INDENT_OUTPUT);
-	public static ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+	public static ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory())
+										.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+										.enable(SerializationFeature.INDENT_OUTPUT)
+										.disable(
+												MapperFeature.AUTO_DETECT_CREATORS,
+												MapperFeature.AUTO_DETECT_FIELDS,
+												MapperFeature.AUTO_DETECT_GETTERS,
+												MapperFeature.AUTO_DETECT_IS_GETTERS);;
+	public static ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory())
+										.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	
 	public static File home;
 	
@@ -57,6 +67,14 @@ public class DirectoryManager
 		}
 		
 		directoryUtils.validateFolder(playlistsDirectory);
+	}
+	
+	public static File getUserPlaylistDirectory(String userID)
+	{
+		File userDirectory = new File(playlistsDirectory, userID);
+		userDirectory.mkdirs();
+		
+		return userDirectory;
 	}
 	
 	// Checks to see if all of the needed files exist, and if they don't it will create it

@@ -1,45 +1,27 @@
 package DJLuigi.Commands.Playlist;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
-import DJLuigi.Playlist.Playlist;
-import DJLuigi.Playlist.PlaylistManager;
+import DJLuigi.Interaction.MenuHandler;
+import DJLuigi.Interaction.PagedMenus.PlaylistListMenu;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
 	command = "listplaylists", 
-	description = "Reloads all of the playlists",
-	aliases = {"playlists"},
+	description = "Lists all available playlists",
+	aliases = {"playlists", "plist"},
 	category = CommandCategory.Playlist
 )
-public class ListPlaylistsCommand implements Command 
+public class ListPlaylistsCommand extends Command 
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		ArrayList<Playlist> playlists = PlaylistManager.getPlaylists(S);
-		
-		StringBuilder list = new StringBuilder();
-		
-		list.append(playlists.size() + " playlist(s):");
-		list.append("```");
-		
-		for (int i = 0; i < playlists.size(); i++)
-		{
-			list.append(playlists.get(i).name);
-			list.append("\n");
-		}
-		
-		list.append("```");
-		
-		S.SendMessage(list.toString());
-		
+		MenuHandler.createMenu(PlaylistListMenu.class, event);	
 	}
 
 }

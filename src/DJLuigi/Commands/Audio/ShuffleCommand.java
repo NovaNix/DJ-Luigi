@@ -1,12 +1,10 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -16,14 +14,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	djOnly = true,
 	category = CommandCategory.Audio
 )
-public class ShuffleCommand implements Command
+public class ShuffleCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event)
+	public void executeCommand(Server S, SlashCommandInteractionEvent event)
 	{
-		S.trackScheduler.shuffle();
-		S.SendMessage("The queue has been shuffled!");
+		S.queue.shuffle();
+		event.reply("The queue has been shuffled!").queue();
 	}
 
 }

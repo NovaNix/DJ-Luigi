@@ -1,13 +1,11 @@
 package DJLuigi.Commands.Playlist;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -16,17 +14,17 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	djOnly = true,
 	category = CommandCategory.Playlist
 )
-public class ReloadPlaylistsCommand implements Command
+public class ReloadPlaylistsCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		S.SendMessage("Reloading...");
+		event.reply("Reloading playlists...").queue();
 		
 		PlaylistManager.reloadPlaylists();
 		
-		S.SendMessage("Reloaded " + PlaylistManager.playlists.size() + " playlist(s)");
+		event.getHook().editOriginal("Reloaded " + PlaylistManager.playlists.size() + " playlist(s)").queue();
 	}
 
 }

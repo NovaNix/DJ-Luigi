@@ -1,97 +1,36 @@
 package DJLuigi.Audio;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
-import javax.sound.midi.Track;
-
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-import DJLuigi.Interaction.List.ReactionListable;
+import DJLuigi.DJ;
 import DJLuigi.Server.Server;
 
-public class TrackScheduler extends AudioEventAdapter implements ReactionListable
+public class TrackScheduler extends AudioEventAdapter
 {
-	private Server HostServer;
-	
-	public ArrayList<AudioTrack> Tracks = new ArrayList<AudioTrack>();
-	
-	public boolean Looped = false; // Whether the current song should be looped
+	private Server hostServer;
+	private Queue queue;
 	
 	public TrackScheduler(Server HostServer) 
 	{
-		this.HostServer = HostServer;
-	}
-
-	public void queue(AudioTrack t)
-	{
-		Tracks.add(t);
-		
-		HostServer.player.startTrack(t, true); 
-	}
-	
-	public void skip() 
-	{
-		Tracks.remove(0);
-		
-		if (Tracks.size() > 0)
-		{
-			HostServer.player.playTrack(Tracks.get(0));
-		}
-		
-		else
-		{
-			HostServer.player.stopTrack();
-		}
-	}
-	
-	public void remove(int song)
-	{	
-		if (song != 0)
-		{
-			Tracks.remove(song);
-		}
-	}
-	
-	public void clearQueue()
-	{
-		Tracks.clear();
-		HostServer.player.stopTrack();
-	}
-	
-	// Shuffles the queue. Note: the first item in the queue will not be suffled because it is currently playing
-	public void shuffle()
-	{
-		@SuppressWarnings("unchecked")
-		ArrayList<AudioTrack> queue = (ArrayList<AudioTrack>) Tracks.clone();
-		ArrayList<AudioTrack> shuffled = new ArrayList<AudioTrack>();
-		
-		shuffled.add(queue.remove(0));
-		
-		while (queue.size() > 0)
-		{
-			shuffled.add(queue.remove(ThreadLocalRandom.current().nextInt(queue.size())));
-		}
-		
-		Tracks = shuffled;
+		this.hostServer = HostServer;
+		this.queue = hostServer.queue;
 	}
 	
 	@Override
 	public void onPlayerPause(AudioPlayer player) 
 	{
-		HostServer.SendMessage("Player was paused");
+		//hostServer.SendMessage("Player was paused");
 		// Player was paused
 	}
 
 	@Override
 	public void onPlayerResume(AudioPlayer player) 
 	{
-		HostServer.SendMessage("Player was resumed");
+		//hostServer.SendMessage("Player was resumed");
 		// Player was resumed
 	}
 
@@ -99,7 +38,8 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	public void onTrackStart(AudioPlayer player, AudioTrack track) 
 	{
 		// A track started playing
-		HostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
+		if (hostServer.data.settings.outputSongNameOnPlay)
+			hostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
 	}
 
 	@Override
@@ -109,27 +49,37 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		{
 			// Start next track
 			
-			if (Looped)
+			if (queue.looped)
 			{
-				// Dont remove the song because its going to be played again
-				Tracks.get(0).setPosition(0);
-				player.playTrack(Tracks.get(0));
+				// Add the last song played to the end of the queue
+				
+				queue.add(track.makeClone());
 			}
 			
-			else
+			queue.remove(0); // Remove the first song in the queue as to not play it again
+			
+			if (queue.size() > 0)
 			{
-				Tracks.remove(0);
-				
-				if (Tracks.size() > 0)
-				{
-					player.playTrack(Tracks.get(0));
-				}
+				player.playTrack(queue.getTrack(0));
 			}
 		}
 		
-		else
+		else if (endReason == AudioTrackEndReason.LOAD_FAILED)
 		{
-			HostServer.LeaveVC();
+			queue.songs.remove(0);
+			
+			if (queue.size() > 0)
+			{
+				player.playTrack(queue.getTrack(0));
+			}
+		}
+		
+		else if (queue.size() == 0)
+		{
+			if (DJ.settings.leaveOnQueueFinish)
+			{
+				hostServer.LeaveVC();
+			}
 		}
 	}
 
@@ -139,7 +89,9 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 		// An already playing track threw an exception (track end event will still be
 		// received separately)
 		
-		HostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
+		hostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
+		System.err.println("Something broke while playing a track!");
+		exception.printStackTrace();
 	}
 
 	@Override
@@ -147,34 +99,8 @@ public class TrackScheduler extends AudioEventAdapter implements ReactionListabl
 	{
 		// Audio track has been unable to provide us any audio, might want to just start
 		// a new track
-		HostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
-		skip();
-	}
-
-	@Override
-	public String getValue(int index) 
-	{	
-		AudioTrack song = Tracks.get(index);
-		
-		return (index + 1) + ". [**" + song.getInfo().title + "**](" + song.getInfo().uri + ")";
-	}
-
-	@Override
-	public int size() 
-	{
-		return Tracks.size();
-	}
-
-	@Override
-	public int itemsPerPage() 
-	{
-		return 10;
-	}
-
-	@Override
-	public String getName() 
-	{	
-		return "Queue";
+		hostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
+		queue.skip();
 	}
 	
 }

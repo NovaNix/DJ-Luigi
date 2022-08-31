@@ -1,12 +1,10 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -15,13 +13,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"start"},
 	category = CommandCategory.Audio
 )
-public class ResumeCommand implements Command
+public class ResumeCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		S.player.setPaused(false);
+		event.reply("Queue Resumed!").queue();
 	}
 	
 }

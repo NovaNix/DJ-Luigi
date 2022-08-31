@@ -1,14 +1,11 @@
 package DJLuigi.Commands.Meta;
 
-import java.util.ArrayList;
-
-import DJLuigi.DJ;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import DJLuigi.Commands.CommandCategory;
 
 @CommandData
@@ -18,29 +15,26 @@ import DJLuigi.Commands.CommandCategory;
 	aliases = {"connect", "summon"},
 	category = CommandCategory.Control
 )
-public class JoinCommand implements Command
+public class JoinCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		GuildVoiceState state = event.getMember().getVoiceState();
 		
-		if (!state.inVoiceChannel())
+		if (!state.inAudioChannel())
 		{
-			S.SendMessage("Youre not in a channel!");
+			event.reply("You're not in a channel!").setEphemeral(true).queue();
 			
 			return;
 		}
 		
-		VoiceChannel channel = state.getChannel();
+		AudioChannel channel = state.getChannel();
 		
 		S.JoinChannel(channel);
 		
-		if (S.trackScheduler.Tracks.size() == 0)
-		{
-			DJ.playerManager.loadItem("https://www.youtube.com/watch?v=nQTxUKsL7iw", S.resultHandler);
-		}
+		event.reply("Joined `" + channel.getName() + "`").queue();
 	}
 	
 }

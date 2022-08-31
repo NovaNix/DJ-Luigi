@@ -1,30 +1,41 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
 (
 	command = "loop", 
-	description = "Toggles if the current song should be looped",
+	description = "Sets if the queue should be looped or not",
+	parameters = {
+		@Parameter(name = "looped", description = "The new looped status", type = OptionType.BOOLEAN, required = false)
+	},
 	aliases = {"l"},
 	djOnly = true,
 	category = CommandCategory.Audio
 )
-public class LoopCommand implements Command
+public class LoopCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		S.trackScheduler.Looped = !S.trackScheduler.Looped;
+		if (event.getOption("looped") == null)
+		{
+			event.reply("Set looped status to : `" + S.queue.toggleLoop() + "`!").queue();
+		}
 		
-		S.SendMessage("Set looped status to : `" + S.trackScheduler.Looped + "`!");
+		else
+		{
+			boolean loopStatus = event.getOption("looped").getAsBoolean();
+			S.queue.setLoop(loopStatus);
+			event.reply("Set looped status to : `" + loopStatus + "`!").queue();
+		}
 		
 	}
 

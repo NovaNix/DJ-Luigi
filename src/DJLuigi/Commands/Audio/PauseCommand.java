@@ -1,12 +1,10 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
@@ -15,13 +13,14 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 	aliases = {"stop"},
 	category = CommandCategory.Audio
 )
-public class PauseCommand implements Command
+public class PauseCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		S.player.setPaused(true);
+		event.reply("Playback Paused!").queue();
 	}
 	
 }

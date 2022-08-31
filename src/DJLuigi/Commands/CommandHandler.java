@@ -2,48 +2,47 @@ package DJLuigi.Commands;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 import DJLuigi.DJ;
 import DJLuigi.Commands.Audio.ClearQueueCommand;
+import DJLuigi.Commands.Audio.CurrentSongCommand;
 import DJLuigi.Commands.Audio.ForceSkipCommand;
 import DJLuigi.Commands.Audio.LoopCommand;
 import DJLuigi.Commands.Audio.PauseCommand;
 import DJLuigi.Commands.Audio.PlayCommand;
 import DJLuigi.Commands.Audio.QueueCommand;
-import DJLuigi.Commands.Audio.RemoveFromQueueCommand;
+import DJLuigi.Commands.Audio.RemoveCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Audio.ShuffleCommand;
-import DJLuigi.Commands.Debugging.SendParametersCommand;
+import DJLuigi.Commands.Debugging.HexTestCommand;
+import DJLuigi.Commands.Debugging.PermissionsTestCommand;
+import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
+import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
 import DJLuigi.Commands.Debugging.TestConfirmCommand;
-import DJLuigi.Commands.Debugging.TestReactionListCommand;
-import DJLuigi.Commands.Meta.ClearSettingsCommand;
+import DJLuigi.Commands.Debugging.TestMenuListCommand;
 import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
-import DJLuigi.Commands.Meta.StatusCommand;
-import DJLuigi.Commands.Playlist.AddSongCommand;
-import DJLuigi.Commands.Playlist.CreatePlaylistCommand;
-import DJLuigi.Commands.Playlist.DeletePlaylistCommand;
-import DJLuigi.Commands.Playlist.ListPlaylistSongsCommand;
+import DJLuigi.Commands.Meta.AboutCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
-import DJLuigi.Commands.Playlist.PlaylistInfoCommand;
+import DJLuigi.Commands.Playlist.PlaylistCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class CommandHandler 
 {
-
+	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
-	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
-
-	private static Pattern commandInfoFinder = Pattern.compile("(\\w+)\\s*(.*)", Pattern.CASE_INSENSITIVE);
-	private static Pattern commandParameterFinder = Pattern.compile("(\\S+)");
+	public static HashMap<CommandCategory, List<Command>> commandsByCategories = new HashMap<CommandCategory, List<Command>>();
+	// TODO consider removing aliases as slash commands no longer support them
+//	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
 	
 	// Loads all of the commands and prepares the command handler
 	public static void init()
@@ -58,13 +57,15 @@ public class CommandHandler
 		loadCommand(new PauseCommand());
 		loadCommand(new ResumeCommand());
 		
+		loadCommand(new CurrentSongCommand());
+		
 		// Queue Commands
 		
 		loadCommand(new ForceSkipCommand());
 		loadCommand(new QueueCommand());
 		loadCommand(new ClearQueueCommand());
 		
-		loadCommand(new RemoveFromQueueCommand());
+		loadCommand(new RemoveCommand());
 		
 		loadCommand(new LoopCommand());
 		
@@ -72,36 +73,34 @@ public class CommandHandler
 		
 		// Playlist Commands
 		
-		loadCommand(new CreatePlaylistCommand());
-		loadCommand(new DeletePlaylistCommand());
-		
-		loadCommand(new AddSongCommand());
+		loadCommand(new PlaylistCommand());
 		
 		loadCommand(new ListPlaylistsCommand());
-		loadCommand(new ListPlaylistSongsCommand());
 		
 		loadCommand(new PlayPlaylistCommand());
-		
 		loadCommand(new ReloadPlaylistsCommand());
-		loadCommand(new PlaylistInfoCommand());
 		
 		// Misc Commands
 		
 		loadCommand(new HelpCommand());
 		
 		loadCommand(new SettingsCommand());
-		loadCommand(new ClearSettingsCommand());
-		loadCommand(new StatusCommand());
+		loadCommand(new AboutCommand());
 		
 		
 		// Initiate all commands used for debugging
 		
 		if (DJ.settings.debugMode)
 		{
-			loadCommand(new SendParametersCommand());
 			loadCommand(new TestConfirmCommand());
-			loadCommand(new TestReactionListCommand());
+			loadCommand(new TestMenuListCommand());
+			loadCommand(new QueueAsJSONCommand());
+			loadCommand(new PlaylistAsJSONCommand());
+			loadCommand(new HexTestCommand());
+			loadCommand(new PermissionsTestCommand());
 		}
+		
+		System.out.println("Loaded " + commands.size() + " Commands!");
 		
 	}
 	
@@ -109,26 +108,105 @@ public class CommandHandler
 	{
 		commands.put(c.getCommandMessage(), c);
 		
-		for (String alias : c.getAliases())
+		// Add the command to the category list
+		
+		List<Command> categoryCommandsList = commandsByCategories.get(c.getCategory());
+		
+		if (categoryCommandsList == null)
 		{
-			aliasCommands.put(alias, c);
+			categoryCommandsList = new ArrayList<Command>();
+			commandsByCategories.put(c.getCategory(), categoryCommandsList);
 		}
+		
+		categoryCommandsList.add(c);
 	}
 	
-	public static void processCommand(Server server, MessageReceivedEvent event)
+	public static void initSlashCommands()
 	{
-		Matcher matcher = commandInfoFinder.matcher(event.getMessage().getContentRaw());
+		System.out.println("Loading slash commands...");
 		
-	    if (!matcher.find()) 
-	    { 
-	    	System.out.println("Invalid regex result! Regex might be broken!");
-	    	
-	    	return; 
-	    } 
-	    
-	    String requestedCommand = matcher.group(1);
-	    
-	    System.out.println("Found command: " + requestedCommand);
+		// Load global commands
+		
+		ArrayList<SlashCommandData> globalCommands = new ArrayList<SlashCommandData>();
+		
+		for (Command c : commands.values())
+		{
+			if (c.isGlobal())
+			{
+				globalCommands.add(c.generateSlashCommand());
+			}
+		}
+		
+		DJ.jda.updateCommands().addCommands(globalCommands).queue();
+		
+		System.out.println("Loaded " + globalCommands.size() + " global commands");
+		
+		// Load local commands
+		
+		for (Server s : DJ.Servers.values())
+		{
+			generateSlashCommands(s.getGuild());
+		}
+		
+		System.out.println("Finished loading slash commands for each server");
+	}
+	
+	private static void generateSlashCommands(Guild guild)
+	{
+		System.out.println("Loading slash commands for \"" + guild.getName() + "\"");
+		
+		int serverCommandCount = guild.retrieveCommands().complete().size();
+		
+		System.out.println("Current number of commands in the guild: " + serverCommandCount);
+		
+		ArrayList<SlashCommandData> loadedCommands = new ArrayList<SlashCommandData>();
+		
+		int globalCommands = 0; // The number of global commands to take out of the total loaded commands cound
+		
+		for (Command c : commands.values())
+		{
+			if (!c.isGlobal())
+			{
+				try {
+					loadedCommands.add(c.generateSlashCommand());			
+				} catch (IllegalArgumentException e) 
+				{
+					System.err.println("Failed to generate command \"" + c.getCommandMessage() + "\"");
+					e.printStackTrace();
+				}
+			}
+			
+			else
+			{
+				globalCommands++;
+			}
+		}
+		
+		System.out.println(String.format("Generated %d/%d commands", loadedCommands.size(), commands.size() - globalCommands));
+		
+		guild.updateCommands().addCommands(loadedCommands).queue();
+		
+	}
+	
+	// Returns the specified command from the loaded commands. It will also work with aliases.
+	// Returns null if the command does not exist
+	public static Command getCommand(String name)
+	{
+		return commands.get(name);
+	}
+	
+	// Returns a list of all of the commands with the specific category
+	public static List<Command> getCommands(CommandCategory category)
+	{
+		return commandsByCategories.get(category);
+	}
+	
+	public static void processCommand(Server server, SlashCommandInteractionEvent event)
+	{
+
+	    String requestedCommand = event.getName();
+		
+	    System.out.println("Processing command \"" + event.getCommandString() + "\"");
 	    
 	    Command c = null;
 	    
@@ -137,14 +215,10 @@ public class CommandHandler
 	    	c = commands.get(requestedCommand);
 	    }
 	    
-	    else if (aliasCommands.containsKey(requestedCommand))
-	    {
-	    	c = aliasCommands.get(requestedCommand);
-	    }
-	    
 	    else
 	    {
-	    	server.SendMessage("Invalid command: \"" + matcher.group(1) + "\"!");
+	    	System.out.println("Failed to find command...");
+	    	event.reply("Invalid command: \"" + requestedCommand + "\"!").setEphemeral(true).queue();
 	    	return;
 	    }
 	    
@@ -152,47 +226,32 @@ public class CommandHandler
 	    {
 	    	if (!commandUtils.isMemberDJ(event.getMember()))
 	    	{
-	    		server.SendMessage("The server is in DJ Only Mode!");
+	    		event.reply("The server is in DJ Only Mode!").setEphemeral(true).queue();
 	    		return;
 	    	}
 	    }
 	    
-	    if (c.isDJOnly())
+	    // The execution of the command is wrapped in a try catch block to provide a user friendly response if the command has a problem
+	    try 
 	    {
-	    	if (!commandUtils.isMemberDJ(event.getMember()))
-	    	{
-	    		server.SendMessage("You must be a DJ to use this command!");
-	    		return;
-	    	}
-	    }
-	    
-	    if (c.isOwnerOnly())
-	    {
-	    	if (!event.getMember().isOwner())
-	    	{
-	    		server.SendMessage("You must be the owner to run this command!");
-	    		return;
-	    	}
-	    }
+	    	c.executeCommand(server, event);
 	    	
-	    ArrayList<String> parameters = extractParameters(matcher.group(2));
+	    } catch (Exception e)
+	    {
+	    	System.err.println("The slash command " + event.getName() + " threw an error. Please fix.");
+	    	e.printStackTrace();
+	    	
+	    	event.reply("Something went wrong while executing your command. Please notify a developer.").queue();
+	    	return;
+	    }
 	    
-	    c.executeCommand(server, parameters, event);
+	    // Ensure that the interaction was acknowledged. Discord requires them to be
+	    if (!event.isAcknowledged())
+	    {
+	    	System.err.println("The slash command " + event.getName() + " did not acknowledge the event. Please fix.");
+	    	event.reply("Something went wrong while trying to respond to your command. Please notify a developer.").queue();
+	    }
 	  
-	}
-	
-	private static ArrayList<String> extractParameters(String input)
-	{
-		Matcher parameterMatcher = commandParameterFinder.matcher(input);
-    	
-    	ArrayList<String> parameters = new ArrayList<String>();
-    	
-    	while (parameterMatcher.find()) 
-    	{
-    		parameters.add(parameterMatcher.group());
-    	}
-    	
-    	return parameters;
 	}
 	
 }

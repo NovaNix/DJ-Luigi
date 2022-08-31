@@ -1,29 +1,27 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
 (
-	command = "clearqueue", 
+	command = "clear", 
 	description = "Clears the queue",
-	aliases = {"clear"},
+	aliases = {"clearqueue"},
 	djOnly = true,
 	category = CommandCategory.Audio
 )
-public class ClearQueueCommand implements Command
+public class ClearQueueCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
-		S.trackScheduler.clearQueue();
-		S.SendMessage("Queue Cleared!");
+		S.queue.clear();
+		event.reply("Queue Cleared!").queue();
 	}
 
 }

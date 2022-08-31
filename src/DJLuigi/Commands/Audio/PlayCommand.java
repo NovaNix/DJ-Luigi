@@ -1,48 +1,73 @@
 package DJLuigi.Commands.Audio;
 
-import java.util.ArrayList;
-
 import DJLuigi.DJ;
+import DJLuigi.Audio.SlashLoadResultHandler;
 import DJLuigi.Commands.Command;
 import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
+import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import DJLuigi.utils.commandUtils;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
 (
 	command = "play", 
 	description = "Plays a song",
 	aliases = {"p"},
+	parameters = {
+			@Parameter(name = "song", description = "The song that should be played", type = OptionType.STRING, required = true)
+	},
 	category = CommandCategory.Audio
 )
-public class PlayCommand implements Command
+public class PlayCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event) 
+	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
 	{
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
-		if (!self.getVoiceState().inVoiceChannel())
+		AudioChannel currentChannel = self.getVoiceState().getChannel();
+		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
+		
+		String song = event.getOption("song").getAsString();
+		
+		if (currentChannel == null)
 		{
-			S.JoinChannel(event.getMember().getVoiceState().getChannel());
+			if (userChannel != null)
+			{
+				S.JoinChannel(userChannel);
+				currentChannel = userChannel;
+			}
+			
+			else
+			{
+				event.reply("You must be in a voice channel for me to join!").queue();
+				return;
+			}
 		}
 		
-		String combinedParameters = commandUtils.parametersToString(Parameters);
-		
-		S.SendMessage("Loading `" + combinedParameters + "`");
-		
-		if (commandUtils.isValidURL(Parameters.get(0)))
+		else if (!currentChannel.equals(userChannel))
 		{
-			DJ.playerManager.loadItem(Parameters.get(0), S.resultHandler);
+			S.JoinChannel(userChannel);
+			currentChannel = userChannel;
+		}
+
+		// Tell the user that we are loading
+		event.deferReply().queue();
+		
+		if (commandUtils.isValidURL(song))
+		{
+			DJ.playerManager.loadItem(song, new SlashLoadResultHandler(S, event));
 		}
 		
 		else
 		{
-			DJ.playerManager.loadItem("ytsearch:" + combinedParameters, S.resultHandler);
+			DJ.playerManager.loadItem("ytsearch:" + song, new SlashLoadResultHandler(S, event));
 		}
 		
 	}

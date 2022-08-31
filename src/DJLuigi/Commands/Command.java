@@ -1,89 +1,108 @@
 package DJLuigi.Commands;
 
-import java.util.ArrayList;
-
 import DJLuigi.Server.Server;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-public interface Command 
+public abstract class Command 
 {
 
-	public void executeCommand(Server S, ArrayList<String> Parameters, MessageReceivedEvent event);
+	private CommandData data;
 	
-	public default String getCommandMessage()
+	public Command()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		this.data = this.getClass().getAnnotation(CommandData.class);
 		
-		if (data != null)
+		if (data == null)
 		{
-			return data.command();
-		}
-		
-		else
-		{
-			System.out.println("COMMAND MESSAGE IS MISSING! FIX!!!!!!");
-			return "MISSING COMMAND";
+			System.err.println("CANNOT FIND THE COMMANDDATA ANNOTATION ON CLASS " + this.getClass().getName() + ". FIX IMMEDIATELY!");
 		}
 	}
 	
-	public default String getDescription()
+	public abstract void executeCommand(Server S, SlashCommandInteractionEvent event);
+	
+	public String getCommandMessage()
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
+		return data.command();
+	}
+	
+	public String getDescription()
+	{
+		return data.description();
+	}
+	
+	public boolean isGlobal()
+	{
+		return data.global();
+	}
+	
+	public boolean isDJOnly()
+	{
+		return data.djOnly();
+	}
+	
+	public boolean isOwnerOnly()
+	{
+		return data.ownerOnly();
+	}
+	
+	public String[] getAliases()
+	{
+		return data.aliases();
+	}
+	
+	public CommandCategory getCategory()
+	{
+		return data.category();
+	}
+	
+	public int getSortOrder()
+	{
+		return data.sortOrder();
+	}
+	
+	public Parameter[] getParameters()
+	{
+		return data.parameters();
+	}
+	
+	public SlashCommandData generateSlashCommand()
+	{
+		SlashCommandData data = Commands.slash(getCommandMessage(), getDescription());
 		
-		if (data != null)
-		{
-			return data.description();
-		}
+		setSlashCommandParameters(data);
 		
-		else
+		setSlashCommandPermissions(data);
+			
+		return data;
+	}
+	
+	// Sets the parameters for the slash command
+	protected void setSlashCommandParameters(SlashCommandData data)
+	{
+		for (int i = 0; i < getParameters().length; i++)
 		{
-			System.out.println("COMMAND DESCRIPTION IS MISSING! FIX!!!!!!");
-			return "MISSING DESCRIPTION";
+			Parameter parameter = getParameters()[i];
+			
+			data.addOption(parameter.type(), parameter.name(), parameter.description(), parameter.required());
 		}
 	}
 	
-	public default boolean isDJOnly()
+	// Sets the default permissions for the slash command
+	protected void setSlashCommandPermissions(SlashCommandData data)
 	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
+		if (isDJOnly())
 		{
-			return data.djOnly();
+			data.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ALL_VOICE_PERMISSIONS));
 		}
 		
-		else
+		else if (isOwnerOnly())
 		{
-			return false;
-		}
-	}
-	
-	public default boolean isOwnerOnly()
-	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.ownerOnly();
-		}
-		
-		else
-		{
-			return true; // RETURN TRUE BECAUSE OWNER ONLY COMMANDS ARE POWERFUL AND IF SOMETHING GOES WRONG NOT ALLOWING THE COMMAND IS BETTER THAN ALLOWING IT
-		}
-	}
-	
-	public default String[] getAliases()
-	{
-		CommandData data = this.getClass().getAnnotation(CommandData.class);
-		
-		if (data != null)
-		{
-			return data.aliases();
-		}
-		
-		else
-		{
-			return new String[] {};
+			// By setting it to disabled only administrators can use it
+			data.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
 		}
 	}
 	

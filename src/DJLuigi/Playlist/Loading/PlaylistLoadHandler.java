@@ -22,7 +22,7 @@ public class PlaylistLoadHandler implements AudioLoadResultHandler
 	@Override
 	public void trackLoaded(AudioTrack track) 
 	{
-		HostServer.trackScheduler.queue(track);
+		HostServer.queue.add(track);
 		//HostServer.SendMessage("Added " + track.getInfo().title + " to playlist " + p.name);
 
 	}
@@ -33,7 +33,7 @@ public class PlaylistLoadHandler implements AudioLoadResultHandler
 	
 		for (AudioTrack track : playlist.getTracks()) 
 		{
-			HostServer.trackScheduler.queue(track);
+			HostServer.queue.add(track);
 		}
 			
 		//HostServer.SendMessage("Added " + playlist.getTracks().size() + " Songs to playlist " + p.name);

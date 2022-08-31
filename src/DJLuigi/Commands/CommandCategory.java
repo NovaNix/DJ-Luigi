@@ -3,6 +3,13 @@ package DJLuigi.Commands;
 public enum CommandCategory 
 {
 
-	Audio, Control, Settings, Playlist, Other
+	Audio(0), Control(1), Settings(2), Playlist(3), Other(4);
+	
+	public int order;
+	
+	CommandCategory(int order)
+	{
+		this.order = order;
+	}
 	
 }

@@ -1,5 +1,6 @@
 package DJLuigi;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import DJLuigi.Commands.CommandHandler;
 import DJLuigi.IO.DirectoryManager;
+import DJLuigi.Interaction.MenuHandler;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.JDA;
@@ -30,8 +33,12 @@ public class DJ
 	
 	public static DJSettings settings;
 	
+	private static Color primaryColor;
+	
 	public static void main(String[] args) throws LoginException, InterruptedException
     {
+		
+		System.out.println("Starting...");
 		
 		if (args.length == 0)
 		{
@@ -39,9 +46,15 @@ public class DJ
 			System.exit(1);
 		}
 		
+		System.out.println("Loading home directory \"" + args[0] + "\"");
+		
 		DirectoryManager.Init(args[0]);
 		
 		settings = DirectoryManager.loadDJConfig();
+		
+		System.out.println("Config file loaded.");
+		
+		primaryColor = new Color(settings.botColor);
 		
 		if (settings.botToken.equals(""))
 		{
@@ -49,10 +62,14 @@ public class DJ
 			System.exit(1);
 		}
 		
-        jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS)
+		System.out.println("Setting up JDA instance...");
+		
+        jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
 //        	.setAudioSendFactory(new NativeAudioSendFactory())
-            .addEventListeners(new EventHandler())
-            .setActivity(Activity.playing("Epic Tunes!"))
+            .addEventListeners(
+            		new EventHandler(),
+            		new MenuHandler())
+            .setActivity(Activity.playing(settings.botStatus))
             .build();
 
         playerManager = new DefaultAudioPlayerManager();
@@ -60,9 +77,13 @@ public class DJ
         
         // optionally block until JDA is ready
         jda.awaitReady();
+        
+        System.out.println("JDA loaded");
 
         PlaylistManager.init();
         LoadServers();
+        
+        CommandHandler.initSlashCommands();
                 
         System.out.println("Ready to accept user input!");
         
@@ -77,7 +98,18 @@ public class DJ
 			Servers.put(Guilds.get(i).getId(), new Server(Guilds.get(i).getId()));
 		}
 		
-		System.out.println("Loaded " + Guilds.size() + " server(s)!");
+		System.out.println("Loaded " + Guilds.size() + " server" + (Guilds.size() != 1 ? "s" : ""));
+	}
+	
+	public static Server getServer(String id)
+	{
+		return Servers.get(id);
+	}
+	
+	// Gets the primary color of the bot
+	public static Color getPrimaryColor()
+	{
+		return primaryColor;
 	}
 	
 	public static int getJoinedServersCount()
