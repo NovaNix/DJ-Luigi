@@ -94,7 +94,7 @@ public class PlaylistCommand extends Command
 		
 		addSubcommand(this::addSong, "add", "Adds a song to a playlist",
 											new OptionData(OptionType.STRING, "playlist", "The name of the playlist to add the song to", true),
-											new OptionData(OptionType.STRING, "song", "The song to add. If not specified, the current song is added"));
+											new OptionData(OptionType.STRING, "song", "The link to the song to add. If not specified, the current song is added"));
 		
 		addSubcommand(this::removeSong, "remove", "Removes a song from a playlist",
 											new OptionData(OptionType.STRING, "playlist", "The name of the playlist to remove the song from", true),
@@ -141,8 +141,8 @@ public class PlaylistCommand extends Command
 		
 		catch (PlaylistAccessException e)
 		{
-			event.reply("An error occurred while executing the command!\n" + e.getMessage()).queue();
 			// Dont print the stacktrace because PlaylistAccessExceptions are caused by user error
+			event.reply("An error occurred while executing the command!\n" + e.getMessage()).setEphemeral(true).queue();
 		}
 	}
 	
@@ -197,25 +197,25 @@ public class PlaylistCommand extends Command
 			
 			if (!Playlist.isValidName(name))
 			{
-				event.reply("Invalid playlist name! You cannot include the character \"/\"").queue();
+				event.reply("Invalid playlist name! You cannot include the character \"/\"").setEphemeral(true).queue();
 				return;
 			}
 			
 			if (name.length() > Playlist.NAME_MAX_CHARS)
 			{
-				event.reply("The playlist name is too long! Please pick a shorter name").queue();
+				event.reply("The playlist name is too long! Please pick a shorter name (Max = " + Playlist.NAME_MAX_CHARS + ", your name length = " + name.length() + ")").setEphemeral(true).queue();
 				return;
 			}
 			
 			if (description.length() > Playlist.MAX_DESCRIPTION_CHARS)
 			{
-				event.reply("The playlist description is too long! Please pick a shorter name").queue();
+				event.reply("The playlist description is too long! Please pick a shorter name").setEphemeral(true).queue();
 				return;
 			}	
 			
 			if (!commandUtils.isValidFileName(name))
 			{
-				event.reply("Invalid playlist name! (Cannot include the characters '\"', '*', '<', '>', '?', '|')");
+				event.reply("Invalid playlist name! (Cannot include the characters '\"', '*', '<', '>', '?', '|')").setEphemeral(true).queue();
 				return;
 			}
 			
@@ -228,19 +228,19 @@ public class PlaylistCommand extends Command
 	// playlist/delete <playlist>
 	// Deletes the specified playlist
 	// TODO add confirmation
-	protected void deletePlaylist(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
+	protected void deletePlaylist(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException, IOException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		assertIsOwner(p, event.getMember());
 
 		if (PlaylistManager.deletePlaylist(p.name)) 
 		{
-			event.reply("Successfully deleted the playlist!").queue();
+			event.reply("Successfully deleted the playlist, " + p.getUniqueName() + "!").queue();
 		}
 
 		else 
 		{
-			event.reply("Something went wrong...").queue();
+			event.reply("Something went wrong while deleting the playlist... Please notify a developer.").queue();
 		}
 
 	}
@@ -274,7 +274,7 @@ public class PlaylistCommand extends Command
 			
 			if (!commandUtils.isValidURL(song))
 			{
-				event.reply("Invalid song link: " + song).queue();
+				event.reply("Invalid song link: `" + song + "`").queue();
 				return;
 			}
 
