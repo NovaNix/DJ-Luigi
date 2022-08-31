@@ -14,6 +14,8 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 public abstract class Menu
 {
 	
+	// TODO make it so theres a setting that only the creator of the menu can interact with it (basically prevent other people from using buttons and stuff)
+	
 	protected Menu()
 	{
 
@@ -58,6 +60,7 @@ public abstract class Menu
 											
 	}
 	
+	// Encodes state for the menu as a string
 	protected String generateStateString(String... state)
 	{
 		if (state.length == 0)
