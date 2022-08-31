@@ -123,20 +123,15 @@ public class PlaylistManager
 	
 	// Pseudo deletes the playlist
 	// Returns if the playlist was successfully deleted
-	public static boolean deletePlaylist(String name)
+	public static boolean deletePlaylist(String name) throws IOException
 	{
 		if (hasPlaylist(name))
 		{
 			Playlist deleting = getPlaylist(name);
-			try {
-				deleting.remove();
-				removePlaylist(name);
-				return true;
-			} catch (IOException e) {
-				System.err.println("Error deleting playlist " + name);
-				e.printStackTrace();
-				return false;
-			}
+			
+			deleting.remove();
+			removePlaylist(name);
+			return true;
 		}
 		
 		else
