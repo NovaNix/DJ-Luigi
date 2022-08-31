@@ -25,7 +25,7 @@ import DJLuigi.Commands.Meta.DisconnectCommand;
 import DJLuigi.Commands.Meta.HelpCommand;
 import DJLuigi.Commands.Meta.JoinCommand;
 import DJLuigi.Commands.Meta.SettingsCommand;
-import DJLuigi.Commands.Meta.StatusCommand;
+import DJLuigi.Commands.Meta.AboutCommand;
 import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
 import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
 import DJLuigi.Commands.Playlist.PlaylistCommand;
@@ -85,7 +85,7 @@ public class CommandHandler
 		loadCommand(new HelpCommand());
 		
 		loadCommand(new SettingsCommand());
-		loadCommand(new StatusCommand());
+		loadCommand(new AboutCommand());
 		
 		
 		// Initiate all commands used for debugging
