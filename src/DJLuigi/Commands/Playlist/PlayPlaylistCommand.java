@@ -48,19 +48,16 @@ public class PlayPlaylistCommand extends Command
 			return;
 		}
 		
+		if (userChannel == null)
+		{
+			event.reply("You must be in a voice channel for me to join!").setEphemeral(true).queue();
+			return;
+		}
+		
 		if (currentChannel == null)
 		{
-			if (userChannel != null)
-			{
-				S.JoinChannel(userChannel);
-				currentChannel = userChannel;
-			}
-			
-			else
-			{
-				event.reply("You must be in a voice channel for me to join!").queue();
-				return;
-			}
+			S.JoinChannel(userChannel);
+			currentChannel = userChannel;
 		}
 		
 		else if (!currentChannel.equals(userChannel))
