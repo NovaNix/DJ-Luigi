@@ -1,3 +1,5 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/novanix/DJ-Luigi)
+
 # DJ-Luigi
 <img align="right" src="https://github.com/NovaNix/DJ-Luigi/blob/main/DJ%20Luigi.jpg?raw=true" height="200" width="200">
 A Discord Music Bot built in Java using JDA and LavaPlayer<br><br>
