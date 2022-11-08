@@ -4,8 +4,8 @@ import djLuigi.server.Server;
 import djLuigi.commands.Command;
 import djLuigi.commands.CommandCategory;
 import djLuigi.commands.CommandData;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @CommandData
@@ -30,7 +30,7 @@ public class JoinCommand extends Command
 			return;
 		}
 		
-		AudioChannel channel = state.getChannel();
+		AudioChannelUnion channel = state.getChannel();
 		
 		s.joinChannel(channel);
 		

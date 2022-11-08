@@ -1,7 +1,5 @@
 package djLuigi.interaction.menus;
 
-import javax.annotation.Nonnull;
-
 import djLuigi.interaction.Menu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -28,7 +26,7 @@ public abstract class ConfirmationMenu extends Menu
 	}
 	
 	@Override
-	public void onModalInteraction(@Nonnull ModalInteractionEvent event) 
+	public void onModalInteraction(ModalInteractionEvent event) 
 	{
 		
 	}

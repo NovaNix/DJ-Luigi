@@ -8,8 +8,8 @@ import djLuigi.commands.CommandCategory;
 import djLuigi.commands.CommandData;
 import djLuigi.commands.Parameter;
 import djLuigi.utils.CommandUtils;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -31,8 +31,8 @@ public class PlayCommand extends Command
 	{
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
-		AudioChannel currentChannel = self.getVoiceState().getChannel();
-		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
+		AudioChannelUnion currentChannel = self.getVoiceState().getChannel();
+		AudioChannelUnion userChannel = event.getMember().getVoiceState().getChannel();
 		
 		String song = event.getOption("song").getAsString();
 		

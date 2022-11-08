@@ -1,7 +1,5 @@
 package djLuigi.interaction;
 
-import javax.annotation.Nonnull;
-
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -26,7 +24,7 @@ public abstract class Menu
 	
 	public void onButtonInteraction(ButtonInteractionEvent event) {};
 	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {};
-	public void onModalInteraction(@Nonnull ModalInteractionEvent event) {};
+	public void onModalInteraction(ModalInteractionEvent event) {};
 	
 	// Returns the unique id of the Menu (Just the class name)
 	// This is used to forward the interaction events to the right object

@@ -7,10 +7,10 @@ import djLuigi.audio.AudioPlayerSendHandler;
 import djLuigi.audio.Queue;
 import djLuigi.audio.TrackScheduler;
 import djLuigi.io.ServerData;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Server 
@@ -25,10 +25,10 @@ public class Server
 	public Queue queue;
 	
 	// The voice channel that the bot is in
-	public String ActiveVoiceChannel = "";
+	public String activeVoiceChannel = "";
 	// The text channel that the bot should send messages to
 	// This changes whenever a command is sent
-	private String ActiveTextChannel = "";
+	private String activeTextChannel = "";
 	
 	public Server(String guildID)
 	{
@@ -53,17 +53,17 @@ public class Server
 	
 	public void setActiveTextChannel(MessageChannel channel)
 	{
-		ActiveTextChannel = channel.getId();
+		activeTextChannel = channel.getId();
 	}
 	
-	public void joinChannel(AudioChannel channel)
+	public void joinChannel(AudioChannelUnion channel)
 	{
 		AudioManager audioManager = getGuild().getAudioManager();
 		
 	 	audioManager.setSendingHandler(new AudioPlayerSendHandler(player));
 		audioManager.openAudioConnection(channel);
 		
-		ActiveVoiceChannel = channel.getId();
+		activeVoiceChannel = channel.getId();
 	}
 	
 	public void leaveVC() 
@@ -74,7 +74,7 @@ public class Server
 		
 		queue.clear();
 		
-		ActiveVoiceChannel = "";
+		activeVoiceChannel = "";
 	}
 	
 	public boolean isInVC()
@@ -91,7 +91,7 @@ public class Server
 			return true;
 		}
 		
-		VoiceChannel channel = DJ.jda.getVoiceChannelById(ActiveVoiceChannel);
+		VoiceChannel channel = DJ.jda.getVoiceChannelById(activeVoiceChannel);
 		
 		return (channel.getMembers().size() <= 1);
 		
@@ -102,9 +102,9 @@ public class Server
 		return DJ.jda.getGuildById(id);
 	}
 	
-	public MessageChannel getActiveChannel()
+	public TextChannel getActiveChannel()
 	{
-		return DJ.jda.getTextChannelById(ActiveTextChannel);
+		return DJ.jda.getTextChannelById(activeTextChannel);
 	}
 	
 	public String getId()

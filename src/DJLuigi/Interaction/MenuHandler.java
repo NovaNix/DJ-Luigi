@@ -3,8 +3,6 @@ package djLuigi.interaction;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.annotation.Nonnull;
-
 import djLuigi.DJ;
 import djLuigi.interaction.menus.paged.EditorListMenu;
 import djLuigi.interaction.menus.paged.HelpMenu;
@@ -97,7 +95,7 @@ public class MenuHandler extends ListenerAdapter
 	}
 	
 	@Override
-	public void onModalInteraction(@Nonnull ModalInteractionEvent event) 
+	public void onModalInteraction(ModalInteractionEvent event) 
 	{
 		// TODO implement modal menus
 		//System.out.println("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");

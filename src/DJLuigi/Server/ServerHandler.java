@@ -4,14 +4,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import djLuigi.DJ;
 import djLuigi.commands.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -62,7 +64,7 @@ public class ServerHandler extends ListenerAdapter
 	// Event Handling
 	
 	@Override
-	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
+	public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event)
 	{
 		Server host = getServer(event.getGuild());
 		host.setActiveTextChannel(event.getChannel());
@@ -71,7 +73,7 @@ public class ServerHandler extends ListenerAdapter
 	}
 	
 	@Override
-	public void onGuildJoin(GuildJoinEvent event)
+	public void onGuildJoin(@Nonnull GuildJoinEvent event)
 	{
 		Guild guild = event.getGuild();
 		servers.put(guild.getId(), new Server(guild.getId()));
@@ -80,15 +82,15 @@ public class ServerHandler extends ListenerAdapter
 	
 	// TODO implement auto complete support
 	@Override
-	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event)
+	public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event)
 	{
 
 	}
 	
 	@Override
-	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event)
+	public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event)
 	{
-		AudioChannel left = event.getChannelLeft();
+		AudioChannelUnion left = event.getChannelLeft();
 
 		Server host = getServer(left.getGuild());
 

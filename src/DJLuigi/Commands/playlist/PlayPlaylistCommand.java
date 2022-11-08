@@ -12,8 +12,8 @@ import djLuigi.commands.Parameter;
 import djLuigi.playlist.Playlist;
 import djLuigi.playlist.PlaylistManager;
 import djLuigi.playlist.loading.PlaylistLoadHandler;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -37,8 +37,8 @@ public class PlayPlaylistCommand extends Command
 		
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
-		AudioChannel currentChannel = self.getVoiceState().getChannel();
-		AudioChannel userChannel = event.getMember().getVoiceState().getChannel();
+		AudioChannelUnion currentChannel = self.getVoiceState().getChannel();
+		AudioChannelUnion userChannel = event.getMember().getVoiceState().getChannel();
 		
 		String playlistName = event.getOption("playlist").getAsString();
 		
