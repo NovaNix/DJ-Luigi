@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Server 
@@ -51,7 +52,7 @@ public class Server
 		getActiveChannel().sendMessage(message).queue();
 	}
 	
-	public void setActiveTextChannel(MessageChannel channel)
+	public void setActiveTextChannel(MessageChannelUnion channel)
 	{
 		activeTextChannel = channel.getId();
 	}

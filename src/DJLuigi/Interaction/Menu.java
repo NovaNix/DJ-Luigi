@@ -3,7 +3,7 @@ package djLuigi.interaction;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
 
 // A type of interaction menu that can be interacted with by the user
 // It is responsible for creating and updating interaction menus 
@@ -23,7 +23,7 @@ public abstract class Menu
 	public abstract void generate(SlashCommandInteractionEvent event, String... state);
 	
 	public void onButtonInteraction(ButtonInteractionEvent event) {};
-	public void onSelectMenuInteraction(SelectMenuInteractionEvent event) {};
+	public void onSelectMenuInteraction(EntitySelectInteractionEvent event) {};
 	public void onModalInteraction(ModalInteractionEvent event) {};
 	
 	// Returns the unique id of the Menu (Just the class name)
