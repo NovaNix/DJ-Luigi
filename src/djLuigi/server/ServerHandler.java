@@ -88,6 +88,9 @@ public class ServerHandler extends ListenerAdapter
 	{
 		AudioChannelUnion left = event.getChannelLeft();
 
+		if (left == null)
+			return;
+		
 		Server host = getServer(left.getGuild());
 
 		if (host.isAloneInVC())
