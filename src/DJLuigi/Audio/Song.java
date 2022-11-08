@@ -20,7 +20,11 @@ public class Song
 	public AudioTrack track;
 	
 	@JsonCreator
-	public Song(String name, String uri, String author, long length)
+	public Song(
+			@JsonProperty("name") String name, 
+			@JsonProperty("uri") String uri, 
+			@JsonProperty("author") String author, 
+			@JsonProperty("length") long length)
 	{
 		this.name = name;
 		this.uri = uri;
