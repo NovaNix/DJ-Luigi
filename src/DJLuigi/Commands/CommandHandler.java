@@ -141,7 +141,7 @@ public class CommandHandler
 		
 		// Load local commands
 		
-		for (Server s : DJ.Servers.values())
+		for (Server s : DJ.getServers().values())
 		{
 			generateSlashCommands(s.getGuild());
 		}

@@ -24,7 +24,7 @@ public class EventHandler extends ListenerAdapter
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
-		Server host = DJ.Servers.get(event.getGuild().getId());
+		Server host = DJ.getServer(event.getGuild());
 		host.SetActiveTextChannel(event.getChannel());
 		
 		CommandHandler.processCommand(host, event);
@@ -42,7 +42,7 @@ public class EventHandler extends ListenerAdapter
 	{
 		AudioChannel left = event.getChannelLeft();
 		
-		Server host = DJ.Servers.get(left.getGuild().getId());
+		Server host = DJ.getServer(left.getGuild());
 		
 		if (host.isAloneInVC())
 		{
@@ -68,7 +68,7 @@ public class EventHandler extends ListenerAdapter
 					
 					event.getGuild().getSystemChannel().sendMessageEmbeds(sendMessage).queue();
 					
-					DJ.Servers.put(event.getGuild().getId(), new Server(event.getGuild().getId()));
+					DJ.getServers().put(event.getGuild().getId(), new Server(event.getGuild().getId()));
 		}
 		
     }

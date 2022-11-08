@@ -29,7 +29,8 @@ public class DJ
 	
 	public static JDA jda;
 		
-	public static HashMap<String, Server> Servers = new HashMap<String, Server>();
+	// TODO Consider moving servers to their own manager
+	private static HashMap<String, Server> servers = new HashMap<String, Server>();
 	
 	public static DJSettings settings;
 	
@@ -48,7 +49,7 @@ public class DJ
 		
 		System.out.println("Loading home directory \"" + args[0] + "\"");
 		
-		DirectoryManager.Init(args[0]);
+		DirectoryManager.init(args[0]);
 		
 		settings = DirectoryManager.loadDJConfig();
 		
@@ -65,7 +66,6 @@ public class DJ
 		System.out.println("Setting up JDA instance...");
 		
         jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
-//        	.setAudioSendFactory(new NativeAudioSendFactory())
             .addEventListeners(
             		new EventHandler(),
             		new MenuHandler())
@@ -81,7 +81,7 @@ public class DJ
         System.out.println("JDA loaded");
 
         PlaylistManager.init();
-        LoadServers();
+        loadServers();
         
         CommandHandler.initSlashCommands();
                 
@@ -89,21 +89,31 @@ public class DJ
         
     }
 	
-	public static void LoadServers()
+	public static void loadServers()
 	{
-		List<Guild> Guilds = jda.getGuilds();
+		List<Guild> guilds = jda.getGuilds();
 		
-		for (int i = 0; i < Guilds.size(); i++)
+		for (Guild guild : guilds)
 		{
-			Servers.put(Guilds.get(i).getId(), new Server(Guilds.get(i).getId()));
+			servers.put(guild.getId(), new Server(guild.getId()));
 		}
 		
-		System.out.println("Loaded " + Guilds.size() + " server" + (Guilds.size() != 1 ? "s" : ""));
+		System.out.println("Loaded " + guilds.size() + " server" + (guilds.size() != 1 ? "s" : ""));
 	}
 	
 	public static Server getServer(String id)
 	{
-		return Servers.get(id);
+		return servers.get(id);
+	}
+	
+	public static Server getServer(Guild g)
+	{
+		return servers.get(g.getId());
+	}
+	
+	public static HashMap<String, Server> getServers()
+	{
+		return servers;
 	}
 	
 	// Gets the primary color of the bot
@@ -119,7 +129,7 @@ public class DJ
 	
 	public static int getLoadedServersCount()
 	{
-		return Servers.size();
+		return servers.size();
 	}
 	
 }
