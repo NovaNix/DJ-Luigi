@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import djLuigi.DJ;
 import djLuigi.commands.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -64,7 +62,7 @@ public class ServerHandler extends ListenerAdapter
 	// Event Handling
 	
 	@Override
-	public void onSlashCommandInteraction(@Nonnull SlashCommandInteractionEvent event)
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
 		Server host = getServer(event.getGuild());
 		host.setActiveTextChannel(event.getChannel());
@@ -73,7 +71,7 @@ public class ServerHandler extends ListenerAdapter
 	}
 	
 	@Override
-	public void onGuildJoin(@Nonnull GuildJoinEvent event)
+	public void onGuildJoin(GuildJoinEvent event)
 	{
 		Guild guild = event.getGuild();
 		servers.put(guild.getId(), new Server(guild.getId()));
@@ -82,13 +80,13 @@ public class ServerHandler extends ListenerAdapter
 	
 	// TODO implement auto complete support
 	@Override
-	public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event)
+	public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event)
 	{
 
 	}
 	
 	@Override
-	public void onGuildVoiceUpdate(@Nonnull GuildVoiceUpdateEvent event)
+	public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event)
 	{
 		AudioChannelUnion left = event.getChannelLeft();
 
