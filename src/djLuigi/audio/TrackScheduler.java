@@ -38,8 +38,14 @@ public class TrackScheduler extends AudioEventAdapter
 	public void onTrackStart(AudioPlayer player, AudioTrack track) 
 	{
 		// A track started playing
-		if (hostServer.data.settings.outputSongNameOnPlay)
-			hostServer.sendMessage("Now playing `" + track.getInfo().title + "`");
+		if (!hostServer.data.settings.outputSongNameOnPlay)
+			return;
+		
+		// Dont say the song name again if its looping one song!
+		if (queue.looped && queue.size() == 1)
+			return;
+		
+		hostServer.sendMessage("Now playing `" + track.getInfo().title + "`");
 	}
 
 	@Override
