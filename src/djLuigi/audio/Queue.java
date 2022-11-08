@@ -63,7 +63,6 @@ public class Queue
 	// Returns the skipped song
 	public Song skip() 
 	{
-		//hostServer.SendMessage("Skipping song `" + songs.get(0).name + "`...");
 		Song removed = songs.remove(0);
 		
 		if (size() > 0)
