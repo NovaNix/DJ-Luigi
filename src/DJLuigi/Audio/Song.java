@@ -2,7 +2,7 @@ package DJLuigi.Audio;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -12,16 +12,20 @@ import DJLuigi.utils.DiscordUtils;
 
 public class Song
 {
-	@JsonProperty("name") public String name;
-	@JsonProperty("uri") public String uri;
-	@JsonProperty("author") public String author;
-	@JsonProperty("length") public long length;
+	@JsonProperty("name") public final String name;
+	@JsonProperty("uri") public final String uri;
+	@JsonProperty("author") public final String author;
+	@JsonProperty("length") public final long length;
 	
 	public AudioTrack track;
 	
-	public Song()
+	@JsonCreator
+	public Song(String name, String uri, String author, long length)
 	{
-		
+		this.name = name;
+		this.uri = uri;
+		this.author = author;
+		this.length = length;
 	}
 	
 	public Song(AudioTrack track)
