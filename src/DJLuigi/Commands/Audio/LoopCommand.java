@@ -6,6 +6,7 @@ import DJLuigi.Commands.CommandData;
 import DJLuigi.Commands.Parameter;
 import DJLuigi.Server.Server;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 @CommandData
@@ -23,19 +24,21 @@ public class LoopCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		if (event.getOption("looped") == null)
+		OptionMapping loopParameter = event.getOption("looped");
+		
+		if (loopParameter == null)
 		{
-			event.reply("Set looped status to : `" + S.queue.toggleLoop() + "`!").queue();
+			s.queue.toggleLoop();
 		}
 		
 		else
 		{
-			boolean loopStatus = event.getOption("looped").getAsBoolean();
-			S.queue.setLoop(loopStatus);
-			event.reply("Set looped status to : `" + loopStatus + "`!").queue();
+			s.queue.setLoop(loopParameter.getAsBoolean());	
 		}
+		
+		event.reply("Set looped status to : `" + s.queue.looped + "`!").queue();
 		
 	}
 
