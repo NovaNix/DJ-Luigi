@@ -14,9 +14,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 public abstract class PagedMenu extends Menu
 {
 	
-	public static Emoji forwardEmoji = Emoji.fromUnicode("➡�?");
-	public static Emoji refreshEmoji = Emoji.fromUnicode("🔄");
-	public static Emoji backEmoji = Emoji.fromUnicode("⬅�?"); 
+	// BE CAREFUL THAT THE EMOJIS ARE NOT IN UNICODE IN THE FILE! IT MIGHT CREATE ISSUES WHEN UPLOADED!
+	
+	public static Emoji forwardEmoji = Emoji.fromUnicode("U+25B6");
+	public static Emoji refreshEmoji = Emoji.fromUnicode("U+1F504");
+	public static Emoji backEmoji = Emoji.fromUnicode("U+25C0"); 
 
 	@Override
 	public void generate(SlashCommandInteractionEvent event, String... state)
