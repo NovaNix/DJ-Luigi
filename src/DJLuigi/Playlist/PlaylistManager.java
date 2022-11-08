@@ -146,7 +146,7 @@ public class PlaylistManager
 	{
 		for (int i = 0; ; i++)
 		{
-			String hexCode = commandUtils.numberToHex(i);
+			String hexCode = Integer.toHexString(i);
 			
 			if (!hasPlaylist(name + "#" + hexCode))
 			{

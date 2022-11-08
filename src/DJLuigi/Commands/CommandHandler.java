@@ -15,7 +15,6 @@ import DJLuigi.Commands.Audio.QueueCommand;
 import DJLuigi.Commands.Audio.RemoveCommand;
 import DJLuigi.Commands.Audio.ResumeCommand;
 import DJLuigi.Commands.Audio.ShuffleCommand;
-import DJLuigi.Commands.Debugging.HexTestCommand;
 import DJLuigi.Commands.Debugging.PermissionsTestCommand;
 import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
 import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
@@ -96,7 +95,6 @@ public class CommandHandler
 			loadCommand(new TestMenuListCommand());
 			loadCommand(new QueueAsJSONCommand());
 			loadCommand(new PlaylistAsJSONCommand());
-			loadCommand(new HexTestCommand());
 			loadCommand(new PermissionsTestCommand());
 		}
 		
