@@ -12,18 +12,18 @@ import DJLuigi.utils.directoryUtils;
 public class ServerData 
 {
 
-	private String ID;
+	private String id;
 	
 	public ServerSettings settings;
 	
 	public File directory;
 	public File settingsFile;
 	
-	public ServerData(String ID)
+	public ServerData(String id)
 	{
-		this.ID = ID;
+		this.id = id;
 		
-		directory = new File(DirectoryManager.serversDirectory, ID); 
+		directory = new File(DirectoryManager.serversDirectory, id); 
 		settingsFile = new File(directory, "config.yml");
 		
 		try {
