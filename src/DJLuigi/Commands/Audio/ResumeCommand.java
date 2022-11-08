@@ -17,9 +17,9 @@ public class ResumeCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		S.player.setPaused(false);
+		s.player.setPaused(false);
 		event.reply("Queue Resumed!").queue();
 	}
 	

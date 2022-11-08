@@ -22,7 +22,7 @@ public abstract class Command
 		}
 	}
 	
-	public abstract void executeCommand(Server S, SlashCommandInteractionEvent event);
+	public abstract void executeCommand(Server s, SlashCommandInteractionEvent event);
 	
 	public String getCommandMessage()
 	{

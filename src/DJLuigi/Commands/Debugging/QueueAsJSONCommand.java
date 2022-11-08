@@ -20,11 +20,11 @@ public class QueueAsJSONCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event)
+	public void executeCommand(Server s, SlashCommandInteractionEvent event)
 	{
 		try
 		{
-			event.reply("```JSON\n" + S.queue.toJSON() + "```").queue();
+			event.reply("```JSON\n" + s.queue.toJSON() + "```").queue();
 		} catch (JsonProcessingException e)
 		{
 			event.reply("Failed to output queue as JSON. Check console for details...").queue();

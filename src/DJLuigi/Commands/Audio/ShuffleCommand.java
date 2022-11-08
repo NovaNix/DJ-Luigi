@@ -18,9 +18,9 @@ public class ShuffleCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event)
+	public void executeCommand(Server s, SlashCommandInteractionEvent event)
 	{
-		S.queue.shuffle();
+		s.queue.shuffle();
 		event.reply("The queue has been shuffled!").queue();
 	}
 

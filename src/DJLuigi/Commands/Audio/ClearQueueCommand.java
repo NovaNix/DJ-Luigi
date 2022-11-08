@@ -18,9 +18,9 @@ public class ClearQueueCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		S.queue.clear();
+		s.queue.clear();
 		event.reply("Queue Cleared!").queue();
 	}
 

@@ -27,7 +27,7 @@ public class PlayCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		Member self = event.getGuild().getMember(DJ.jda.getSelfUser());
 		
@@ -44,13 +44,13 @@ public class PlayCommand extends Command
 		
 		if (currentChannel == null)
 		{
-			S.JoinChannel(userChannel);
+			s.JoinChannel(userChannel);
 			currentChannel = userChannel;
 		}
 		
 		else if (!currentChannel.equals(userChannel))
 		{
-			S.JoinChannel(userChannel);
+			s.JoinChannel(userChannel);
 			currentChannel = userChannel;
 		}
 
@@ -59,12 +59,12 @@ public class PlayCommand extends Command
 		
 		if (commandUtils.isValidURL(song))
 		{
-			DJ.playerManager.loadItem(song, new SlashLoadResultHandler(S, event));
+			DJ.playerManager.loadItem(song, new SlashLoadResultHandler(s, event));
 		}
 		
 		else
 		{
-			DJ.playerManager.loadItem("ytsearch:" + song, new SlashLoadResultHandler(S, event));
+			DJ.playerManager.loadItem("ytsearch:" + song, new SlashLoadResultHandler(s, event));
 		}
 		
 	}

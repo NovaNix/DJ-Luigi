@@ -21,21 +21,21 @@ public class CurrentSongCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event)
+	public void executeCommand(Server s, SlashCommandInteractionEvent event)
 	{
-		if (S.queue.size() == 0)
+		if (s.queue.size() == 0)
 		{
 			event.reply("Nothing is playing right now!").queue();
 			return;
 		}
 		
-		Song currentSong = S.queue.songs.get(0);
+		Song currentSong = s.queue.songs.get(0);
 		
 		MessageEmbed e = new EmbedBuilder()
-											.setTitle(currentSong.name, currentSong.uri)
-											.setColor(DJ.getPrimaryColor())
-											.setDescription("*" + currentSong.author + ", " + currentSong.getLengthString() + "*")
-											.build();
+				.setTitle(currentSong.name, currentSong.uri)
+				.setColor(DJ.getPrimaryColor())
+				.setDescription("*" + currentSong.author + ", " + currentSong.getLengthString() + "*")
+				.build();
 
 		event.replyEmbeds(e).queue();
 		

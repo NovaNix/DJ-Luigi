@@ -17,9 +17,9 @@ public class TestConfirmCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		event.reply("This command is broken rn, come back later").queue();
+		event.reply("This command is broken right now, come back later").queue();
 //		new ReactionConfirmation("This is a test. Accept?", event, 
 //				() -> S.SendMessage("Approved"),
 //				() -> S.SendMessage("Denied"));

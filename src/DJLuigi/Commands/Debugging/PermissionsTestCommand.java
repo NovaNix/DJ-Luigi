@@ -25,7 +25,7 @@ public class PermissionsTestCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event)
+	public void executeCommand(Server s, SlashCommandInteractionEvent event)
 	{
 		String playlistName = event.getOption("playlist").getAsString();
 		

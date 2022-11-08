@@ -19,10 +19,10 @@ public class QueueCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		
-		if (S.queue.size() > 0)
+		if (s.queue.size() > 0)
 		{
 			MenuHandler.createMenu(QueueMenu.class, event);
 		}

@@ -19,7 +19,7 @@ public class JoinCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		GuildVoiceState state = event.getMember().getVoiceState();
 		
@@ -32,7 +32,7 @@ public class JoinCommand extends Command
 		
 		AudioChannel channel = state.getChannel();
 		
-		S.JoinChannel(channel);
+		s.JoinChannel(channel);
 		
 		event.reply("Joined `" + channel.getName() + "`").queue();
 	}

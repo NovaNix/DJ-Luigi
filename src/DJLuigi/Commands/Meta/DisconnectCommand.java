@@ -17,11 +17,11 @@ public class DisconnectCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		if (S.isInVC())
+		if (s.isInVC())
 		{
-			S.LeaveVC();
+			s.LeaveVC();
 			event.reply("Disconnected!").queue();
 		}
 		

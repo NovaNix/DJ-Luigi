@@ -23,7 +23,7 @@ public class AboutCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		MessageEmbed e = new EmbedBuilder()
 			    .setTitle("About")

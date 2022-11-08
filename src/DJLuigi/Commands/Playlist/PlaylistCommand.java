@@ -130,13 +130,13 @@ public class PlaylistCommand extends Command
 	}
 	
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event)
+	public void executeCommand(Server s, SlashCommandInteractionEvent event)
 	{
 		String path = event.getCommandPath().replaceFirst(getCommandMessage() + "/", "");
 		
 		try
 		{
-			subcommands.get(path).executeCommand(S, event);
+			subcommands.get(path).executeCommand(s, event);
 		} 
 		
 		catch (IOException e) // Error occurred while saving 
@@ -185,7 +185,7 @@ public class PlaylistCommand extends Command
 	
 	// playlist/create [name] [description]
 	// Creates a new playlist. If name is not defined then it opens up a modal to create it 
-	protected void createPlaylist(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException
+	protected void createPlaylist(Server s, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException
 	{
 		
 		if (event.getOption("name") == null)
@@ -225,7 +225,7 @@ public class PlaylistCommand extends Command
 				return;
 			}
 			
-			Playlist created = new Playlist(name, description, event.getUser().getId(), S.guildID);
+			Playlist created = new Playlist(name, description, event.getUser().getId(), s.guildID);
 			PlaylistManager.addPlaylist(created);
 			event.reply("Created playlist `" + created.getUniqueName() + "`").queue();
 		}
@@ -234,7 +234,7 @@ public class PlaylistCommand extends Command
 	// playlist/delete <playlist>
 	// Deletes the specified playlist
 	// TODO add confirmation
-	protected void deletePlaylist(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException, IOException
+	protected void deletePlaylist(Server s, SlashCommandInteractionEvent event) throws PlaylistAccessException, IOException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		assertIsOwner(p, event.getMember());
@@ -253,20 +253,20 @@ public class PlaylistCommand extends Command
 	
 	// playlist/add <playlist> <song>
 	// Adds a song to the specified playlist
-	protected void addSong(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
+	protected void addSong(Server s, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		assertCanEdit(p, event.getMember());
 
 		if (event.getOption("song") == null) // Add current song
 		{	
-			if (S.queue.size() == 0)
+			if (s.queue.size() == 0)
 			{
 				event.reply("No song is currently playing!").queue();
 				return;
 			}
 
-			AudioTrack currentSong = S.queue.getTrack(0);
+			AudioTrack currentSong = s.queue.getTrack(0);
 
 			Song song = new Song(currentSong);
 
@@ -286,14 +286,14 @@ public class PlaylistCommand extends Command
 
 			event.deferReply().queue();
 			
-			DJ.playerManager.loadItem(song, new PlaylistLoadTrackHandler(S, p, event));
+			DJ.playerManager.loadItem(song, new PlaylistLoadTrackHandler(s, p, event));
 		}
 	}
 	
 	// playlist/remove <playlist> <song>
 	// Removes a song from the specified playlist
 	// If the song is a number, it removes that index from the playlist. Otherwise it searches the playlist for a song with the name specified
-	protected void removeSong(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
+	protected void removeSong(Server s, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		int songIndex = event.getOption("song").getAsInt() - 1;
@@ -312,7 +312,7 @@ public class PlaylistCommand extends Command
 			return;
 		}
 		
-		else if (songIndex >= S.queue.size())
+		else if (songIndex >= s.queue.size())
 		{
 			event.reply("That index is out of bounds! (There are only " + p.size() + " songs in the playlist!)").queue();
 			return;
@@ -325,7 +325,7 @@ public class PlaylistCommand extends Command
 	
 	// playlist/songs <playlist>
 	// Lists the songs in the playlist
-	protected void listSongs(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
+	protected void listSongs(Server s, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		
@@ -334,7 +334,7 @@ public class PlaylistCommand extends Command
 	
 	// playlist/info
 	// Tells info about a playlist
-	protected void playlistInfo(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
+	protected void playlistInfo(Server s, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 			
@@ -354,7 +354,7 @@ public class PlaylistCommand extends Command
 	}
 	
 	// playlist/editors/add
-	protected void addEditor(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
+	protected void addEditor(Server s, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		User newEditor = event.getOption("editor").getAsUser();
@@ -372,7 +372,7 @@ public class PlaylistCommand extends Command
 	}
 	
 	// playlist/editors/remove
-	protected void removeEditor(Server S, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
+	protected void removeEditor(Server s, SlashCommandInteractionEvent event) throws JsonGenerationException, JsonMappingException, IOException, PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		User removedEditor = event.getOption("editor").getAsUser();
@@ -391,7 +391,7 @@ public class PlaylistCommand extends Command
 	}
 	
 	// playlist/editors/list
-	protected void listEditors(Server S, SlashCommandInteractionEvent event) throws PlaylistAccessException
+	protected void listEditors(Server s, SlashCommandInteractionEvent event) throws PlaylistAccessException
 	{
 		Playlist p = getPlaylist(event.getOption("playlist").getAsString());
 		
@@ -414,7 +414,7 @@ public class PlaylistCommand extends Command
 	// The subcommands can throw IOException and PlaylistAccessException to push error handling code out of the subcommand, making it easier to standardize responses and make the subcommand code smaller
 	private static interface Subcommand 
 	{
-		public void executeCommand(Server S, SlashCommandInteractionEvent event) throws IOException, PlaylistAccessException;
+		public void executeCommand(Server s, SlashCommandInteractionEvent event) throws IOException, PlaylistAccessException;
 	}
 	
 }

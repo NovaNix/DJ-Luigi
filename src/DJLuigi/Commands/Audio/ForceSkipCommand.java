@@ -19,16 +19,17 @@ public class ForceSkipCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		if (S.queue.size() == 0)
+		if (s.queue.size() == 0)
 		{
 			event.reply("There's nothing to skip!").queue();
+			return;
 		}
 		
 		event.reply("Skipping...").queue();
 		
-		Song removed = S.queue.skip();
+		Song removed = s.queue.skip();
 		
 		event.getHook().editOriginal("Skipped `" + removed.name + "`...").queue();
 		

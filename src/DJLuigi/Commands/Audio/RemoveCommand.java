@@ -23,7 +23,7 @@ public class RemoveCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		int songIndex = event.getOption("index").getAsInt() - 1;
 		
@@ -42,14 +42,14 @@ public class RemoveCommand extends Command
 			event.reply("You can't remove a song thats currently playing!").queue();
 		}
 			
-		else if (songIndex >= S.queue.size())
+		else if (songIndex >= s.queue.size())
 		{
-			event.reply("That index is out of bounds! (Current queue length is " + S.queue.size() + ")").queue();;
+			event.reply("That index is out of bounds! (Current queue length is " + s.queue.size() + ")").queue();;
 		}
 			
 		else
 		{
-			Song removed = S.queue.remove(songIndex);
+			Song removed = s.queue.remove(songIndex);
 			event.reply("Removed song `" + removed.name + "` from the queue.").queue();
 			
 		}

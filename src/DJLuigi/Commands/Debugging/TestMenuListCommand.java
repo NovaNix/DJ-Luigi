@@ -19,7 +19,7 @@ public class TestMenuListCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		MenuHandler.createMenu(TestListMenu.class, event);
 	}

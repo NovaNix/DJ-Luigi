@@ -18,7 +18,7 @@ public class ReloadPlaylistsCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		event.reply("Reloading playlists...").queue();
 		

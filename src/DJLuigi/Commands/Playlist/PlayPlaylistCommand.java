@@ -31,7 +31,7 @@ public class PlayPlaylistCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
 		// TODO consider add dropdown if multiple playlists share the same name
 		
@@ -56,13 +56,13 @@ public class PlayPlaylistCommand extends Command
 		
 		if (currentChannel == null)
 		{
-			S.JoinChannel(userChannel);
+			s.JoinChannel(userChannel);
 			currentChannel = userChannel;
 		}
 		
 		else if (!currentChannel.equals(userChannel))
 		{
-			S.JoinChannel(userChannel);
+			s.JoinChannel(userChannel);
 			currentChannel = userChannel;
 		}
 		
@@ -72,7 +72,7 @@ public class PlayPlaylistCommand extends Command
 		
 		for (int i = 0; i < songs.size(); i++)
 		{
-			DJ.playerManager.loadItem(songs.get(i).uri, new PlaylistLoadHandler(S));
+			DJ.playerManager.loadItem(songs.get(i).uri, new PlaylistLoadHandler(s));
 		}
 		
 		event.reply("Loaded `" + songs.size() + "` songs from playlist `" + p.displayName + "`").queue();

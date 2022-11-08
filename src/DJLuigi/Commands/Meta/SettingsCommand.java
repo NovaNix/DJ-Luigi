@@ -28,25 +28,24 @@ public class SettingsCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		//event.reply("Sorry, this command is broken right now. Come back later").queue();
 		
 		event.deferReply().queue();
 		
 		switch (event.getSubcommandName())
 		{
 			case "list":
-				executeListCommand(S, event);
+				executeListCommand(s, event);
 				break;
 			case "set":
-				executeSetCommand(S, event);
+				executeSetCommand(s, event);
 				break;
 			case "get":
-				executeGetCommand(S, event);
+				executeGetCommand(s, event);
 				break;
 			case "reset":
-				executeResetCommand(S, event);
+				executeResetCommand(s, event);
 				break;
 			default:
 				event.getHook().sendMessage("Something went wrong! Contact a developer!").queue();
@@ -56,9 +55,9 @@ public class SettingsCommand extends Command
 		
 	}
 	
-	private void executeListCommand(Server S, SlashCommandInteractionEvent event)
+	private void executeListCommand(Server s, SlashCommandInteractionEvent event)
 	{
-		ArrayList<Field> settings = S.data.settings.getSettings();
+		ArrayList<Field> settings = s.data.settings.getSettings();
 		
 		StringBuilder list = new StringBuilder();
 		
@@ -71,7 +70,7 @@ public class SettingsCommand extends Command
 			try {
 				list.append(settings.get(i).getName() + ": " + botSetting.description() + "\n");
 				list.append("\tSetting type: " + settings.get(i).getType().getSimpleName() + "\n");
-				list.append("\tCurrent value: " + getSettingValue(S, settings.get(i).getName()));
+				list.append("\tCurrent value: " + getSettingValue(s, settings.get(i).getName()));
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			}
@@ -84,12 +83,12 @@ public class SettingsCommand extends Command
 		event.getHook().sendMessage(list.toString()).queue();
 	}
 	
-	private void executeSetCommand(Server S, SlashCommandInteractionEvent event)
+	private void executeSetCommand(Server s, SlashCommandInteractionEvent event)
 	{
 		String settingName = event.getOption("setting").getAsString();
 		String value = event.getOption("value").getAsString();
 		
-		ServerSettings settings = S.data.settings;
+		ServerSettings settings = s.data.settings;
 		
 		try {
 			switch (settings.getSetting(settingName).getType().getSimpleName().toLowerCase())
@@ -121,30 +120,30 @@ public class SettingsCommand extends Command
 			return;
 		}
 		
-		event.getHook().sendMessage(String.format("Set setting `%s` to value `%s`.", settingName, getSettingValue(S, settingName))).queue();
+		event.getHook().sendMessage(String.format("Set setting `%s` to value `%s`.", settingName, getSettingValue(s, settingName))).queue();
 		
 		try {
-			S.data.saveSettings();
+			s.data.saveSettings();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Error saving server data!");
-			S.SendMessage("WARNING! THERE WAS A PROBLEM SAVING SETTING CHANGES. PLEASE NOTIFY A DEVELOPER IMMEDIETLY!");
+			s.SendMessage("WARNING! THERE WAS A PROBLEM SAVING SETTING CHANGES. PLEASE NOTIFY A DEVELOPER IMMEDIETLY!");
 		}
 
 	}
 	
-	private void executeGetCommand(Server S, SlashCommandInteractionEvent event)
+	private void executeGetCommand(Server s, SlashCommandInteractionEvent event)
 	{
 		String setting = event.getOption("setting").getAsString();
 		
-		BotSetting settingData = S.data.settings.getSetting(setting).getAnnotation(BotSetting.class);
+		BotSetting settingData = s.data.settings.getSetting(setting).getAnnotation(BotSetting.class);
 		
 		event.getHook().sendMessage(setting + ": " + settingData.description() + "\n"
-				+ "Current value: `" + getSettingValue(S, setting) + "`").queue();
+				+ "Current value: `" + getSettingValue(s, setting) + "`").queue();
 	}
 	
 	// TODO ask for confirmation
-	private void executeResetCommand(Server S, SlashCommandInteractionEvent event)
+	private void executeResetCommand(Server s, SlashCommandInteractionEvent event)
 	{
 		ServerSettings defaultSettings = new ServerSettings();
 		
@@ -152,10 +151,10 @@ public class SettingsCommand extends Command
 		{
 			// Clear all the settings
 			
-			S.data.settings = defaultSettings;
+			s.data.settings = defaultSettings;
 			
 			try {
-				S.data.saveSettings();
+				s.data.saveSettings();
 				event.getHook().sendMessage("Settings have been reset!").queue();
 			} catch (IOException e) {
 				System.err.println("Error saving server data!");
@@ -168,12 +167,12 @@ public class SettingsCommand extends Command
 		{
 			String settingName = event.getOption("setting").getAsString();
 			
-			Field oldSetting = S.data.settings.getSetting(settingName);
+			Field oldSetting = s.data.settings.getSetting(settingName);
 			Field newSetting = defaultSettings.getSetting(settingName);
 			
 			try
 			{
-				oldSetting.set(S.data.settings, newSetting.get(defaultSettings));
+				oldSetting.set(s.data.settings, newSetting.get(defaultSettings));
 			} catch (IllegalArgumentException | IllegalAccessException e1)
 			{
 				event.getHook().sendMessage("Something went wrong while changing the setting!").queue();
@@ -181,10 +180,10 @@ public class SettingsCommand extends Command
 				return;
 			}
 			
-			event.getHook().sendMessage(String.format("Reset setting `%s` to the default value (`%s`).", settingName, getSettingValue(S, settingName))).queue();
+			event.getHook().sendMessage(String.format("Reset setting `%s` to the default value (`%s`).", settingName, getSettingValue(s, settingName))).queue();
 			
 			try {
-				S.data.saveSettings();
+				s.data.saveSettings();
 			} catch (IOException e) {
 				System.err.println("Error saving server data!");
 				event.getHook().sendMessage("WARNING! THERE WAS A PROBLEM SAVING SETTING CHANGES. PLEASE NOTIFY A DEVELOPER IMMEDIETLY!").queue();
@@ -233,10 +232,10 @@ public class SettingsCommand extends Command
 		data.addSubcommands(listCommand, setCommand, getCommand, resetCommand);
 	}
 	
-	private String getSettingValue(Server S, String setting)
+	private String getSettingValue(Server s, String setting)
 	{
 		try {
-			return S.data.settings.getSetting(setting).get(S.data.settings).toString();
+			return s.data.settings.getSetting(setting).get(s.data.settings).toString();
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 			return "ERROR!";

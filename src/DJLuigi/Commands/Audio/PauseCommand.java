@@ -17,9 +17,9 @@ public class PauseCommand extends Command
 {
 
 	@Override
-	public void executeCommand(Server S, SlashCommandInteractionEvent event) 
+	public void executeCommand(Server s, SlashCommandInteractionEvent event) 
 	{
-		S.player.setPaused(true);
+		s.player.setPaused(true);
 		event.reply("Playback Paused!").queue();
 	}
 	
