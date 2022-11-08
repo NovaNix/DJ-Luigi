@@ -1,13 +1,13 @@
-package DJLuigi.Playlist;
+package djLuigi.playlist;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import DJLuigi.IO.DirectoryManager;
-import DJLuigi.Server.Server;
-import DJLuigi.utils.commandUtils;
+import djLuigi.server.Server;
+import djLuigi.io.DirectoryManager;
+import djLuigi.utils.CommandUtils;
 
 public class PlaylistManager 
 {

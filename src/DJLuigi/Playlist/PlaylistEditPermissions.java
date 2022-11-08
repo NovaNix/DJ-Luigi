@@ -1,6 +1,6 @@
-package DJLuigi.Playlist;
+package djLuigi.playlist;
 
-import DJLuigi.utils.commandUtils;
+import djLuigi.utils.CommandUtils;
 import net.dv8tion.jda.api.entities.Member;
 
 public class PlaylistEditPermissions 
@@ -20,7 +20,7 @@ public class PlaylistEditPermissions
 	{
 		int permissionsBitmask = USER_EVERYONE;
 		
-		if (commandUtils.isMemberDJ(m))
+		if (CommandUtils.isMemberDJ(m))
 			permissionsBitmask = permissionsBitmask | USER_DJ;
 		
 		if (p.isEditor(m.getUser()))

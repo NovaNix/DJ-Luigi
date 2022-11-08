@@ -1,8 +1,8 @@
-package DJLuigi.Interaction;
+package djLuigi.interaction;
 
-import DJLuigi.DJ;
-import DJLuigi.Server.Server;
-import DJLuigi.Server.ServerHandler;
+import djLuigi.DJ;
+import djLuigi.server.Server;
+import djLuigi.server.ServerHandler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 

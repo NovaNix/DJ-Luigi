@@ -1,17 +1,17 @@
-package DJLuigi.Interaction;
+package djLuigi.interaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.annotation.Nonnull;
 
-import DJLuigi.DJ;
-import DJLuigi.Interaction.PagedMenus.EditorListMenu;
-import DJLuigi.Interaction.PagedMenus.HelpMenu;
-import DJLuigi.Interaction.PagedMenus.PlaylistListMenu;
-import DJLuigi.Interaction.PagedMenus.PlaylistSongsMenu;
-import DJLuigi.Interaction.PagedMenus.QueueMenu;
-import DJLuigi.Interaction.PagedMenus.TestListMenu;
+import djLuigi.DJ;
+import djLuigi.interaction.menus.paged.EditorListMenu;
+import djLuigi.interaction.menus.paged.HelpMenu;
+import djLuigi.interaction.menus.paged.PlaylistListMenu;
+import djLuigi.interaction.menus.paged.PlaylistSongsMenu;
+import djLuigi.interaction.menus.paged.QueueMenu;
+import djLuigi.interaction.menus.paged.TestListMenu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

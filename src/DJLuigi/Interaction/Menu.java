@@ -1,4 +1,4 @@
-package DJLuigi.Interaction;
+package djLuigi.interaction;
 
 import javax.annotation.Nonnull;
 

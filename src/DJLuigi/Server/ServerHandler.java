@@ -1,11 +1,11 @@
-package DJLuigi.Server;
+package djLuigi.server;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import DJLuigi.DJ;
-import DJLuigi.Commands.CommandHandler;
+import djLuigi.DJ;
+import djLuigi.commands.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;

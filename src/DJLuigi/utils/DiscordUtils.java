@@ -1,8 +1,8 @@
-package DJLuigi.utils;
+package djLuigi.utils;
 
 import java.time.Duration;
 
-import DJLuigi.DJ;
+import djLuigi.DJ;
 
 public class DiscordUtils
 {

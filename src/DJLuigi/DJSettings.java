@@ -1,11 +1,12 @@
-package DJLuigi;
+package djLuigi;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import DJLuigi.IO.DirectoryManager;
+
+import djLuigi.io.DirectoryManager;
 
 public class DJSettings 
 {

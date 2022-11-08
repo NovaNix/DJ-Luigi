@@ -1,4 +1,4 @@
-package DJLuigi.Playlist;
+package djLuigi.playlist;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,9 +10,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import DJLuigi.DJ;
-import DJLuigi.Audio.Song;
-import DJLuigi.IO.DirectoryManager;
+import djLuigi.DJ;
+import djLuigi.audio.Song;
+import djLuigi.io.DirectoryManager;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 

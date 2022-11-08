@@ -1,12 +1,12 @@
-package DJLuigi.Server;
+package djLuigi.server;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
-import DJLuigi.DJ;
-import DJLuigi.Audio.AudioPlayerSendHandler;
-import DJLuigi.Audio.Queue;
-import DJLuigi.Audio.TrackScheduler;
-import DJLuigi.IO.ServerData;
+import djLuigi.DJ;
+import djLuigi.audio.AudioPlayerSendHandler;
+import djLuigi.audio.Queue;
+import djLuigi.audio.TrackScheduler;
+import djLuigi.io.ServerData;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;

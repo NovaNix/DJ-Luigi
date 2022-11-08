@@ -1,4 +1,4 @@
-package DJLuigi.Commands;
+package djLuigi.commands;
 
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

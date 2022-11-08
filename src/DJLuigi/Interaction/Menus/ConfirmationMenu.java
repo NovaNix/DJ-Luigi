@@ -1,8 +1,8 @@
-package DJLuigi.Interaction.Menus;
+package djLuigi.interaction.menus;
 
 import javax.annotation.Nonnull;
 
-import DJLuigi.Interaction.Menu;
+import djLuigi.interaction.Menu;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 

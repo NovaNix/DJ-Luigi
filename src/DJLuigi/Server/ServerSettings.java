@@ -1,4 +1,4 @@
-package DJLuigi.Server;
+package djLuigi.server;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import DJLuigi.IO.BotSetting;
-import DJLuigi.IO.DirectoryManager;
+import djLuigi.io.BotSetting;
+import djLuigi.io.DirectoryManager;
 
 // A container of all of the server settings that can be changed by server admins. 
 public class ServerSettings 

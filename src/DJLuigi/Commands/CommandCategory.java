@@ -1,4 +1,4 @@
-package DJLuigi.Commands;
+package djLuigi.commands;
 
 public enum CommandCategory 
 {

@@ -1,37 +1,37 @@
-package DJLuigi.Commands;
+package djLuigi.commands;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import DJLuigi.DJ;
-import DJLuigi.Commands.Audio.ClearQueueCommand;
-import DJLuigi.Commands.Audio.CurrentSongCommand;
-import DJLuigi.Commands.Audio.ForceSkipCommand;
-import DJLuigi.Commands.Audio.LoopCommand;
-import DJLuigi.Commands.Audio.PauseCommand;
-import DJLuigi.Commands.Audio.PlayCommand;
-import DJLuigi.Commands.Audio.QueueCommand;
-import DJLuigi.Commands.Audio.RemoveCommand;
-import DJLuigi.Commands.Audio.ResumeCommand;
-import DJLuigi.Commands.Audio.ShuffleCommand;
-import DJLuigi.Commands.Debugging.PermissionsTestCommand;
-import DJLuigi.Commands.Debugging.PlaylistAsJSONCommand;
-import DJLuigi.Commands.Debugging.QueueAsJSONCommand;
-import DJLuigi.Commands.Debugging.TestConfirmCommand;
-import DJLuigi.Commands.Debugging.TestMenuListCommand;
-import DJLuigi.Commands.Meta.DisconnectCommand;
-import DJLuigi.Commands.Meta.HelpCommand;
-import DJLuigi.Commands.Meta.JoinCommand;
-import DJLuigi.Commands.Meta.SettingsCommand;
-import DJLuigi.Commands.Meta.AboutCommand;
-import DJLuigi.Commands.Playlist.ListPlaylistsCommand;
-import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
-import DJLuigi.Commands.Playlist.PlaylistCommand;
-import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
-import DJLuigi.Server.Server;
-import DJLuigi.Server.ServerHandler;
-import DJLuigi.utils.commandUtils;
+import djLuigi.DJ;
+import djLuigi.commands.audio.ClearQueueCommand;
+import djLuigi.commands.audio.CurrentSongCommand;
+import djLuigi.commands.audio.ForceSkipCommand;
+import djLuigi.commands.audio.PauseCommand;
+import djLuigi.commands.audio.LoopCommand;
+import djLuigi.commands.audio.PlayCommand;
+import djLuigi.commands.audio.QueueCommand;
+import djLuigi.commands.audio.RemoveCommand;
+import djLuigi.commands.audio.ResumeCommand;
+import djLuigi.commands.audio.ShuffleCommand;
+import djLuigi.commands.debugging.PermissionsTestCommand;
+import djLuigi.commands.debugging.PlaylistAsJSONCommand;
+import djLuigi.commands.debugging.QueueAsJSONCommand;
+import djLuigi.commands.debugging.TestConfirmCommand;
+import djLuigi.commands.debugging.TestMenuListCommand;
+import djLuigi.commands.meta.AboutCommand;
+import djLuigi.commands.meta.DisconnectCommand;
+import djLuigi.commands.meta.HelpCommand;
+import djLuigi.commands.meta.JoinCommand;
+import djLuigi.commands.meta.SettingsCommand;
+import djLuigi.commands.playlist.ListPlaylistsCommand;
+import djLuigi.commands.playlist.PlayPlaylistCommand;
+import djLuigi.commands.playlist.PlaylistCommand;
+import djLuigi.commands.playlist.ReloadPlaylistsCommand;
+import djLuigi.server.Server;
+import djLuigi.server.ServerHandler;
+import djLuigi.utils.CommandUtils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
@@ -221,7 +221,7 @@ public class CommandHandler
 	    
 	    if (server.data.settings.djOnlyMode)
 	    {
-	    	if (!commandUtils.isMemberDJ(event.getMember()))
+	    	if (!CommandUtils.isMemberDJ(event.getMember()))
 	    	{
 	    		event.reply("The server is in DJ Only Mode!").setEphemeral(true).queue();
 	    		return;

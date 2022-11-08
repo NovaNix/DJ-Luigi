@@ -1,6 +1,6 @@
-package DJLuigi.Commands;
+package djLuigi.commands;
 
-import DJLuigi.Server.Server;
+import djLuigi.server.Server;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
