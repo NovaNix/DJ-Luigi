@@ -35,7 +35,7 @@ public class DirectoryManager
 	public static File serversDirectory;
 	public static File playlistsDirectory;
 	
-	public static void Init(String directory)
+	public static void init(String directory)
 	{
 		home = new File(directory);
 		
