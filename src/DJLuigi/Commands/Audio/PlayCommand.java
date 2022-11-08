@@ -44,13 +44,13 @@ public class PlayCommand extends Command
 		
 		if (currentChannel == null)
 		{
-			s.JoinChannel(userChannel);
+			s.joinChannel(userChannel);
 			currentChannel = userChannel;
 		}
 		
 		else if (!currentChannel.equals(userChannel))
 		{
-			s.JoinChannel(userChannel);
+			s.joinChannel(userChannel);
 			currentChannel = userChannel;
 		}
 

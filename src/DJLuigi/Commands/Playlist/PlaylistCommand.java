@@ -225,7 +225,7 @@ public class PlaylistCommand extends Command
 				return;
 			}
 			
-			Playlist created = new Playlist(name, description, event.getUser().getId(), s.guildID);
+			Playlist created = new Playlist(name, description, event.getUser().getId(), s.getId());
 			PlaylistManager.addPlaylist(created);
 			event.reply("Created playlist `" + created.getUniqueName() + "`").queue();
 		}

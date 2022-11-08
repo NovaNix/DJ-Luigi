@@ -21,7 +21,7 @@ public class DisconnectCommand extends Command
 	{
 		if (s.isInVC())
 		{
-			s.LeaveVC();
+			s.leaveVC();
 			event.reply("Disconnected!").queue();
 		}
 		

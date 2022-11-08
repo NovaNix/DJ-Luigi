@@ -15,13 +15,13 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 {
 
-	private Server HostServer;
+	private Server hostServer;
 	private Playlist p;
 	private SlashCommandInteractionEvent event;
 	
-	public PlaylistLoadTrackHandler(Server HostServer, Playlist p, SlashCommandInteractionEvent event)
+	public PlaylistLoadTrackHandler(Server host, Playlist p, SlashCommandInteractionEvent event)
 	{
-		this.HostServer = HostServer;
+		this.hostServer = host;
 		this.p = p;
 		this.event = event;
 	}
@@ -48,7 +48,7 @@ public class PlaylistLoadTrackHandler implements AudioLoadResultHandler
 			try {
 				p.addSong(new Song(track));
 			} catch (IOException e) {
-				HostServer.SendMessage("Something went wrong adding song `" + track.getInfo().title + "` to the playlist `" + p.displayName + "`");
+				hostServer.sendMessage("Something went wrong adding song `" + track.getInfo().title + "` to the playlist `" + p.displayName + "`");
 				failedSongCount++;
 				e.printStackTrace();
 			}

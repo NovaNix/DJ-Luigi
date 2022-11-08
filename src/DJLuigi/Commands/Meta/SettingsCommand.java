@@ -127,7 +127,7 @@ public class SettingsCommand extends Command
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Error saving server data!");
-			s.SendMessage("WARNING! THERE WAS A PROBLEM SAVING SETTING CHANGES. PLEASE NOTIFY A DEVELOPER IMMEDIETLY!");
+			s.sendMessage("WARNING! THERE WAS A PROBLEM SAVING SETTING CHANGES. PLEASE NOTIFY A DEVELOPER IMMEDIETLY!");
 		}
 
 	}

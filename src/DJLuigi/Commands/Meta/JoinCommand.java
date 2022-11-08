@@ -32,7 +32,7 @@ public class JoinCommand extends Command
 		
 		AudioChannel channel = state.getChannel();
 		
-		s.JoinChannel(channel);
+		s.joinChannel(channel);
 		
 		event.reply("Joined `" + channel.getName() + "`").queue();
 	}

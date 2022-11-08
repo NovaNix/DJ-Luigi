@@ -25,7 +25,7 @@ public class EventHandler extends ListenerAdapter
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
 	{
 		Server host = DJ.getServer(event.getGuild());
-		host.SetActiveTextChannel(event.getChannel());
+		host.setActiveTextChannel(event.getChannel());
 		
 		CommandHandler.processCommand(host, event);
 	}
@@ -46,7 +46,7 @@ public class EventHandler extends ListenerAdapter
 		
 		if (host.isAloneInVC())
 		{
-			host.LeaveVC();
+			host.leaveVC();
 		}
 	}
 	

@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Server 
 {
-	public String guildID;
+	private String id;
 	
 	public ServerData data;
 	
@@ -30,11 +30,11 @@ public class Server
 	// This changes whenever a command is sent
 	private String ActiveTextChannel = "";
 	
-	public Server(String GuildID)
+	public Server(String guildID)
 	{
-		this.guildID = GuildID;
+		this.id = guildID;
 		
-		this.data = new ServerData(guildID); 
+		this.data = new ServerData(id); 
 		
 		player = DJ.playerManager.createPlayer();
 		
@@ -46,17 +46,17 @@ public class Server
 	
 	// Sends a message to the current active text channel. 
 	// Note: should never be used by a command, because slash commands require a reply through the event
-	public void SendMessage(String message)
+	public void sendMessage(String message)
 	{
 		getActiveChannel().sendMessage(message).queue();
 	}
 	
-	public void SetActiveTextChannel(MessageChannel channel)
+	public void setActiveTextChannel(MessageChannel channel)
 	{
 		ActiveTextChannel = channel.getId();
 	}
 	
-	public void JoinChannel(AudioChannel channel)
+	public void joinChannel(AudioChannel channel)
 	{
 		AudioManager audioManager = getGuild().getAudioManager();
 		
@@ -66,7 +66,7 @@ public class Server
 		ActiveVoiceChannel = channel.getId();
 	}
 	
-	public void LeaveVC() 
+	public void leaveVC() 
 	{
 		AudioManager audioManager = getGuild().getAudioManager();
 		
@@ -99,11 +99,16 @@ public class Server
 	
 	public Guild getGuild()
 	{
-		return DJ.jda.getGuildById(guildID);
+		return DJ.jda.getGuildById(id);
 	}
 	
 	public MessageChannel getActiveChannel()
 	{
 		return DJ.jda.getTextChannelById(ActiveTextChannel);
+	}
+	
+	public String getId()
+	{
+		return id;
 	}
 }

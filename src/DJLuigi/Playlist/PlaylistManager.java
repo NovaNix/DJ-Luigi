@@ -67,7 +67,7 @@ public class PlaylistManager
 	{
 		ArrayList<Playlist> serversPlaylists = new ArrayList<Playlist>();
 		
-		String hostID = s.guildID;
+		String hostID = s.getId();
 		
 		for (int i = 0; i < playlists.size(); i++)
 		{

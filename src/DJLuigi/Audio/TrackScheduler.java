@@ -39,7 +39,7 @@ public class TrackScheduler extends AudioEventAdapter
 	{
 		// A track started playing
 		if (hostServer.data.settings.outputSongNameOnPlay)
-			hostServer.SendMessage("Now playing `" + track.getInfo().title + "`");
+			hostServer.sendMessage("Now playing `" + track.getInfo().title + "`");
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class TrackScheduler extends AudioEventAdapter
 		{
 			if (DJ.settings.leaveOnQueueFinish)
 			{
-				hostServer.LeaveVC();
+				hostServer.leaveVC();
 			}
 		}
 	}
@@ -89,7 +89,7 @@ public class TrackScheduler extends AudioEventAdapter
 		// An already playing track threw an exception (track end event will still be
 		// received separately)
 		
-		hostServer.SendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
+		hostServer.sendMessage("Something went wrong while playing `" + track.getInfo().title + "`: `" + exception.getMessage() + "`");
 		System.err.println("Something broke while playing a track!");
 		exception.printStackTrace();
 	}
@@ -99,7 +99,7 @@ public class TrackScheduler extends AudioEventAdapter
 	{
 		// Audio track has been unable to provide us any audio, might want to just start
 		// a new track
-		hostServer.SendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
+		hostServer.sendMessage("I think I'm stuck... I'm going to skip `" + track.getInfo().title + "`");
 		queue.skip();
 	}
 	

@@ -12,44 +12,38 @@ import DJLuigi.Server.Server;
 public class PlaylistLoadHandler implements AudioLoadResultHandler
 {
 
-	private Server HostServer;
+	private Server hostServer;
 	
-	public PlaylistLoadHandler(Server HostServer)
+	public PlaylistLoadHandler(Server host)
 	{
-		this.HostServer = HostServer;
+		this.hostServer = host;
 	}
 	
 	@Override
 	public void trackLoaded(AudioTrack track) 
 	{
-		HostServer.queue.add(track);
-		//HostServer.SendMessage("Added " + track.getInfo().title + " to playlist " + p.name);
-
+		hostServer.queue.add(track);
 	}
 
 	@Override
 	public void playlistLoaded(AudioPlaylist playlist) 
 	{
-	
 		for (AudioTrack track : playlist.getTracks()) 
 		{
-			HostServer.queue.add(track);
+			hostServer.queue.add(track);
 		}
-			
-		//HostServer.SendMessage("Added " + playlist.getTracks().size() + " Songs to playlist " + p.name);
-		
 	}
 
 	@Override
 	public void noMatches() 
 	{
-		HostServer.SendMessage("We had trouble finding a song!");
+		hostServer.sendMessage("We had trouble finding a song!");
 	}
 
 	@Override
 	public void loadFailed(FriendlyException exception) 
 	{
-		HostServer.SendMessage("Failed to load song: " + exception.getMessage());
+		hostServer.sendMessage("Failed to load song: " + exception.getMessage());
 	}
 
 }
