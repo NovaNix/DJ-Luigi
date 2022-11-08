@@ -30,6 +30,7 @@ import DJLuigi.Commands.Playlist.PlayPlaylistCommand;
 import DJLuigi.Commands.Playlist.PlaylistCommand;
 import DJLuigi.Commands.Playlist.ReloadPlaylistsCommand;
 import DJLuigi.Server.Server;
+import DJLuigi.Server.ServerHandler;
 import DJLuigi.utils.commandUtils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -40,8 +41,6 @@ public class CommandHandler
 	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
 	public static HashMap<CommandCategory, List<Command>> commandsByCategories = new HashMap<CommandCategory, List<Command>>();
-	// TODO consider removing aliases as slash commands no longer support them
-//	public static HashMap<String, Command> aliasCommands = new HashMap<String, Command>();
 	
 	// Loads all of the commands and prepares the command handler
 	public static void init()
@@ -141,7 +140,7 @@ public class CommandHandler
 		
 		// Load local commands
 		
-		for (Server s : DJ.getServers().values())
+		for (Server s : ServerHandler.getServers())
 		{
 			generateSlashCommands(s.getGuild());
 		}

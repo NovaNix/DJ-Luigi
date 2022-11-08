@@ -6,6 +6,7 @@ import DJLuigi.Commands.CommandCategory;
 import DJLuigi.Commands.CommandData;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
+import DJLuigi.Server.ServerHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -30,7 +31,7 @@ public class AboutCommand extends Command
 			    .setColor(DJ.getPrimaryColor())
 			    .setImage(DJ.settings.botIcon)
 			    .addField("Joined Servers", Integer.toString(DJ.getJoinedServersCount()), true)
-			    .addField("Loaded Servers", Integer.toString(DJ.getLoadedServersCount()), true)
+			    .addField("Loaded Servers", Integer.toString(ServerHandler.getLoadedServerCount()), true)
 			    .addField("Total Playlists", Integer.toString(PlaylistManager.getTotalPlaylistCount()), false)
 			    .build();
 		

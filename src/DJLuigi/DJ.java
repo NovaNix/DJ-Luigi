@@ -16,6 +16,7 @@ import DJLuigi.IO.DirectoryManager;
 import DJLuigi.Interaction.MenuHandler;
 import DJLuigi.Playlist.PlaylistManager;
 import DJLuigi.Server.Server;
+import DJLuigi.Server.ServerHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -30,7 +31,7 @@ public class DJ
 	public static JDA jda;
 		
 	// TODO Consider moving servers to their own manager
-	private static HashMap<String, Server> servers = new HashMap<String, Server>();
+	
 	
 	public static DJSettings settings;
 	
@@ -67,7 +68,7 @@ public class DJ
 		
         jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
             .addEventListeners(
-            		new EventHandler(),
+            		new ServerHandler(),
             		new MenuHandler())
             .setActivity(Activity.playing(settings.botStatus))
             .build();
@@ -81,40 +82,15 @@ public class DJ
         System.out.println("JDA loaded");
 
         PlaylistManager.init();
-        loadServers();
+        int loadedServers = ServerHandler.loadServers();
+        System.out.println("Loaded " + loadedServers + " server" + (loadedServers != 1 ? "s" : ""));
         
+        CommandHandler.init();
         CommandHandler.initSlashCommands();
                 
         System.out.println("Ready to accept user input!");
         
     }
-	
-	public static void loadServers()
-	{
-		List<Guild> guilds = jda.getGuilds();
-		
-		for (Guild guild : guilds)
-		{
-			servers.put(guild.getId(), new Server(guild.getId()));
-		}
-		
-		System.out.println("Loaded " + guilds.size() + " server" + (guilds.size() != 1 ? "s" : ""));
-	}
-	
-	public static Server getServer(String id)
-	{
-		return servers.get(id);
-	}
-	
-	public static Server getServer(Guild g)
-	{
-		return servers.get(g.getId());
-	}
-	
-	public static HashMap<String, Server> getServers()
-	{
-		return servers;
-	}
 	
 	// Gets the primary color of the bot
 	public static Color getPrimaryColor()
@@ -125,11 +101,6 @@ public class DJ
 	public static int getJoinedServersCount()
 	{
 		return jda.getGuilds().size();
-	}
-	
-	public static int getLoadedServersCount()
-	{
-		return servers.size();
 	}
 	
 }

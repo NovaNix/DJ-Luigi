@@ -2,6 +2,7 @@ package DJLuigi.Interaction;
 
 import DJLuigi.DJ;
 import DJLuigi.Server.Server;
+import DJLuigi.Server.ServerHandler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 
@@ -18,7 +19,7 @@ public class MenuContext
 	
 	public MenuContext(GenericComponentInteractionCreateEvent event, String[] state)
 	{
-		server = DJ.getServer(event.getGuild().getId());
+		server = ServerHandler.getServer(event.getGuild());
 		user = event.getMember().getId();
 		channelID = event.getChannel().getId();
 		
@@ -27,7 +28,7 @@ public class MenuContext
 	
 	public MenuContext(SlashCommandInteractionEvent event, String[] state)
 	{
-		server = DJ.getServer(event.getGuild().getId());
+		server = ServerHandler.getServer(event.getGuild());
 		user = event.getMember().getId();
 		channelID = event.getChannel().getId();
 		
@@ -36,7 +37,7 @@ public class MenuContext
 	
 	public MenuContext(GenericComponentInteractionCreateEvent event)
 	{
-		server = DJ.getServer(event.getGuild().getId());
+		server = ServerHandler.getServer(event.getGuild());
 		user = event.getMember().getId();
 		channelID = event.getChannel().getId();
 		
@@ -45,7 +46,7 @@ public class MenuContext
 	
 	public MenuContext(SlashCommandInteractionEvent event)
 	{
-		server = DJ.getServer(event.getGuild().getId());
+		server = ServerHandler.getServer(event.getGuild());
 		user = event.getMember().getId();
 		channelID = event.getChannel().getId();
 		
