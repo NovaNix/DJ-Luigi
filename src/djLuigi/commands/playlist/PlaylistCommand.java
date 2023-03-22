@@ -132,7 +132,8 @@ public class PlaylistCommand extends Command
 	@Override
 	public void executeCommand(Server s, SlashCommandInteractionEvent event)
 	{
-		String path = event.getCommandPath().replaceFirst(getCommandMessage() + "/", "");
+
+		String path = event.getFullCommandName().replaceFirst(getCommandMessage() + " ", "");
 		
 		try
 		{
