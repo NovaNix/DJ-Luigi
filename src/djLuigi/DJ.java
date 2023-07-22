@@ -1,9 +1,6 @@
 package djLuigi;
 
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.List;
-
 import javax.security.auth.login.LoginException;
 
 //import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
@@ -12,7 +9,6 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
 import djLuigi.interaction.MenuHandler;
-import djLuigi.server.Server;
 import djLuigi.server.ServerHandler;
 import djLuigi.commands.CommandHandler;
 import djLuigi.io.DirectoryManager;
@@ -20,7 +16,6 @@ import djLuigi.playlist.PlaylistManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class DJ 

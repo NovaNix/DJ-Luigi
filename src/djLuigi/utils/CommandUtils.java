@@ -3,11 +3,8 @@ package djLuigi.utils;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import java.awt.Color;
 
 public class CommandUtils 
