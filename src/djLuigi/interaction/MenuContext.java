@@ -1,6 +1,5 @@
 package djLuigi.interaction;
 
-import djLuigi.DJ;
 import djLuigi.server.Server;
 import djLuigi.server.ServerHandler;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

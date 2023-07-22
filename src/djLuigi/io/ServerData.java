@@ -12,7 +12,7 @@ import djLuigi.utils.DirectoryUtils;
 public class ServerData 
 {
 
-	private String id;
+	public final String id;
 	
 	public ServerSettings settings;
 	
