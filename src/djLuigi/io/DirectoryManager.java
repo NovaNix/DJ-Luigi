@@ -3,6 +3,9 @@ package djLuigi.io;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -12,12 +15,15 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import djLuigi.DJ;
 import djLuigi.DJSettings;
+import djLuigi.playlist.PlaylistManager;
 import djLuigi.server.ServerSettings;
 import djLuigi.utils.DirectoryUtils;
 
 public class DirectoryManager 
 {
 
+	private static final Logger logger = LoggerFactory.getLogger(DirectoryManager.class);
+	
 	public static ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory())
 										.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 										.enable(SerializationFeature.INDENT_OUTPUT)
@@ -45,7 +51,6 @@ public class DirectoryManager
 		try {
 			validate();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -56,8 +61,8 @@ public class DirectoryManager
 		//Check to see if the playlist directory has been defined
 		if (DJ.settings.playlistsDirectory.equals("")) 
 		{
-			System.err.println("WARNING: PLAYLIST DIRECTORY HAS NOT BEEN DEFINED. DEFAULTING TO \"/playlists\" IN THE HOME DIRECTORY");
-			System.err.println("THIS MEANS PLAYLISTS WILL NOT WORK BETWEEN MULTIPLE BOTS");
+			logger.error("WARNING: PLAYLIST DIRECTORY HAS NOT BEEN DEFINED. DEFAULTING TO \"/playlists\" IN THE HOME DIRECTORY");
+			logger.error("THIS MEANS PLAYLISTS WILL NOT WORK BETWEEN MULTIPLE BOTS");
 			playlistsDirectory = new File(home, "playlists");
 		}
 		

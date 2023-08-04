@@ -5,12 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import djLuigi.server.Server;
 import djLuigi.io.DirectoryManager;
 
 public class PlaylistManager 
 {
-
+	private static final Logger logger = LoggerFactory.getLogger(PlaylistManager.class);
+	
 	public static ArrayList<Playlist> playlists;
 	
 	public static HashMap<String, Playlist> playlistMap;
@@ -18,13 +22,13 @@ public class PlaylistManager
 	
 	public static void init()
 	{
-		System.out.println("Loading playlists...");
+		logger.info("Loading playlists...");
 		
 		DirectoryManager.initPlaylistDirectory();
 		
 		reloadPlaylists();
 		
-		System.out.println("Loaded " + playlists.size() + " playlist" + (playlists.size() != 1 ? "s" : ""));
+		logger.info("Loaded " + playlists.size() + " playlist" + (playlists.size() != 1 ? "s" : ""));
 	}
 	
 	public static void reloadPlaylists()
@@ -48,11 +52,11 @@ public class PlaylistManager
 					
 					else
 					{
-						System.out.println("Found deleted playlist: " + p.name + ". Ignoring.");
+						logger.info("Found deleted playlist: " + p.name + ". Ignoring.");
 					}
 					
 				} catch (IOException e) {
-					System.err.println("There was an error loading playlist: \"" + f.getName() + "\" (" + f.getPath() + ")");
+					logger.error("There was an error loading playlist: \"" + f.getName() + "\" (" + f.getPath() + ")");
 					e.printStackTrace();
 				}
 			}

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import djLuigi.DJ;
 import djLuigi.commands.audio.ClearQueueCommand;
 import djLuigi.commands.audio.CurrentSongCommand;
@@ -38,6 +41,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class CommandHandler 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(CommandHandler.class);
 	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
 	public static HashMap<CommandCategory, List<Command>> commandsByCategories = new HashMap<CommandCategory, List<Command>>();
@@ -97,7 +102,7 @@ public class CommandHandler
 			loadCommand(new PermissionsTestCommand());
 		}
 		
-		System.out.println("Loaded " + commands.size() + " Commands!");
+		logger.info("Loaded " + commands.size() + " Commands!");
 		
 	}
 	
@@ -120,7 +125,7 @@ public class CommandHandler
 	
 	public static void initSlashCommands()
 	{
-		System.out.println("Loading slash commands...");
+		logger.info("Loading slash commands...");
 		
 		// Load global commands
 		
@@ -136,7 +141,7 @@ public class CommandHandler
 		
 		DJ.jda.updateCommands().addCommands(globalCommands).queue();
 		
-		System.out.println("Loaded " + globalCommands.size() + " global commands");
+		logger.info("Loaded " + globalCommands.size() + " global commands");
 		
 		// Load local commands
 		
@@ -145,16 +150,16 @@ public class CommandHandler
 			generateSlashCommands(s.getGuild());
 		}
 		
-		System.out.println("Finished loading slash commands for each server");
+		logger.info("Finished loading slash commands for each server");
 	}
 	
 	private static void generateSlashCommands(Guild guild)
 	{
-		System.out.println("Loading slash commands for \"" + guild.getName() + "\"");
+		logger.info("Loading slash commands for \"" + guild.getName() + "\"");
 		
 		int serverCommandCount = guild.retrieveCommands().complete().size();
 		
-		System.out.println("Current number of commands in the guild: " + serverCommandCount);
+		logger.info("Current number of commands in the guild: " + serverCommandCount);
 		
 		ArrayList<SlashCommandData> loadedCommands = new ArrayList<SlashCommandData>();
 		
@@ -168,7 +173,7 @@ public class CommandHandler
 					loadedCommands.add(c.generateSlashCommand());			
 				} catch (IllegalArgumentException e) 
 				{
-					System.err.println("Failed to generate command \"" + c.getCommandMessage() + "\"");
+					logger.error("Failed to generate command \"" + c.getCommandMessage() + "\"");
 					e.printStackTrace();
 				}
 			}
@@ -179,7 +184,7 @@ public class CommandHandler
 			}
 		}
 		
-		System.out.println(String.format("Generated %d/%d commands", loadedCommands.size(), commands.size() - globalCommands));
+		logger.info(String.format("Generated %d/%d commands", loadedCommands.size(), commands.size() - globalCommands));
 		
 		guild.updateCommands().addCommands(loadedCommands).queue();
 		
@@ -203,7 +208,7 @@ public class CommandHandler
 
 	    String requestedCommand = event.getName();
 		
-	    System.out.println("Processing command \"" + event.getCommandString() + "\"");
+	    logger.info("Processing command \"" + event.getCommandString() + "\"");
 	    
 	    Command c = null;
 	    
@@ -214,7 +219,7 @@ public class CommandHandler
 	    
 	    else
 	    {
-	    	System.out.println("Failed to find command...");
+	    	logger.info("Failed to find command...");
 	    	event.reply("Invalid command: \"" + requestedCommand + "\"!").setEphemeral(true).queue();
 	    	return;
 	    }
@@ -235,7 +240,7 @@ public class CommandHandler
 	    	
 	    } catch (Exception e)
 	    {
-	    	System.err.println("The slash command " + event.getName() + " threw an error. Please fix.");
+	    	logger.error("The slash command " + event.getName() + " threw an error. Please fix.");
 	    	e.printStackTrace();
 	    	
 	    	event.reply("Something went wrong while executing your command. Please notify a developer.").queue();
@@ -245,7 +250,7 @@ public class CommandHandler
 	    // Ensure that the interaction was acknowledged. Discord requires them to be
 	    if (!event.isAcknowledged())
 	    {
-	    	System.err.println("The slash command " + event.getName() + " did not acknowledge the event. Please fix.");
+	    	logger.error("The slash command " + event.getName() + " did not acknowledge the event. Please fix.");
 	    	event.reply("Something went wrong while trying to respond to your command. Please notify a developer.").queue();
 	    }
 	  

@@ -3,6 +3,9 @@ package djLuigi;
 import java.awt.Color;
 import javax.security.auth.login.LoginException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -21,13 +24,12 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 public class DJ 
 {
 
+	private static final Logger logger = LoggerFactory.getLogger(DJ.class);
+	
 	public static AudioPlayerManager playerManager;
 	
 	public static JDA jda;
 		
-	// TODO Consider moving servers to their own manager
-	
-	
 	public static DJSettings settings;
 	
 	private static Color primaryColor;
@@ -35,31 +37,31 @@ public class DJ
 	public static void main(String[] args) throws LoginException, InterruptedException
     {
 		
-		System.out.println("Starting...");
+		logger.info("Starting...");
 		
 		if (args.length == 0)
 		{
-			System.err.println("You must specify the home directory in the program arguments!");
+			logger.error("You must specify the home directory in the program arguments!");
 			System.exit(1);
 		}
 		
-		System.out.println("Loading home directory \"" + args[0] + "\"");
+		logger.info("Loading home directory \"" + args[0] + "\"");
 		
 		DirectoryManager.init(args[0]);
 		
 		settings = DirectoryManager.loadDJConfig();
 		
-		System.out.println("Config file loaded.");
+		logger.info("Config file loaded.");
 		
 		primaryColor = new Color(settings.botColor);
 		
 		if (settings.botToken.equals(""))
 		{
-			System.err.println("You must specify the bot token in the config file!");
+			logger.error("You must specify the bot token in the config file!");
 			System.exit(1);
 		}
 		
-		System.out.println("Setting up JDA instance...");
+		logger.info("Setting up JDA instance...");
 		
         jda = JDABuilder.create(settings.botToken, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
             .addEventListeners(
@@ -74,16 +76,16 @@ public class DJ
         // optionally block until JDA is ready
         jda.awaitReady();
         
-        System.out.println("JDA loaded");
+        logger.info("JDA loaded");
 
         PlaylistManager.init();
         int loadedServers = ServerHandler.loadServers();
-        System.out.println("Loaded " + loadedServers + " server" + (loadedServers != 1 ? "s" : ""));
+        logger.info("Loaded " + loadedServers + " server" + (loadedServers != 1 ? "s" : ""));
         
         CommandHandler.init();
         CommandHandler.initSlashCommands();
                 
-        System.out.println("Ready to accept user input!");
+        logger.info("Ready to accept user input!");
         
     }
 	

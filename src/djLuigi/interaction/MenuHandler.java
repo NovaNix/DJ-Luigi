@@ -3,6 +3,9 @@ package djLuigi.interaction;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import djLuigi.DJ;
 import djLuigi.interaction.menus.paged.EditorListMenu;
 import djLuigi.interaction.menus.paged.HelpMenu;
@@ -20,6 +23,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 // Handles creating, distributing events, and accessing menus
 public class MenuHandler extends ListenerAdapter 
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MenuHandler.class);
 
 	private static ArrayList<Menu> menus = new ArrayList<Menu>();
 	private static HashMap<String, Menu> menuMap = new HashMap<String, Menu>();
@@ -41,7 +46,7 @@ public class MenuHandler extends ListenerAdapter
 			loadMenu(new TestListMenu());
 		}
 		
-		System.out.println("Loaded " + menus.size() + " menus");
+		logger.info("Loaded " + menus.size() + " menus");
 	}
 	
 	public static void createMenu(Class<? extends Menu> menuClass, SlashCommandInteractionEvent event, String... state)
@@ -51,7 +56,7 @@ public class MenuHandler extends ListenerAdapter
 		if (menu == null)
 		{
 			event.reply("Something went wrong! Please contact a developer!").queue();
-			System.err.println("Failed to find menu \"" + menuClass.getSimpleName() + "\"");
+			logger.error("Failed to find menu \"" + menuClass.getSimpleName() + "\"");
 			return;
 		}
 		
@@ -79,7 +84,7 @@ public class MenuHandler extends ListenerAdapter
 	{
 		Menu menu = findEventMenu(event);
 	
-		System.out.println("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
+		logger.info("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
 		
 		menu.onButtonInteraction(event);
 	}
@@ -89,7 +94,7 @@ public class MenuHandler extends ListenerAdapter
 	{
 		Menu menu = findEventMenu(event);
 		
-		System.out.println("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
+		logger.info("User \"" + event.getUser().getName() + "\" (" + event.getUser().getId() + ") has interacted with a menu of type \"" + menu.getMenuID() + "\"");
 		
 		menu.onSelectMenuInteraction(event);
 	}
