@@ -1,7 +1,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/novanix/DJ-Luigi)
 
 # DJ-Luigi
-<img align="right" src="https://github.com/NovaNix/DJ-Luigi/blob/main/DJ%20Luigi.jpg?raw=true" height="200" width="200">
+<img align="right" src="https://github.com/NovaNix/DJ-Luigi/blob/main/resources/DJ%20Luigi.jpg?raw=true" height="200" width="200">
 A Discord Music Bot built in Java using JDA and LavaPlayer<br><br>
 Since Youtube is shutting down a lot of Discord Music bots (such as Rythm and Groovy), I figured it would be a good idea to write my own bot that can't be shut down.<br>
 I currently use this bot on a few servers with my friends.
