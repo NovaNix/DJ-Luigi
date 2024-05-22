@@ -11,6 +11,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
+import dev.lavalink.youtube.clients.AndroidWithThumbnail;
+import dev.lavalink.youtube.clients.MusicWithThumbnail;
+import dev.lavalink.youtube.clients.WebWithThumbnail;
+import dev.lavalink.youtube.clients.skeleton.Client;
 import io.github.novanix.djluigi.commands.CommandHandler;
 import io.github.novanix.djluigi.interaction.MenuHandler;
 import io.github.novanix.djluigi.io.DirectoryManager;
@@ -71,6 +76,11 @@ public class DJ
             .build();
 
         playerManager = new DefaultAudioPlayerManager();
+        
+        // Add youtube support
+        YoutubeAudioSourceManager youtube = new YoutubeAudioSourceManager(/*allowSearch:*/ true, new Client[] { new MusicWithThumbnail(), new WebWithThumbnail(), new AndroidWithThumbnail() });
+        playerManager.registerSourceManager(youtube);
+
 		AudioSourceManagers.registerRemoteSources(playerManager);
         
         // optionally block until JDA is ready
