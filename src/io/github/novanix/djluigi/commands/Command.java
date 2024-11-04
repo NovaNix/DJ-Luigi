@@ -96,7 +96,7 @@ public abstract class Command
 	{
 		if (isDJOnly())
 		{
-			data.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ALL_VOICE_PERMISSIONS));
+			data.setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.VOICE_MUTE_OTHERS));
 		}
 		
 		else if (isOwnerOnly())

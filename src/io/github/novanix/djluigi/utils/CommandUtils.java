@@ -13,7 +13,7 @@ public class CommandUtils
 	public static final Color ERROR_COLOR = new Color(0xf30c0d); 
 	
 	// The permissions required to be considered a DJ
-	public static final long DJ_REQUIRED_PERMISSIONS = Permission.ALL_VOICE_PERMISSIONS;
+	public static final Permission DJ_REQUIRED_PERMISSIONS = Permission.VOICE_MUTE_OTHERS;
 	
 	// Pulled from https://www.geeksforgeeks.org/check-if-url-is-valid-or-not-in-java/
 	public static boolean isValidURL(String url)
@@ -55,7 +55,7 @@ public class CommandUtils
 	
 	public static boolean isMemberDJ(Member u)
 	{
-		return u.hasPermission(Permission.getPermissions(DJ_REQUIRED_PERMISSIONS));
+		return u.hasPermission(DJ_REQUIRED_PERMISSIONS);
 	}
 	
 	public static final Character[] INVALID_SPECIFIC_CHARS = {'"', '*', '<', '>', '?', '|', '\000'};
